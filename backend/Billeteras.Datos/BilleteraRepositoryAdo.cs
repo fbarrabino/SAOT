@@ -37,8 +37,8 @@ public class BilleteraRepositoryAdo(string connectionString) : IBilleteraReposit
     public async Task<int> InsertarAsync(Billetera entidad)
     {
         const string sql = @"INSERT INTO Billetera (Nombre, LogoUrl)
-                             VALUES (@nombre, @logoUrl);
-                             SELECT CAST(SCOPE_IDENTITY() AS int);";
+                            VALUES (@nombre, @logoUrl);
+                            SELECT CAST(SCOPE_IDENTITY() AS int);";
 
         using var conn = new SqlConnection(connectionString);
         using var cmd = new SqlCommand(sql, conn);
@@ -51,8 +51,8 @@ public class BilleteraRepositoryAdo(string connectionString) : IBilleteraReposit
     public async Task<bool> ActualizarAsync(Billetera entidad)
     {
         const string sql = @"UPDATE Billetera
-                             SET Nombre = @nombre, LogoUrl = @logoUrl
-                             WHERE BilleteraId = @id;";
+                            SET Nombre = @nombre, LogoUrl = @logoUrl
+                            WHERE BilleteraId = @id;";
 
         using var conn = new SqlConnection(connectionString);
         using var cmd = new SqlCommand(sql, conn);

@@ -1,0 +1,20 @@
+@API_URL = https://localhost:7001
+
+### Listar todos los usuarios
+GET {{API_URL}}/api/usuarios
+
+### Obtener un usuario por id
+GET {{API_URL}}/api/usuarios/1
+
+### Actualizar un usuario
+PUT {{API_URL}}/api/usuarios/1
+Content-Type: application/json
+
+{
+  "nombre": "Fabricio",
+  "apellido": "Ceniquel",
+  "email": "fabritho@com"
+}
+
+### Eliminar un usuario (hard delete)
+DELETE {{API_URL}}/api/usuarios/1

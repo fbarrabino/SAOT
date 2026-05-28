@@ -1,0 +1,33 @@
+@API_URL = https://localhost:7001
+@TOKEN = PEGAR_TOKEN_DEL_LOGIN_ACA
+
+###  Registrar un usuario nuevo (público) 
+POST {{API_URL}}/api/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "Fabricio",
+  "apellido": "Ceniquel",
+  "email": "fabrice@com",
+  "password": "hola123"
+}
+
+### Login (público) → copiá el "token" de la respuesta a la variable @TOKEN de arriba
+POST {{API_URL}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "fabrice@com",
+  "password": "hola123"
+}
+
+### Perfil del usuario autenticado (requiere token)
+GET {{API_URL}}/api/auth/me
+Authorization: Bearer {{TOKEN}}
+
+### Time público (no requiere token)
+GET {{API_URL}}/api/time
+
+### Time seguro (requiere token)
+GET {{API_URL}}/api/time/secure
+Authorization: Bearer {{TOKEN}}
