@@ -1,0 +1,59 @@
+using Billeteras.Datos.Interfaces;
+using Billeteras.Entidades;
+using Billeteras.Negocio.Dtos;
+using Billeteras.Negocio.Interfaces;
+
+namespace Billeteras.Negocio;
+
+public class CuentaBilleteraNegocio(ICuentaBilleteraRepository repo) : ICuentaBilleteraNegocio
+{
+    public async Task<List<CuentaBilleteraResponse>> ObtenerTodosAsync()
+        => (await repo.ObtenerTodosAsync()).Select(Map).ToList();
+
+    public async Task<CuentaBilleteraResponse?> ObtenerPorIdAsync(int id)
+    {
+        var cuenta = await repo.ObtenerPorIdAsync(id);
+        return cuenta is null ? null : Map(cuenta);
+    }
+
+    public async Task<CuentaBilleteraResponse> CrearAsync(CuentaBilleteraRequest req)
+    {
+        var cuenta = new CuentaBilletera
+        {
+            UsuarioId = req.UsuarioId,
+            BilleteraId = req.BilleteraId,
+            Alias = req.Alias,
+            SaldoActual = req.SaldoActual
+        };
+        cuenta.CuentaBilleteraId = await repo.InsertarAsync(cuenta);
+        return Map(cuenta);
+    }
+
+    public async Task<CuentaBilleteraResponse?> ActualizarAsync(int id, CuentaBilleteraRequest req)
+    {
+        var cuenta = await repo.ObtenerPorIdAsync(id);
+        if (cuenta is null)
+            return null;
+
+        cuenta.UsuarioId = req.UsuarioId;
+        cuenta.BilleteraId = req.BilleteraId;
+        cuenta.Alias = req.Alias;
+        cuenta.SaldoActual = req.SaldoActual;
+
+        await repo.ActualizarAsync(cuenta);
+        return Map(cuenta);
+    }
+
+    public Task<bool> EliminarAsync(int id) => repo.EliminarAsync(id);
+
+    private static CuentaBilleteraResponse Map(CuentaBilletera c)
+        => new(
+            c.CuentaBilleteraId,
+            c.UsuarioId,
+            c.BilleteraId,
+            c.Alias,
+            c.SaldoActual,
+            c.FechaVinculacion,
+            c.Billetera?.Nombre,
+            c.Usuario is null ? null : $"{c.Usuario.Nombre} {c.Usuario.Apellido}".Trim());
+}
