@@ -1,0 +1,69 @@
+using Billeteras.Datos.Interfaces;
+using Billeteras.Entidades;
+using Billeteras.Negocio.Dtos;
+using Billeteras.Negocio.Interfaces;
+
+namespace Billeteras.Negocio;
+
+/// Servicio de Negocio de Usuario. Recibe el repositorio por DI (ADO o EF).
+/// Acá vive el hash/verificación de contraseña con BCrypt.
+public class UsuarioNegocio(IUsuarioRepository repo) : IUsuarioNegocio
+{
+    public async Task<List<UsuarioResponse>> ObtenerTodosAsync()
+        => (await repo.ObtenerTodosAsync()).Select(Map).ToList();
+
+    public async Task<UsuarioResponse?> ObtenerPorIdAsync(int id)
+    {
+        var usuario = await repo.ObtenerPorIdAsync(id);
+        return usuario is null ? null : Map(usuario);
+    }
+
+    public async Task<UsuarioResponse?> RegistrarAsync(RegistrarUsuarioRequest req)
+    {
+        // El email es único: si ya existe, no registramos.
+        if (await repo.ObtenerPorEmailAsync(req.Email) is not null)
+            return null;
+
+        var usuario = new Usuario
+        {
+            Nombre = req.Nombre,
+            Apellido = req.Apellido,
+            Email = req.Email,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(req.Password)
+        };
+
+        usuario.UsuarioId = await repo.InsertarAsync(usuario);
+        return Map(usuario);
+    }
+
+    public async Task<UsuarioResponse?> AutenticarAsync(string email, string password)
+    {
+        var usuario = await repo.ObtenerPorEmailAsync(email);
+        if (usuario is null)
+            return null;
+
+        return BCrypt.Net.BCrypt.Verify(password, usuario.PasswordHash)
+            ? Map(usuario)
+            : null;
+    }
+
+    public async Task<UsuarioResponse?> ActualizarAsync(int id, UsuarioUpdateRequest req)
+    {
+        var usuario = await repo.ObtenerPorIdAsync(id);
+        if (usuario is null)
+            return null;
+
+        usuario.Nombre = req.Nombre;
+        usuario.Apellido = req.Apellido;
+        usuario.Email = req.Email;
+        // La contraseña no se actualiza en este TP.
+
+        await repo.ActualizarAsync(usuario);
+        return Map(usuario);
+    }
+
+    public Task<bool> EliminarAsync(int id) => repo.EliminarAsync(id);
+
+    private static UsuarioResponse Map(Usuario u)
+        => new(u.UsuarioId, u.Nombre, u.Apellido, u.Email, u.FechaAlta);
+}
