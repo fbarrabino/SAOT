@@ -1,6 +1,6 @@
 /* ============================================================================
    Billeteras — Script de inicialización de la base de datos
-   Unificador de Billeteras Virtuales · Equipo O'T · Programación III · UTN FRRe
+   Unificador de Billeteras Virtuales · Equipo SAOT · Programación III · UTN FRRe
    ----------------------------------------------------------------------------
    Crea la base BilleterasDB, las 5 tablas del dominio y los seeds de catálogo.
    El script es idempotente: se puede correr varias veces sin romper nada.
