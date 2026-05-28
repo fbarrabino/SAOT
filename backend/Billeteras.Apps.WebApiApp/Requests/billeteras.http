@@ -1,0 +1,28 @@
+@API_URL = https://localhost:7001
+
+### Listar todas las billeteras
+GET {{API_URL}}/api/billeteras
+
+### Obtener una billetera por id
+GET {{API_URL}}/api/billeteras/1
+
+### Crear una billetera
+POST {{API_URL}}/api/billeteras
+Content-Type: application/json
+
+{
+  "nombre": "Lemon Cash",
+  "logoUrl": "https://ejemplo.com/lemon.png"
+}
+
+### Actualizar una billetera
+PUT {{API_URL}}/api/billeteras/6
+Content-Type: application/json
+
+{
+  "nombre": "Lemon",
+  "logoUrl": null
+}
+
+### Eliminar una billetera (hard delete)
+DELETE {{API_URL}}/api/billeteras/6

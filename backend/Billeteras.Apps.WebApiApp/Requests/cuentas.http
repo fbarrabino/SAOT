@@ -1,0 +1,32 @@
+@API_URL = https://localhost:7001
+
+### Listar todas las cuentas de billetera
+GET {{API_URL}}/api/cuentas-billetera
+
+### Obtener una cuenta por id
+GET {{API_URL}}/api/cuentas-billetera/1
+
+### Crear una cuenta de billetera (UsuarioId 1, Billetera 1 = Mercado Pago)
+POST {{API_URL}}/api/cuentas-billetera
+Content-Type: application/json
+
+{
+  "usuarioId": 1,
+  "billeteraId": 1,
+  "alias": "Mi Mercado Pago",
+  "saldoActual": 15000.50
+}
+
+### Actualizar una cuenta (el saldo se edita manualmente)     
+PUT {{API_URL}}/api/cuentas-billetera/1
+Content-Type: application/json
+
+{
+  "usuarioId": 1,
+  "billeteraId": 1,
+  "alias": "MP principal",
+  "saldoActual": 20000.00
+}
+
+### Eliminar una cuenta (hard delete)
+DELETE {{API_URL}}/api/cuentas-billetera/1

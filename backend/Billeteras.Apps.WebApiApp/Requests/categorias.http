@@ -1,0 +1,28 @@
+@API_URL = https://localhost:7001
+
+### Listar todas las categorías
+GET {{API_URL}}/api/categorias
+
+### Obtener una categoría por id
+GET {{API_URL}}/api/categorias/1
+
+### Crear una categoría
+POST {{API_URL}}/api/categorias
+Content-Type: application/json
+
+{
+  "nombre": "Salud",
+  "tipo": "Egreso"
+}
+
+### Actualizar una categoría
+PUT {{API_URL}}/api/categorias/8
+Content-Type: application/json
+
+{
+  "nombre": "Salud y farmacia",
+  "tipo": "Egreso"
+}
+
+### Eliminar una categoría (hard delete)
+DELETE {{API_URL}}/api/categorias/8
