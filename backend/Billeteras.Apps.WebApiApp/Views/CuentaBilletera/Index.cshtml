@@ -1,0 +1,55 @@
+@model List<Billeteras.Entidades.CuentaBilletera>
+@{
+    ViewData["Title"] = "Listado de Cuentas";
+    var source = ViewData["Source"] as string ?? "mock";
+}
+
+<h2>Listado de Cuentas Vinculadas (Materias)</h2>
+<p>
+    Esta lista representa las cuentas de billetera digital vinculadas. 
+    En el contexto del ejercicio de TUP, equivale al <strong>listado de materias</strong>.
+</p>
+
+@if (Model == null || Model.Count == 0)
+{
+    <p><em>No hay cuentas registradas actualmente.</em></p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>ID Cuenta</th>
+                <th>Billetera (Materia)</th>
+                <th>Alias</th>
+                <th>Titular (Profesor a cargo)</th>
+                <th>Saldo Actual</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cuenta in Model)
+            {
+                <tr>
+                    <td>@cuenta.CuentaBilleteraId</td>
+                    <td><strong>@(cuenta.Billetera?.Nombre ?? "Sin Billetera")</strong></td>
+                    <td>@(cuenta.Alias ?? "Sin Alias")</td>
+                    <td>
+                        @if (cuenta.Usuario != null)
+                        {
+                            <span>@cuenta.Usuario.Nombre @cuenta.Usuario.Apellido (@cuenta.Usuario.Email)</span>
+                        }
+                        else
+                        {
+                            <span>Sin Titular</span>
+                        }
+                    </td>
+                    <td>$ @cuenta.SaldoActual.ToString("N2")</td>
+                    <td>
+                        <a href="/CuentaBilletera/Details/@cuenta.CuentaBilleteraId?source=@source" class="btn-detail">Ver Detalle ➔</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

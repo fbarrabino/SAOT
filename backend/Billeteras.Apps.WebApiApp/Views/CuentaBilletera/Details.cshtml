@@ -1,0 +1,81 @@
+@model Billeteras.Entidades.CuentaBilletera
+@{
+    ViewData["Title"] = "Detalle de Cuenta";
+    var source = ViewData["Source"] as string ?? "mock";
+    var movimientos = ViewBag.Movimientos as List<Billeteras.Entidades.Movimiento> ?? new List<Billeteras.Entidades.Movimiento>();
+}
+
+<h2>Detalle de la Cuenta (Detalle de Materia)</h2>
+<p>
+    Información detallada de la cuenta y sus movimientos. 
+    En el ejercicio TUP, equivale a <strong>consultar la materia con sus alumnos asociados</strong>.
+</p>
+
+<div class="card">
+    <h3>Información de la Cuenta</h3>
+    <p><strong>ID Cuenta:</strong> @Model.CuentaBilleteraId</p>
+    <p><strong>Billetera (Materia):</strong> @(Model.Billetera?.Nombre ?? "N/D")</p>
+    <p><strong>Alias:</strong> @(Model.Alias ?? "Sin Alias")</p>
+    <p><strong>Saldo Actual:</strong> $ @Model.SaldoActual.ToString("N2")</p>
+    <p><strong>Fecha de Vinculación:</strong> @Model.FechaVinculacion.ToString("dd/MM/yyyy HH:mm")</p>
+</div>
+
+<div class="card">
+    <h3>Titular de la Cuenta (Profesor a cargo)</h3>
+    @if (Model.Usuario != null)
+    {
+        <p><strong>Nombre completo:</strong> @Model.Usuario.Nombre @Model.Usuario.Apellido</p>
+        <p><strong>Email:</strong> @Model.Usuario.Email</p>
+        <p><strong>Fecha de registro:</strong> @Model.Usuario.FechaAlta.ToString("dd/MM/yyyy")</p>
+    }
+    else
+    {
+        <p><em>No hay un titular asignado a esta cuenta.</em></p>
+    }
+</div>
+
+<div class="card">
+    <h3>Listado de Movimientos (Alumnos Inscriptos)</h3>
+    <p>Total de movimientos registrados en esta cuenta: <strong>@movimientos.Count</strong></p>
+
+    @if (movimientos.Count == 0)
+    {
+        <p><em>No hay movimientos registrados en esta cuenta.</em></p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                    <th>Tipo</th>
+                    <th>Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mov in movimientos)
+                {
+                    <tr>
+                        <td>@mov.MovimientoId</td>
+                        <td>@mov.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@(mov.Descripcion ?? "Sin Descripción")</td>
+                        <td>
+                            <span class="badge @mov.Tipo.ToLower()">
+                                @mov.Tipo.ToUpper()
+                            </span>
+                        </td>
+                        <td style="color: @(mov.Tipo.ToLower() == "ingreso" ? "green" : "red"); font-weight: bold;">
+                            @(mov.Tipo.ToLower() == "ingreso" ? "+" : "-") $ @mov.Monto.ToString("N2")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<p>
+    <a href="/?source=@source" class="btn-toggle">⬅ Volver al Listado</a>
+</p>
