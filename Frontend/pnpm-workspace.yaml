@@ -1,0 +1,4 @@
+nodeLinker: hoisted
+onlyBuiltDependencies:
+  - react-native-screens
+verifyDepsBeforeRun: false

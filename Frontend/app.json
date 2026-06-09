@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "SaOT",
+    "slug": "saot",
+    "version": "0.1.0",
+    "scheme": "saot",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#000000",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "app.saot.mobile"
+    },
+    "android": {
+      "package": "app.saot.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#000000"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
