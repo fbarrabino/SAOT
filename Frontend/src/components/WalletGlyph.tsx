@@ -1,13 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { colors, fonts } from '@/theme/tokens';
+import { View, Image, StyleSheet, ImageSourcePropType } from 'react-native';
 
 type Key = 'mp' | 'ua' | 'lm';
 
-const STYLE: Record<Key, { bg: string; fg: string; letter: string }> = {
-  mp: { bg: '#FFFFFF', fg: '#00B0E5', letter: 'MP' },
-  ua: { bg: '#FFFFFF', fg: '#7B61FF', letter: 'U' },
-  lm: { bg: '#0A1A2E', fg: '#B6F04B', letter: 'L' },
+const LOGOS: Record<Key, ImageSourcePropType> = {
+  mp: require('../assets/wallets/mplogo.webp'),
+  ua: require('../assets/wallets/logouala.webp'),
+  lm: require('../assets/wallets/logolm.webp'),
 };
 
 type Props = {
@@ -16,20 +15,32 @@ type Props = {
 };
 
 export function WalletGlyph({ wallet, size = 34 }: Props) {
-  const s = STYLE[wallet];
+  const isLemon = wallet === 'lm';
   return (
     <View
       style={[
         styles.tile,
-        { width: size, height: size, borderRadius: size / 2, backgroundColor: s.bg },
+        {
+          width: size,
+          height: size,
+          borderRadius: size / 2,
+          backgroundColor: isLemon ? 'transparent' : '#FFFFFF',
+        },
       ]}
     >
-      <Text style={[styles.letter, { color: s.fg, fontSize: size * 0.42 }]}>{s.letter}</Text>
+      <Image
+        source={LOGOS[wallet]}
+        style={
+          isLemon
+            ? { width: size, height: size }
+            : { width: size * 0.82, height: size * 0.82 }
+        }
+        resizeMode="contain"
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tile: { alignItems: 'center', justifyContent: 'center' },
-  letter: { fontFamily: fonts.displayBold, letterSpacing: -0.5 },
+  tile: { alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
 });
