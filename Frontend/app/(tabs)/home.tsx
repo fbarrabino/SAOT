@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import Svg, { Path, Rect } from 'react-native-svg';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { WalletGlyph } from '@/components/WalletGlyph';
@@ -101,16 +102,35 @@ export default function Home() {
           </View>
 
           <View style={styles.qa}>
-            <QuickAction icon={<SendIcon />} label="Enviar" />
-            <QuickAction icon={<RequestIcon />} label="Pedir" />
-            <QuickAction icon={<SwapIcon />} label="Cambiar" />
-            <QuickAction icon={<QRIcon />} label="Pagar QR" />
+            <QuickAction
+              icon={<SendIcon />}
+              label="Enviar"
+              onPress={() => router.push('/(send)/recipient')}
+            />
+            <QuickAction
+              icon={<RequestIcon />}
+              label="Pedir"
+              onPress={() => router.push('/(request)/amount')}
+            />
+            <QuickAction
+              icon={<SwapIcon />}
+              label="Cambiar"
+              onPress={() => router.push('/(exchange)/amount')}
+            />
+            <QuickAction
+              icon={<QRIcon />}
+              label="Pagar QR"
+              onPress={() => router.push('/(payqr)/scanner')}
+            />
           </View>
 
-          <View style={[styles.sectionRow, { marginTop: 26 }]}>
+          <Pressable
+            style={[styles.sectionRow, { marginTop: 26 }]}
+            onPress={() => router.push('/(tabs)/activity')}
+          >
             <Text style={styles.h4}>Actividad Reciente</Text>
             <Text style={styles.more}>Ver todo ›</Text>
-          </View>
+          </Pressable>
 
           {ACTIVITY.map((a, i) => (
             <View key={i} style={styles.act}>
@@ -131,9 +151,17 @@ export default function Home() {
   );
 }
 
-function QuickAction({ icon, label }: { icon: React.ReactNode; label: string }) {
+function QuickAction({
+  icon,
+  label,
+  onPress,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onPress?: () => void;
+}) {
   return (
-    <Pressable style={styles.qaItem}>
+    <Pressable style={styles.qaItem} onPress={onPress}>
       <View style={styles.qaCircle}>{icon}</View>
       <Text style={styles.qaLabel}>{label}</Text>
     </Pressable>
