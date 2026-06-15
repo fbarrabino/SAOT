@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, Image } from 'react-native';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { colors, radii, spacing, type } from '@/theme/tokens';
@@ -26,10 +26,11 @@ export default function TransactionDetailScreen() {
 
             <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
                 <View style={styles.headerTx}>
-                    {/* Logo temporal para no bloquear el desarrollo */}
-                    <View style={styles.logoContainer}>
-                        <Text style={styles.logoText}>MP</Text>
-                    </View>
+                    {/* Logo oficial de Mercado Pago cargado desde assets */}
+                    <Image
+                        source={require('@/assets/wallets/logo-mp.png')}
+                        style={styles.logoContainer}
+                    />
                     <Text style={styles.subtitle}>Pagado con {tx.walletName}</Text>
                     <Text style={type.balance}>{fmt(tx.amount)}</Text>
                     <Text style={[type.small, { marginTop: spacing.xs }]}>{tx.date}</Text>
@@ -85,11 +86,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: spacing.md,
-    },
-    logoText: {
-        color: '#00A1EA',
-        fontWeight: 'bold',
-        fontSize: 24,
+        resizeMode: 'contain',
     },
     subtitle: {
         ...type.body,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 import { AuroraBackground } from '@/components/AuroraBackground';
@@ -31,10 +31,10 @@ export default function WalletDetailScreen() {
                     style={styles.card}
                 >
                     <View style={styles.cardHeader}>
-                        {/* Reemplazo temporal del logo a prueba de fallos */}
-                        <View style={styles.logo}>
-                            <Text style={styles.logoText}>MP</Text>
-                        </View>
+                        <Image
+                            source={require('@/assets/wallets/logo-mp.png')}
+                            style={styles.logo}
+                        />
                     </View>
 
                     <Text style={styles.balanceLabel}>Balance disponible</Text>
@@ -107,11 +107,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    logoText: {
-        color: '#00A1EA',
-        fontWeight: 'bold',
-        fontSize: 18,
     },
     balanceLabel: {
         ...type.body,
