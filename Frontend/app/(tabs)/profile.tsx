@@ -36,7 +36,8 @@ export default function Profile() {
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
           <Text style={styles.h1}>Perfil</Text>
 
-          <Pressable style={styles.userCard}>
+          {/* NAVEGACIÓN 1: Tarjeta de usuario -> Editar Perfil */}
+          <Pressable onPress={() => router.push('/profile-edit')} style={styles.userCard}>
             <LinearGradient
               colors={gradients.lime}
               start={{ x: 0, y: 0 }}
@@ -61,6 +62,7 @@ export default function Profile() {
                 </Svg>
               </RowIcon>
             </Row>
+
             <Row label="Notificaciones" sub="Push, email">
               <RowIcon>
                 <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.cyan)}>
@@ -69,7 +71,9 @@ export default function Profile() {
                 </Svg>
               </RowIcon>
             </Row>
-            <Row label="Seguridad" sub="Face ID, 2FA">
+
+            {/* NAVEGACIÓN 2: Fila de Seguridad -> Pantalla de Seguridad */}
+            <Row label="Seguridad" sub="Face ID, 2FA" onPress={() => router.push('/profile-security')}>
               <RowIcon>
                 <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.cyan)}>
                   <Path d="M6 10V8a6 6 0 0112 0v2" />
@@ -77,6 +81,7 @@ export default function Profile() {
                 </Svg>
               </RowIcon>
             </Row>
+
             <Row label="Ayuda y soporte" sub="FAQ, contactanos">
               <RowIcon>
                 <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.cyan)}>
@@ -86,7 +91,9 @@ export default function Profile() {
                 </Svg>
               </RowIcon>
             </Row>
-            <Row label="Cerrar sesión" danger onPress={() => router.replace('/(auth)/login')}>
+
+            {/* NAVEGACIÓN 3: Fila de Logout -> Pantalla de Confirmación de Logout */}
+            <Row label="Cerrar sesión" danger onPress={() => router.push('/profile-logout')}>
               <RowIcon color={colors.red}>
                 <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.red)}>
                   <Path d="M10 17l5-5-5-5" />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { router } from 'expo-router';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { AuroraBackground } from '@/components/AuroraBackground';
@@ -9,22 +10,20 @@ export default function ProfileLogoutScreen() {
         <View style={styles.container}>
             <AuroraBackground />
 
-            {/* Botón de cerrar superior */}
+            {/* Cabecera con zIndex para que la X sea clickeable */}
             <View style={styles.header}>
-                <Pressable style={styles.closeBtn}>
+                <Pressable style={styles.closeBtn} onPress={() => router.back()}>
                     <Feather name="x" size={24} color={colors.text} />
                 </Pressable>
             </View>
 
             <View style={styles.content}>
-                {/* Ícono de advertencia / logout */}
                 <View style={styles.iconCircleOuter}>
                     <View style={styles.iconCircleInner}>
                         <Feather name="log-out" size={32} color={colors.red} />
                     </View>
                 </View>
 
-                {/* Textos de advertencia */}
                 <View style={styles.textContainer}>
                     <Text style={styles.title}>¿Cerrar{'\n'}sesión?</Text>
                     <Text style={styles.subtitle}>
@@ -33,13 +32,16 @@ export default function ProfileLogoutScreen() {
                 </View>
             </View>
 
-            {/* Footer con botones */}
             <View style={styles.footer}>
-                <Pressable style={styles.dangerBtn} android_ripple={{ color: 'rgba(0,0,0,0.1)' }}>
+                <Pressable
+                    style={styles.dangerBtn}
+                    android_ripple={{ color: 'rgba(0,0,0,0.1)' }}
+                    onPress={() => router.replace('/(auth)/login')}
+                >
                     <Text style={[type.button, { color: '#FFFFFF' }]}>Cerrar sesión</Text>
                 </Pressable>
 
-                <Pressable style={styles.ghostBtn}>
+                <Pressable style={styles.ghostBtn} onPress={() => router.back()}>
                     <Text style={[type.button, { color: colors.text }]}>Cancelar</Text>
                 </Pressable>
             </View>
@@ -56,6 +58,7 @@ const styles = StyleSheet.create({
         paddingTop: 60,
         paddingHorizontal: spacing.xl,
         alignItems: 'flex-end',
+        zIndex: 10, // EL FIX: Fuerza a la cabecera a estar por encima del contenido
     },
     closeBtn: {
         width: 40,
@@ -70,13 +73,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: spacing.xl,
-        marginTop: -60, // Centrado perfecto compensando el header
+        marginTop: -60,
     },
     iconCircleOuter: {
         width: 96,
         height: 96,
         borderRadius: 48,
-        backgroundColor: 'rgba(248,113,113,0.15)', // Rojo con opacidad
+        backgroundColor: 'rgba(248,113,113,0.15)',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: spacing.xxl,
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
         width: 64,
         height: 64,
         borderRadius: 32,
-        backgroundColor: 'rgba(248,113,113,0.2)', // Rojo un poco más oscuro
+        backgroundColor: 'rgba(248,113,113,0.2)',
         borderWidth: 1,
         borderColor: colors.red,
         alignItems: 'center',
@@ -119,7 +122,7 @@ const styles = StyleSheet.create({
         borderRadius: radii.button,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.red, // Rojo destructivo del token
+        backgroundColor: colors.red,
         shadowColor: colors.red,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
