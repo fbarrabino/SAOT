@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, Switch } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
 
 export default function ConnectPermissionsScreen() {
-    // Estados para los switches (los dos primeros prendidos por defecto según diseño)
     const [balanceEnabled, setBalanceEnabled] = useState(true);
     const [historyEnabled, setHistoryEnabled] = useState(true);
     const [operateEnabled, setOperateEnabled] = useState(false);
@@ -22,13 +22,11 @@ export default function ConnectPermissionsScreen() {
 
             <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
 
-                {/* Cabecera con logos conectados */}
                 <View style={styles.logosRow}>
                     <View style={[styles.logoCircle, { backgroundColor: colors.teal }]}>
                         <Text style={[styles.logoText, { color: colors.bg }]}>S</Text>
                     </View>
 
-                    {/* Puntitos conectores */}
                     <View style={styles.connectorContainer}>
                         <View style={styles.dot} />
                         <View style={styles.dot} />
@@ -39,13 +37,11 @@ export default function ConnectPermissionsScreen() {
                     </View>
                 </View>
 
-                {/* Títulos */}
                 <Text style={styles.title}>SaOT quiere conectarse con Brubank</Text>
                 <Text style={styles.subtitle}>
                     Vamos a recibir los datos que vos elijas. Podés revocar el acceso desde Perfil → Seguridad.
                 </Text>
 
-                {/* Tarjeta de Permisos */}
                 <View style={styles.permissionsCard}>
                     <PermissionRow
                         icon="credit-card"
@@ -68,7 +64,6 @@ export default function ConnectPermissionsScreen() {
                     />
                 </View>
 
-                {/* Nota de seguridad inferior */}
                 <View style={styles.securityNote}>
                     <Feather name="lock" size={14} color={colors.dim} />
                     <Text style={styles.securityText}>
@@ -78,10 +73,12 @@ export default function ConnectPermissionsScreen() {
 
             </ScrollView>
 
-            {/* Footer con el CTA */}
             <View style={styles.footer}>
                 <View style={[shadow.cta, { borderRadius: radii.button, flex: 1 }]}>
-                    <Pressable android_ripple={{ color: 'rgba(0,0,0,0.12)' }}>
+                    <Pressable
+                        android_ripple={{ color: 'rgba(0,0,0,0.12)' }}
+                        onPress={() => router.push('/connect-success')}
+                    >
                         <LinearGradient
                             colors={gradients.cyan}
                             start={{ x: 0, y: 0 }}
@@ -97,7 +94,6 @@ export default function ConnectPermissionsScreen() {
     );
 }
 
-// Sub-componente para cada fila de permiso con su Switch
 function PermissionRow({ icon, label, value, onValueChange, noBorder }: any) {
     return (
         <View style={[styles.permissionRow, !noBorder && styles.permissionRowBorder]}>
@@ -126,7 +122,7 @@ const styles = StyleSheet.create({
     content: {
         paddingHorizontal: spacing.lg,
         paddingTop: spacing.lg,
-        paddingBottom: 40,
+        paddingBottom: 20, // Reducido para acercarlo al footer
     },
     logosRow: {
         flexDirection: 'row',
@@ -214,7 +210,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         padding: spacing.lg,
-        paddingBottom: 40,
+        paddingBottom: 60, // Aumentado para separarlo del borde inferior de iOS
     },
     primaryBtn: {
         height: 52,

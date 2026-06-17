@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { colors, radii, spacing, type, gradients } from '@/theme/tokens';
@@ -54,16 +55,18 @@ export default function WalletDetailScreen() {
 
                 <View style={styles.transactionsList}>
                     {mockTransactions.map((tx) => (
-                        <View key={tx.id} style={styles.txRow}>
-                            <View style={styles.txIconContainer}>
-                                <Feather name="arrow-up-right" size={16} color={colors.text} />
+                        <Pressable key={tx.id} onPress={() => router.push('/transaction-detail')}>
+                            <View style={styles.txRow}>
+                                <View style={styles.txIconContainer}>
+                                    <Feather name="arrow-up-right" size={16} color={colors.text} />
+                                </View>
+                                <View style={styles.txInfo}>
+                                    <Text style={type.bodyText}>{tx.title}</Text>
+                                    <Text style={type.small}>{tx.date}</Text>
+                                </View>
+                                <Text style={type.h4}>{fmt(tx.amount)}</Text>
                             </View>
-                            <View style={styles.txInfo}>
-                                <Text style={type.bodyText}>{tx.title}</Text>
-                                <Text style={type.small}>{tx.date}</Text>
-                            </View>
-                            <Text style={type.h4}>{fmt(tx.amount)}</Text>
-                        </View>
+                        </Pressable>
                     ))}
                 </View>
             </ScrollView>
@@ -75,7 +78,7 @@ function ActionButton({ icon, label }: { icon: keyof typeof Feather.glyphMap; la
     return (
         <Pressable style={styles.actionBtn}>
             <Feather name={icon} size={14} color={colors.text} style={{ marginRight: spacing.xs }} />
-            <Text style={type.button}>{label}</Text>
+            <Text style={[type.button, { color: colors.text }]}>{label}</Text>
         </Pressable>
     );
 }

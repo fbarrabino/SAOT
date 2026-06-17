@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
 
@@ -12,20 +13,18 @@ export default function ConnectSuccessScreen() {
 
             {/* Botón de cerrar superior */}
             <View style={styles.header}>
-                <Pressable style={styles.closeBtn}>
+                <Pressable style={styles.closeBtn} onPress={() => router.replace('/(tabs)/wallets')}>
                     <Feather name="x" size={24} color={colors.text} />
                 </Pressable>
             </View>
 
             <View style={styles.content}>
-                {/* Animación/Check de Éxito */}
                 <View style={styles.successCircleOuter}>
                     <View style={styles.successCircleInner}>
                         <Feather name="check" size={32} color="#FFFFFF" />
                     </View>
                 </View>
 
-                {/* Textos arreglados (sin superposición) */}
                 <View style={styles.textContainer}>
                     <Text style={type.display}>Brubank</Text>
                     <Text style={styles.successLabel}>¡Conectada!</Text>
@@ -34,7 +33,6 @@ export default function ConnectSuccessScreen() {
                     </Text>
                 </View>
 
-                {/* Tarjeta de estado de sincronización */}
                 <View style={styles.statusCard}>
                     <View style={styles.statusLeft}>
                         <View style={[styles.walletIcon, { backgroundColor: '#6842FF' }]}>
@@ -52,7 +50,10 @@ export default function ConnectSuccessScreen() {
             {/* Footer con botones de acción */}
             <View style={styles.footer}>
                 <View style={[shadow.cta, { borderRadius: radii.button, marginBottom: spacing.md }]}>
-                    <Pressable android_ripple={{ color: 'rgba(0,0,0,0.12)' }}>
+                    <Pressable 
+                        android_ripple={{ color: 'rgba(0,0,0,0.12)' }} 
+                        onPress={() => router.replace('/(tabs)/wallets')}
+                    >
                         <LinearGradient
                             colors={gradients.cyan}
                             start={{ x: 0, y: 0 }}
@@ -64,7 +65,7 @@ export default function ConnectSuccessScreen() {
                     </Pressable>
                 </View>
 
-                <Pressable style={styles.ghostBtn}>
+                <Pressable style={styles.ghostBtn} onPress={() => router.replace('/connect-list')}>
                     <Text style={[type.button, { color: colors.text }]}>Conectar otra</Text>
                 </Pressable>
             </View>
@@ -81,6 +82,7 @@ const styles = StyleSheet.create({
         paddingTop: 60,
         paddingHorizontal: spacing.xl,
         alignItems: 'flex-end',
+        zIndex: 10,
     },
     closeBtn: {
         width: 40,
@@ -95,12 +97,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: spacing.xl,
+        marginTop: -60,
     },
     successCircleOuter: {
         width: 96,
         height: 96,
         borderRadius: 48,
-        backgroundColor: 'rgba(74,222,128,0.15)', // Verde con opacidad
+        backgroundColor: 'rgba(74,222,128,0.15)',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: spacing.xxl,

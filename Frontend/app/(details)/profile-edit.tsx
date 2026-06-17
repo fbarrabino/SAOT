@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, TextInput } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
@@ -23,16 +24,14 @@ export default function ProfileEditScreen() {
 
             <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
 
-                {/* Avatar editable */}
                 <View style={styles.avatarSection}>
                     <View style={styles.avatarCircle}>
                         <LinearGradient
-                            colors={gradients.lime} // Gradiente lime característico
+                            colors={gradients.lime}
                             style={StyleSheet.absoluteFillObject}
                         />
                         <Text style={styles.avatarText}>FA</Text>
 
-                        {/* Botón flotante de editar foto */}
                         <Pressable style={styles.editIconBadge}>
                             <Feather name="image" size={14} color="#FFFFFF" />
                         </Pressable>
@@ -44,7 +43,6 @@ export default function ProfileEditScreen() {
                     </Pressable>
                 </View>
 
-                {/* Formulario */}
                 <View style={styles.formSection}>
                     <FormInput label="NOMBRE COMPLETO" value={name} onChange={setName} />
                     <FormInput label="USUARIO" value={user} onChange={setUser} />
@@ -55,10 +53,10 @@ export default function ProfileEditScreen() {
 
             </ScrollView>
 
-            {/* Footer */}
             <View style={styles.footer}>
                 <View style={[shadow.cta, { borderRadius: radii.button }]}>
-                    <Pressable android_ripple={{ color: 'rgba(0,0,0,0.12)' }}>
+                    {/* Al presionar Guardar, vuelve a la pantalla de Perfil simulando éxito */}
+                    <Pressable android_ripple={{ color: 'rgba(0,0,0,0.12)' }} onPress={() => router.back()}>
                         <LinearGradient
                             colors={gradients.cyan}
                             start={{ x: 0, y: 0 }}
@@ -74,7 +72,6 @@ export default function ProfileEditScreen() {
     );
 }
 
-// Sub-componente para los inputs
 function FormInput({ label, value, onChange, keyboardType = 'default', editable = true }: any) {
     return (
         <View style={styles.inputContainer}>

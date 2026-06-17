@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, Switch } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { colors, radii, spacing, type } from '@/theme/tokens';
 
 export default function ProfileSecurityScreen() {
-    // Estados para los switches según el diseño
     const [faceId, setFaceId] = useState(true);
     const [pin, setPin] = useState(true);
     const [twoFactor, setTwoFactor] = useState(true);
@@ -22,7 +22,6 @@ export default function ProfileSecurityScreen() {
 
             <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
 
-                {/* Sección Acceso */}
                 <Text style={styles.sectionLabel}>ACCESO</Text>
                 <View style={styles.card}>
                     <ToggleRow
@@ -39,7 +38,6 @@ export default function ProfileSecurityScreen() {
                     />
                 </View>
 
-                {/* Sección Pagos */}
                 <Text style={styles.sectionLabel}>PAGOS</Text>
                 <View style={styles.card}>
                     <ToggleRow
@@ -48,12 +46,17 @@ export default function ProfileSecurityScreen() {
                     />
                 </View>
 
-                {/* Sección Cuenta */}
                 <Text style={styles.sectionLabel}>CUENTA</Text>
                 <View style={styles.card}>
                     <LinkRow icon="lock" title="Cambiar contraseña" />
                     <LinkRow icon="smartphone" title="Dispositivos conectados" subtitle="2 dispositivos activos" />
-                    <LinkRow icon="log-out" title="Cerrar sesión en todos lados" isDestructive noBorder />
+                    <LinkRow
+                        icon="log-out"
+                        title="Cerrar sesión en todos lados"
+                        isDestructive
+                        noBorder
+                        onPress={() => router.push('/profile-logout')}
+                    />
                 </View>
 
             </ScrollView>
@@ -61,7 +64,6 @@ export default function ProfileSecurityScreen() {
     );
 }
 
-// Sub-componente para filas con Switch
 function ToggleRow({ icon, title, subtitle, value, onValueChange, noBorder }: any) {
     return (
         <View style={[styles.row, !noBorder && styles.rowBorder]}>
@@ -83,13 +85,12 @@ function ToggleRow({ icon, title, subtitle, value, onValueChange, noBorder }: an
     );
 }
 
-// Sub-componente para filas con Link (flechita)
-function LinkRow({ icon, title, subtitle, isDestructive, noBorder }: any) {
+function LinkRow({ icon, title, subtitle, isDestructive, noBorder, onPress }: any) {
     const textColor = isDestructive ? colors.red : colors.text;
     const iconColor = isDestructive ? colors.red : colors.cyan;
 
     return (
-        <Pressable style={[styles.row, !noBorder && styles.rowBorder]}>
+        <Pressable style={[styles.row, !noBorder && styles.rowBorder]} onPress={onPress}>
             <View style={styles.rowIcon}>
                 <Feather name={icon} size={18} color={iconColor} />
             </View>

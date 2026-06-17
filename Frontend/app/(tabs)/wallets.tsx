@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { WalletGlyph } from '@/components/WalletGlyph';
@@ -51,7 +52,7 @@ export default function Wallets() {
               </LinearGradient>
             ))}
 
-            <Pressable style={styles.addRow}>
+            <Pressable style={styles.addRow} onPress={() => router.push('/connect-list')}>
               <View style={styles.plusCircle}>
                 <Svg width={18} height={18} viewBox="0 0 24 24" stroke={colors.muted} strokeWidth={2.2} fill="none" strokeLinecap="round">
                   <Path d="M12 5v14M5 12h14" />

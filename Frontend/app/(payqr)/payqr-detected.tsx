@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
 
@@ -10,19 +11,16 @@ export default function PayQRDetectedScreen() {
         <View style={styles.container}>
             <AuroraBackground />
 
-            {/* Cabecera */}
             <View style={styles.header}>
-                <Pressable style={styles.iconBtn}>
+                <Pressable style={styles.iconBtn} onPress={() => router.back()}>
                     <Feather name="chevron-left" size={24} color={colors.text} />
                 </Pressable>
                 <Text style={styles.title}>Código detectado</Text>
-                <Pressable style={styles.iconBtn}>
-                    <Feather name="x" size={24} color={colors.text} />
-                </Pressable>
+                {/* Ocultamos la 'X' redundante insertando un bloque vacío del mismo tamaño para mantener el centrado flex */}
+                <View style={{ width: 44, height: 44 }} />
             </View>
 
             <View style={styles.content}>
-                {/* Tarjeta del Comercio */}
                 <View style={styles.merchantCard}>
                     <View style={styles.merchantIconBox}>
                         <Feather name="grid" size={20} color={colors.cyan} />
@@ -36,7 +34,6 @@ export default function PayQRDetectedScreen() {
                     </View>
                 </View>
 
-                {/* Monto a cobrar */}
                 <View style={styles.amountContainer}>
                     <Text style={type.small}>Cobro</Text>
                     <Text style={[type.display, { color: colors.green, fontSize: 40, marginTop: spacing.xs }]}>
@@ -44,7 +41,6 @@ export default function PayQRDetectedScreen() {
                     </Text>
                 </View>
 
-                {/* Detalles del pago */}
                 <View style={styles.detailsContainer}>
                     <View style={styles.detailRow}>
                         <Text style={type.body}>Desde</Text>
@@ -67,10 +63,9 @@ export default function PayQRDetectedScreen() {
                 </View>
             </View>
 
-            {/* Footer con el CTA */}
             <View style={styles.footer}>
                 <View style={[shadow.cta, { borderRadius: radii.button }]}>
-                    <Pressable android_ripple={{ color: 'rgba(0,0,0,0.12)' }}>
+                    <Pressable android_ripple={{ color: 'rgba(0,0,0,0.12)' }} onPress={() => router.push('/payqr-success')}>
                         <LinearGradient
                             colors={gradients.cyan}
                             start={{ x: 0, y: 0 }}

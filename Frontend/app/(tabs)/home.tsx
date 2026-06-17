@@ -83,8 +83,14 @@ export default function Home() {
             style={{ marginHorizontal: -18, paddingHorizontal: 18 }}
           >
             {WALLETS.map(w => (
-              /* NAVEGACIÓN A TU PANTALLA DE DETALLE DE BILLETERA */
-              <Pressable key={w.key} onPress={() => router.push('/wallet-detail')}>
+              <Pressable
+                key={w.key}
+                onPress={() => {
+                  if (w.key === 'mp') {
+                    router.push('/wallet-detail');
+                  }
+                }}
+              >
                 <LinearGradient
                   colors={w.tint}
                   start={{ x: 0, y: 0 }}
@@ -122,7 +128,6 @@ export default function Home() {
             <QuickAction
               icon={<QRIcon />}
               label="Pagar QR"
-              /* NAVEGACIÓN A TU PANTALLA DE ESCANEO DE QR */
               onPress={() => router.push('/payqr-scanning')}
             />
           </View>

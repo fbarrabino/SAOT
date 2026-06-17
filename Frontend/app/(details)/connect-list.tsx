@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, TextInput } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { colors, radii, spacing, type } from '@/theme/tokens';
 
-// Mock de las billeteras basado en el diseño
 const AVAILABLE_WALLETS = [
     { id: 'bb', name: 'Brubank', desc: 'Banco digital · ARG', color: '#6842FF', short: 'BB' },
     { id: 'nx', name: 'Naranja X', desc: 'Billetera virtual · ARG', color: '#FF5C00', short: 'NX' },
@@ -20,7 +20,6 @@ const AVAILABLE_WALLETS = [
 export default function ConnectListScreen() {
     const [searchQuery, setSearchQuery] = useState('');
 
-    // Lógica de filtrado corregida: ahora solo busca al inicio de la palabra (.startsWith)
     const filteredWallets = AVAILABLE_WALLETS.filter((wallet) =>
         wallet.name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
         wallet.short.toLowerCase().startsWith(searchQuery.toLowerCase())
@@ -59,7 +58,11 @@ export default function ConnectListScreen() {
                 <View style={styles.listContainer}>
                     {filteredWallets.length > 0 ? (
                         filteredWallets.map((wallet) => (
-                            <ConnectRow key={wallet.id} wallet={wallet} />
+                            <ConnectRow
+                                key={wallet.id}
+                                wallet={wallet}
+                                onPress={() => router.push('/connect-permissions')}
+                            />
                         ))
                     ) : (
                         <Text style={styles.noResultsText}>No se encontraron resultados.</Text>
@@ -71,9 +74,9 @@ export default function ConnectListScreen() {
     );
 }
 
-function ConnectRow({ wallet }: { wallet: typeof AVAILABLE_WALLETS[0] }) {
+function ConnectRow({ wallet, onPress }: { wallet: typeof AVAILABLE_WALLETS[0], onPress?: () => void }) {
     return (
-        <Pressable style={styles.row}>
+        <Pressable style={styles.row} onPress={onPress}>
             <View style={[styles.walletIcon, { backgroundColor: wallet.color }]}>
                 <Text style={styles.walletIconText}>{wallet.short}</Text>
             </View>

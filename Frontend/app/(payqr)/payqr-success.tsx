@@ -2,35 +2,42 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
 
 export default function PayQRSuccessScreen() {
+
+    // Función para volver al inicio borrando el stack
+    function done() {
+        if (router.dismissAll) {
+            router.dismissAll();
+        }
+        router.replace('/(tabs)/home');
+    }
+
     return (
         <View style={styles.container}>
             <AuroraBackground />
 
             {/* Botón de cerrar superior */}
             <View style={styles.header}>
-                <Pressable style={styles.closeBtn}>
+                <Pressable style={styles.closeBtn} onPress={done}>
                     <Feather name="x" size={24} color={colors.text} />
                 </Pressable>
             </View>
 
             <View style={styles.content}>
-                {/* Animación/Check de Éxito */}
                 <View style={styles.successCircleOuter}>
                     <View style={styles.successCircleInner}>
                         <Feather name="check" size={32} color="#FFFFFF" />
                     </View>
                 </View>
 
-                {/* Textos arreglados (sin superposición) */}
                 <View style={styles.textContainer}>
                     <Text style={styles.successLabel}>Pago</Text>
                     <Text style={styles.successLabel}>aprobado</Text>
 
-                    {/* Subtítulo con margen superior para evitar el error del diseño original */}
                     <Text style={styles.subtitle}>
                         $24.80 pagado a <Text style={{ fontWeight: 'bold', color: colors.text }}>Café Buenos Aires</Text>{'\n'}
                         vía Mercado Pago.
@@ -41,7 +48,7 @@ export default function PayQRSuccessScreen() {
             {/* Footer con el CTA Listo */}
             <View style={styles.footer}>
                 <View style={[shadow.cta, { borderRadius: radii.button }]}>
-                    <Pressable android_ripple={{ color: 'rgba(0,0,0,0.12)' }}>
+                    <Pressable android_ripple={{ color: 'rgba(0,0,0,0.12)' }} onPress={done}>
                         <LinearGradient
                             colors={gradients.cyan}
                             start={{ x: 0, y: 0 }}
@@ -66,6 +73,7 @@ const styles = StyleSheet.create({
         paddingTop: 60,
         paddingHorizontal: spacing.xl,
         alignItems: 'flex-end',
+        zIndex: 10,
     },
     closeBtn: {
         width: 40,
@@ -80,13 +88,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: spacing.xl,
-        marginTop: -60, // Compensa el espacio del header para centrar perfectamente
+        marginTop: -60,
     },
     successCircleOuter: {
         width: 96,
         height: 96,
         borderRadius: 48,
-        backgroundColor: 'rgba(74,222,128,0.15)', // Verde con opacidad
+        backgroundColor: 'rgba(74,222,128,0.15)',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: spacing.xxl,
@@ -118,7 +126,7 @@ const styles = StyleSheet.create({
         ...type.body,
         textAlign: 'center',
         color: colors.dim,
-        marginTop: spacing.xl, // Separación clave aplicada para separar los textos
+        marginTop: spacing.xl,
         lineHeight: 22,
     },
     footer: {

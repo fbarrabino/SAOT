@@ -1,23 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { colors, radii, spacing, type } from '@/theme/tokens';
 
 export default function PayQRScanningScreen() {
-    // Valor animado para la línea del escáner
     const scanLineY = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
-        // Animación en loop que sube y baja
         Animated.loop(
             Animated.sequence([
                 Animated.timing(scanLineY, {
-                    toValue: 240, // baja 240px
+                    toValue: 240,
                     duration: 2000,
                     useNativeDriver: true,
                 }),
                 Animated.timing(scanLineY, {
-                    toValue: 0, // vuelve a subir
+                    toValue: 0,
                     duration: 2000,
                     useNativeDriver: true,
                 })
@@ -27,12 +26,10 @@ export default function PayQRScanningScreen() {
 
     return (
         <View style={styles.container}>
-            {/* Simulación del feed de la cámara (fondo oscuro) */}
             <View style={styles.cameraFeed} />
 
-            {/* Cabecera flotante */}
             <View style={styles.header}>
-                <Pressable style={styles.iconBtn}>
+                <Pressable style={styles.iconBtn} onPress={() => router.back()}>
                     <Feather name="x" size={24} color={colors.text} />
                 </Pressable>
                 <Text style={styles.title}>Escanear QR</Text>
@@ -41,16 +38,13 @@ export default function PayQRScanningScreen() {
                 </Pressable>
             </View>
 
-            {/* Área central de escaneo */}
             <View style={styles.scanAreaContainer}>
                 <View style={styles.scanBox}>
-                    {/* Esquinas del marco */}
                     <View style={[styles.corner, styles.topLeft]} />
                     <View style={[styles.corner, styles.topRight]} />
                     <View style={[styles.corner, styles.bottomLeft]} />
                     <View style={[styles.corner, styles.bottomRight]} />
 
-                    {/* Línea láser animada */}
                     <Animated.View
                         style={[
                             styles.scanLine,
@@ -60,11 +54,13 @@ export default function PayQRScanningScreen() {
                 </View>
             </View>
 
-            {/* Pie flotante */}
             <View style={styles.footer}>
-                <View style={styles.instructionPill}>
-                    <Text style={styles.instructionText}>Enfocá el código QR para pagar</Text>
-                </View>
+                {/* TRUCO DE UI/UX: Al tocar esta etiqueta simulamos que la cámara leyó un QR exitosamente */}
+                <Pressable onPress={() => router.push('/payqr-detected')}>
+                    <View style={styles.instructionPill}>
+                        <Text style={styles.instructionText}>Enfocá el código QR para pagar</Text>
+                    </View>
+                </Pressable>
             </View>
         </View>
     );
@@ -73,11 +69,11 @@ export default function PayQRScanningScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000000', // Fondo negro de cámara
+        backgroundColor: '#000000',
     },
     cameraFeed: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: '#11141A', // Simula la oscuridad de una cámara activa
+        backgroundColor: '#11141A',
     },
     header: {
         flexDirection: 'row',
