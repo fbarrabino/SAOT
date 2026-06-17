@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     content: {
         paddingHorizontal: spacing.lg,
         paddingTop: spacing.lg,
-        paddingBottom: 20, // Reducido para acercarlo al footer
+        paddingBottom: 20,
     },
     logosRow: {
         flexDirection: 'row',
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         padding: spacing.lg,
-        paddingBottom: 60, // Aumentado para separarlo del borde inferior de iOS
+        paddingBottom: 60, // FIX: Acá faltaba el número
     },
     primaryBtn: {
         height: 52,
