@@ -31,3 +31,7 @@ GET {{API_URL}}/api/time
 ### Time seguro (requiere token)
 GET {{API_URL}}/api/time/secure
 Authorization: Bearer {{TOKEN}}
+
+### Movimientos del usuario autenticado (requiere token)
+GET {{API_URL}}/api/time/movimientos/me
+Authorization: Bearer {{TOKEN}}

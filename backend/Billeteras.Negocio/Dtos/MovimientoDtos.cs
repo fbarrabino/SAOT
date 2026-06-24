@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 namespace Billeteras.Negocio.Dtos;
 
 public record MovimientoRequest(
-    [property: Range(1, int.MaxValue)] int CuentaBilleteraId,
-    [property: Range(1, int.MaxValue)] int CategoriaId,
+    [Range(1, int.MaxValue)] int CuentaBilleteraId,
+    [Range(1, int.MaxValue)] int CategoriaId,
     DateTime Fecha,
-    [property: MaxLength(250)] string? Descripcion,
+    [MaxLength(250)] string? Descripcion,
     decimal Monto,
-    [property: Required, MaxLength(10)] string Tipo);
+    [Required, MaxLength(10)] string Tipo);
 
 public record MovimientoResponse(
     int MovimientoId,

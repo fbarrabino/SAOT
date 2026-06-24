@@ -1,6 +1,10 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useFonts as useSpaceGrotesk, SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
+import {
+  useFonts as useSpaceGrotesk,
+  SpaceGrotesk_600SemiBold,
+  SpaceGrotesk_700Bold,
+} from '@expo-google-fonts/space-grotesk';
 import {
   useFonts as useJakarta,
   PlusJakartaSans_400Regular,
@@ -12,6 +16,31 @@ import {
 import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { colors } from '@/theme/tokens';
+import { SessionProvider, useSession } from '@/context/SessionContext';
+import { WalletsProvider } from '@/context/WalletsContext';
+
+/**
+ * Wrapper interno que conecta el estado de autenticación con WalletsProvider.
+ * Necesita estar dentro de SessionProvider para poder llamar useSession().
+ */
+function AppWithProviders() {
+  const { isAuthenticated } = useSession();
+
+  return (
+    // enabled={isAuthenticated} hace que WalletsProvider cargue datos
+    // solo cuando hay sesión activa y los limpie al desloguearse.
+    <WalletsProvider enabled={isAuthenticated}>
+      <StatusBar style="light" />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.bg },
+          animation: 'slide_from_right',
+        }}
+      />
+    </WalletsProvider>
+  );
+}
 
 export default function RootLayout() {
   const [grotesk] = useSpaceGrotesk({ SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold });
@@ -23,20 +52,17 @@ export default function RootLayout() {
     PlusJakartaSans_800ExtraBold,
   });
 
+  // Pantalla en negro mientras cargan las fuentes
   if (!grotesk || !jakarta) {
     return <View style={{ flex: 1, backgroundColor: colors.bg }} />;
   }
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="light" />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.bg },
-          animation: 'slide_from_right',
-        }}
-      />
+      {/* SessionProvider va afuera: maneja JWT y datos del usuario */}
+      <SessionProvider>
+        <AppWithProviders />
+      </SessionProvider>
     </SafeAreaProvider>
   );
 }

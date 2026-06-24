@@ -75,6 +75,11 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Mapeo de controladores API (attribute routing — [Route], [HttpGet], etc.)
+// IMPORTANTE: sin esta línea ningún endpoint /api/* responde.
+app.MapControllers();
+
+// Ruta MVC convencional para las vistas Razor existentes (CuentaBilletera/Index, etc.)
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=CuentaBilletera}/{action=Index}/{id?}");

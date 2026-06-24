@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 namespace Billeteras.Negocio.Dtos;
 
 public record CuentaBilleteraRequest(
-    [property: Range(1, int.MaxValue)] int UsuarioId,
-    [property: Range(1, int.MaxValue)] int BilleteraId,
-    [property: MaxLength(100)] string? Alias,
+    [Range(1, int.MaxValue)] int UsuarioId,
+    [Range(1, int.MaxValue)] int BilleteraId,
+    [MaxLength(100)] string? Alias,
     decimal SaldoActual);
 
 public record CuentaBilleteraResponse(

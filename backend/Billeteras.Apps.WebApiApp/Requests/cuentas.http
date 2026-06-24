@@ -1,6 +1,11 @@
 @API_URL = https://localhost:7001
+@TOKEN = PEGAR_TOKEN_DEL_LOGIN_ACA
 
-### Listar todas las cuentas de billetera
+### ✅ MIS cuentas (usuario del token JWT) — requiere token
+GET {{API_URL}}/api/cuentas-billetera/me
+Authorization: Bearer {{TOKEN}}
+
+### Listar todas las cuentas de billetera (sin filtro, admin/debug)
 GET {{API_URL}}/api/cuentas-billetera
 
 ### Obtener una cuenta por id

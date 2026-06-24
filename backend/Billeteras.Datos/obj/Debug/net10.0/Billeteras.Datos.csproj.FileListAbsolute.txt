@@ -1,0 +1,16 @@
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\bin\Debug\net10.0\Billeteras.Datos.deps.json
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\bin\Debug\net10.0\Billeteras.Datos.dll
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\bin\Debug\net10.0\Billeteras.Datos.pdb
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\bin\Debug\net10.0\Billeteras.Entidades.dll
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\bin\Debug\net10.0\Billeteras.Entidades.pdb
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.csproj.AssemblyReference.cache
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.AssemblyInfoInputs.cache
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.AssemblyInfo.cs
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.sourcelink.json
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeter.4224E23F.Up2Date
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.dll
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\refint\Billeteras.Datos.dll
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.pdb
+C:\Users\USER\Desktop\Programacion\Facultad\TPIS\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\ref\Billeteras.Datos.dll

@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
@@ -7,22 +14,10 @@ import Svg, { Path, Rect } from 'react-native-svg';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { WalletGlyph } from '@/components/WalletGlyph';
 import { colors, fonts, gradients, radii, type } from '@/theme/tokens';
+import { useWallets } from '@/context/WalletsContext';
+import { fmt } from '@/utils/format';
 
-const fmt = (n: number) =>
-  '$' +
-  n.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-const WALLETS = [
-  { key: 'mp' as const, name: 'Mercado Pago', bal: 3200.5, tint: gradients.mpTint },
-  { key: 'ua' as const, name: 'Ualá', bal: 1500.0, tint: gradients.uaTint },
-  { key: 'lm' as const, name: 'Lemon', bal: 7749.75, tint: gradients.lmTint },
-];
-
-const ACTIVITY = [
-  { key: 'mp' as const, title: 'Mercado Pago', sub: 'Supermercado', amt: -45.2 },
-  { key: 'ua' as const, title: 'Ualá', sub: 'Transferencia recibida', amt: 200.0 },
-  { key: 'lm' as const, title: 'Lemon', sub: 'Compra online', amt: -120.5 },
-];
+// ─── Íconos ───────────────────────────────────────────────────────────────────
 
 function SendIcon() {
   return (
@@ -60,17 +55,46 @@ function QRIcon() {
   );
 }
 
+// ─── Componente principal ─────────────────────────────────────────────────────
+
 export default function Home() {
-  const total = WALLETS.reduce((s, w) => s + w.bal, 0);
+  // Datos reales del backend (o mock si el backend no responde)
+  const { wallets, activity, isLoading, error, refresh } = useWallets();
+
+  const total = wallets.reduce((s, w) => s + w.bal, 0);
+
+  // Mostramos solo los últimos 3 movimientos en la home
+  const recentActivity = activity.slice(0, 3);
 
   return (
     <View style={styles.root}>
       <AuroraBackground />
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-          <Text style={styles.balanceLabel}>Balance Total</Text>
-          <Text style={styles.balance}>{fmt(total)}</Text>
 
+          {/* ── Balance total ───────────────────────────────────────────────── */}
+          <Text style={styles.balanceLabel}>Balance Total</Text>
+
+          {isLoading ? (
+            <View style={styles.loadingRow}>
+              <ActivityIndicator color={colors.cyan} size="small" />
+              <Text style={styles.loadingText}>Actualizando...</Text>
+            </View>
+          ) : (
+            <Text style={styles.balance}>{fmt(total)}</Text>
+          )}
+
+          {/* Banner de error con botón para reintentar */}
+          {error && !isLoading ? (
+            <View style={styles.errorBanner}>
+              <Text style={styles.errorText}>{error}</Text>
+              <Pressable onPress={refresh} style={styles.retryBtn}>
+                <Text style={styles.retryText}>Reintentar</Text>
+              </Pressable>
+            </View>
+          ) : null}
+
+          {/* ── Billeteras conectadas ────────────────────────────────────────── */}
           <View style={styles.sectionRow}>
             <Text style={styles.h4}>Billeteras Conectadas</Text>
             <Text style={styles.more}>›</Text>
@@ -82,21 +106,28 @@ export default function Home() {
             contentContainerStyle={{ paddingRight: 18, gap: 10 }}
             style={{ marginHorizontal: -18, paddingHorizontal: 18 }}
           >
-            {WALLETS.map(w => (
-              <LinearGradient
+            {wallets.map(w => (
+              <Pressable
                 key={w.key}
-                colors={w.tint}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.wcard}
+                onPress={() => {
+                  if (w.key === 'mp') router.push('/wallet-detail');
+                }}
               >
-                <WalletGlyph wallet={w.key} size={34} />
-                <Text style={styles.wname}>{w.name}</Text>
-                <Text style={styles.wbal}>{fmt(w.bal)}</Text>
-              </LinearGradient>
+                <LinearGradient
+                  colors={w.tint}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.wcard}
+                >
+                  <WalletGlyph wallet={w.key} size={34} />
+                  <Text style={styles.wname}>{w.name}</Text>
+                  <Text style={styles.wbal}>{fmt(w.bal)}</Text>
+                </LinearGradient>
+              </Pressable>
             ))}
           </ScrollView>
 
+          {/* ── Acciones rápidas ─────────────────────────────────────────────── */}
           <View style={[styles.sectionRow, { marginTop: 24 }]}>
             <Text style={styles.h4}>Acciones Rápidas</Text>
           </View>
@@ -124,6 +155,7 @@ export default function Home() {
             />
           </View>
 
+          {/* ── Actividad reciente ───────────────────────────────────────────── */}
           <Pressable
             style={[styles.sectionRow, { marginTop: 26 }]}
             onPress={() => router.push('/(tabs)/activity')}
@@ -132,24 +164,31 @@ export default function Home() {
             <Text style={styles.more}>Ver todo ›</Text>
           </Pressable>
 
-          {ACTIVITY.map((a, i) => (
-            <View key={i} style={styles.act}>
-              <WalletGlyph wallet={a.key} size={36} />
-              <View style={{ flex: 1, marginLeft: 11 }}>
-                <Text style={styles.actTitle}>{a.title}</Text>
-                <Text style={styles.actSub}>{a.sub}</Text>
+          {recentActivity.length === 0 && !isLoading ? (
+            <Text style={styles.emptyText}>Sin movimientos recientes.</Text>
+          ) : (
+            recentActivity.map(a => (
+              <View key={a.id} style={styles.act}>
+                <WalletGlyph wallet={a.wallet} size={36} />
+                <View style={{ flex: 1, marginLeft: 11 }}>
+                  <Text style={styles.actTitle}>{a.title}</Text>
+                  <Text style={styles.actSub}>{a.walletName}</Text>
+                </View>
+                <Text style={[styles.actAmt, { color: a.kind === 'in' ? colors.green : colors.text }]}>
+                  {a.kind === 'in' ? '+' : '-'}
+                  {fmt(Math.abs(a.amount))}
+                </Text>
               </View>
-              <Text style={[styles.actAmt, { color: a.amt < 0 ? colors.text : colors.green }]}>
-                {a.amt < 0 ? '-' : '+'}
-                {fmt(Math.abs(a.amt))}
-              </Text>
-            </View>
-          ))}
+            ))
+          )}
+
         </ScrollView>
       </SafeAreaView>
     </View>
   );
 }
+
+// ─── Componente auxiliar ──────────────────────────────────────────────────────
 
 function QuickAction({
   icon,
@@ -168,6 +207,8 @@ function QuickAction({
   );
 }
 
+// ─── Estilos ──────────────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   scroll: { paddingHorizontal: 18, paddingTop: 18, paddingBottom: 120 },
@@ -185,6 +226,50 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginBottom: 6,
     color: colors.cyan,
+  },
+  loadingRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 8,
+    marginBottom: 6,
+  },
+  loadingText: {
+    fontFamily: fonts.body,
+    fontSize: 13,
+    color: colors.muted,
+  },
+  errorBanner: {
+    backgroundColor: 'rgba(239,68,68,0.10)',
+    borderWidth: 1,
+    borderColor: 'rgba(239,68,68,0.30)',
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    marginTop: 6,
+    marginBottom: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  errorText: {
+    fontFamily: fonts.body,
+    fontSize: 12.5,
+    color: '#f87171',
+    flex: 1,
+  },
+  retryBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(239,68,68,0.4)',
+  },
+  retryText: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 12,
+    color: '#f87171',
   },
   sectionRow: {
     flexDirection: 'row',
@@ -217,6 +302,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   qaLabel: { fontFamily: fonts.bodySemi, fontSize: 11, color: colors.cyan },
+  emptyText: {
+    fontFamily: fonts.body,
+    fontSize: 13,
+    color: colors.dim,
+    textAlign: 'center',
+    marginTop: 12,
+  },
   act: {
     flexDirection: 'row',
     alignItems: 'center',
