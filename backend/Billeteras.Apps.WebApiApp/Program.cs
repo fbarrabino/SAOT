@@ -18,17 +18,14 @@ var connStr = builder.Configuration.GetConnectionString("BilleterasDB")
 builder.Services.AddDbContext<BilleterasContext>(opt => opt.UseSqlServer(connStr));
 
 // Repositorios: por DEFECTO EF Core.
-//    Para usar ADO.NET, se comenta la línea EF y se descomentá la ADO de al lado.
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepositoryEF>();
-// builder.Services.AddScoped<IUsuarioRepository>(_ => new UsuarioRepositoryAdo(connStr));
 builder.Services.AddScoped<IBilleteraRepository, BilleteraRepositoryEF>();
-// builder.Services.AddScoped<IBilleteraRepository>(_ => new BilleteraRepositoryAdo(connStr));
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepositoryEF>();
-// builder.Services.AddScoped<ICategoriaRepository>(_ => new CategoriaRepositoryAdo(connStr));
 builder.Services.AddScoped<ICuentaBilleteraRepository, CuentaBilleteraRepositoryEF>();
-// builder.Services.AddScoped<ICuentaBilleteraRepository>(_ => new CuentaBilleteraRepositoryAdo(connStr));
 builder.Services.AddScoped<IMovimientoRepository, MovimientoRepositoryEF>();
-// builder.Services.AddScoped<IMovimientoRepository>(_ => new MovimientoRepositoryAdo(connStr));
+
+// --- NUESTRO REPOSITORIO (BE-02) ---
+builder.Services.AddScoped<IMetodoPagoExternoRepository, MetodoPagoExternoRepositoryEF>();
 
 // Servicios de Negocio
 builder.Services.AddScoped<IUsuarioNegocio, UsuarioNegocio>();
