@@ -105,3 +105,125 @@ INSERT INTO dbo.Categoria (Nombre, Tipo) VALUES
     (N'Ocio',                   N'Egreso'),
     (N'Otros',                  N'Egreso');
 GO
+
+-- ===================================================================
+-- EXTENSIÓN DEL MODELO DE DATOS (BE-01) - TFI UTN FRRe
+-- Desarrollado por: Franco Barrabino
+-- Objetivo: Alcanzar las 20 tablas, relaciones N-N y campo JSON.
+-- ===================================================================
+
+-- 1. MÓDULO DE SEGURIDAD (Requisito para BE-11)
+CREATE TABLE [dbo].[Rol] (
+    [RolId] INT IDENTITY(1,1) PRIMARY KEY,
+    [Nombre] VARCHAR(50) NOT NULL UNIQUE,
+    [Descripcion] VARCHAR(255) NULL
+);
+
+CREATE TABLE [dbo].[UsuarioRol] (
+    [UsuarioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
+    [RolId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Rol]([RolId]),
+    PRIMARY KEY ([UsuarioId], [RolId])
+);
+
+-- 2. MÓDULO DE RED Y CONTACTOS (Requisito para BE-03)
+CREATE TABLE [dbo].[Contacto] (
+    [UsuarioPropietarioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
+    [UsuarioContactoId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
+    [AliasPersonalizado] VARCHAR(50) NULL,
+    [FechaAgregado] DATETIME DEFAULT GETDATE(),
+    PRIMARY KEY ([UsuarioPropietarioId], [UsuarioContactoId])
+);
+
+-- 3. MÓDULO DE COMERCIOS Y PAGOS QR (Requisito para BE-05)
+CREATE TABLE [dbo].[Comercio] (
+    [ComercioId] INT IDENTITY(1,1) PRIMARY KEY,
+    [RazonSocial] VARCHAR(100) NOT NULL,
+    [Cuit] VARCHAR(20) NOT NULL UNIQUE
+);
+
+CREATE TABLE [dbo].[Sucursal] (
+    [SucursalId] INT IDENTITY(1,1) PRIMARY KEY,
+    [ComercioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Comercio]([ComercioId]),
+    [Direccion] VARCHAR(200) NOT NULL,
+    [CodigoQRBase] VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE [dbo].[ComercioBilletera] (
+    [ComercioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Comercio]([ComercioId]),
+    [BilleteraId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Billetera]([BilleteraId]),
+    [TasaComision] DECIMAL(5,2) DEFAULT 0,
+    PRIMARY KEY ([ComercioId], [BilleteraId])
+);
+
+-- 4. MÓDULO DE SOLICITUDES DE PAGO/COBRO (Requisito para BE-06)
+CREATE TABLE [dbo].[SolicitudCobro] (
+    [SolicitudId] INT IDENTITY(1,1) PRIMARY KEY,
+    [UsuarioSolicitanteId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
+    [MontoTotal] DECIMAL(18,2) NOT NULL,
+    [FechaVencimiento] DATETIME NOT NULL,
+    [Estado] VARCHAR(20) DEFAULT 'Pendiente'
+);
+
+CREATE TABLE [dbo].[SolicitudCobroDetalle] (
+    [DetalleSolicitudId] INT IDENTITY(1,1) PRIMARY KEY,
+    [SolicitudId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[SolicitudCobro]([SolicitudId]),
+    [UsuarioDeudorId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
+    [MontoMita] DECIMAL(18,2) NOT NULL,
+    [Pagado] BIT DEFAULT 0
+);
+
+-- 5. MÓDULO DE SOPORTE TÉCNICO (Requisito para BE-07)
+CREATE TABLE [dbo].[MotivoReporte] (
+    [MotivoId] INT IDENTITY(1,1) PRIMARY KEY,
+    [Titulo] VARCHAR(100) NOT NULL,
+    [Gravedad] INT DEFAULT 1
+);
+
+CREATE TABLE [dbo].[TicketSoporte] (
+    [TicketId] INT IDENTITY(1,1) PRIMARY KEY,
+    [UsuarioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
+    [MotivoId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[MotivoReporte]([MotivoId]),
+    [FechaCreacion] DATETIME DEFAULT GETDATE(),
+    [Estado] VARCHAR(20) DEFAULT 'Abierto'
+);
+
+CREATE TABLE [dbo].[TicketMensaje] (
+    [MensajeId] INT IDENTITY(1,1) PRIMARY KEY,
+    [TicketId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[TicketSoporte]([TicketId]),
+    [RemitenteEsSoporte] BIT DEFAULT 0,
+    [CuerpoMensaje] TEXT NOT NULL,
+    [FechaEnvio] DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE [dbo].[TicketAdjunto] (
+    [AdjuntoId] INT IDENTITY(1,1) PRIMARY KEY,
+    [MensajeId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[TicketMensaje]([MensajeId]),
+    [UrlArchivo] VARCHAR(255) NOT NULL,
+    [TipoMime] VARCHAR(50) NOT NULL
+);
+
+-- 6. MÓDULO DE MÉTODOS DE PAGO Y NOTIFICACIONES
+CREATE TABLE [dbo].[Notificacion] (
+    [NotificacionId] INT IDENTITY(1,1) PRIMARY KEY,
+    [UsuarioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
+    [Titulo] VARCHAR(100) NOT NULL,
+    [Mensaje] VARCHAR(255) NOT NULL,
+    [Leida] BIT DEFAULT 0,
+    [FechaEmision] DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE [dbo].[MetodoPagoExterno] (
+    [MetodoId] INT IDENTITY(1,1) PRIMARY KEY,
+    [UsuarioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
+    [Tipo] VARCHAR(50) NOT NULL, 
+    [UltimosCuatro] CHAR(4) NOT NULL,
+    [EntidadEmisora] VARCHAR(100) NOT NULL
+);
+
+-- 7. REQUERIMIENTO TPI CLASE 7: ALTER TABLE PARA CAMPO JSON
+-- Nota Franco: Se agrega a la tabla Movimiento (creada por Lautaro/Fabri)
+ALTER TABLE [dbo].[Movimiento] ADD [MetadataExtranjera] NVARCHAR(MAX) NULL;
+ALTER TABLE [dbo].[Movimiento] ADD CONSTRAINT [CHK_Movimiento_Metadata_JSON] CHECK (ISJSON([MetadataExtranjera]) = 1);
+GO
+
+
