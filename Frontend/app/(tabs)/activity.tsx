@@ -15,6 +15,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { WalletGlyph } from '@/components/WalletGlyph';
@@ -141,7 +142,13 @@ export default function Activity() {
               <View key={g.bucket}>
                 <Text style={styles.bucket}>{g.bucket}</Text>
                 {g.items.map(a => (
-                  <View key={a.id} style={styles.row}>
+                  <Pressable
+                    key={a.id}
+                    style={styles.row}
+                    onPress={() =>
+                      router.push({ pathname: '/transaction-detail', params: { id: a.id } })
+                    }
+                  >
                     <WalletGlyph wallet={a.wallet} size={36} />
                     <View style={{ flex: 1, marginLeft: 12 }}>
                       <Text style={styles.title}>{a.title}</Text>
@@ -158,7 +165,7 @@ export default function Activity() {
                       {a.kind === 'in' ? '+' : '-'}
                       {fmt(Math.abs(a.amount))}
                     </Text>
-                  </View>
+                  </Pressable>
                 ))}
               </View>
             ))
