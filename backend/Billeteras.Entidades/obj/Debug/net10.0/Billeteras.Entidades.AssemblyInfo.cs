@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Billeteras.Entidades")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4158001b5d950a6b0ffc5f5345f2c447015e8869")]
 [assembly: System.Reflection.AssemblyProductAttribute("Billeteras.Entidades")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Billeteras.Entidades")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

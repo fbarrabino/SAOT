@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\USER\\Desktop\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {}
+    "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {}
   },
   "projects": {
-    "C:\\Users\\USER\\Desktop\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {
+    "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USER\\Desktop\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj",
+        "projectUniqueName": "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj",
         "projectName": "Billeteras.Entidades",
-        "projectPath": "C:\\Users\\USER\\Desktop\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\USER\\Desktop\\backend\\Billeteras.Entidades\\obj\\",
+        "projectPath": "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj",
+        "packagesPath": "C:\\Users\\USUARIO\\.nuget\\packages\\",
+        "outputPath": "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\USUARIO\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -61,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

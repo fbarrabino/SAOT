@@ -1,0 +1,16 @@
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\bin\Debug\net10.0\Billeteras.Datos.deps.json
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\bin\Debug\net10.0\Billeteras.Datos.dll
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\bin\Debug\net10.0\Billeteras.Datos.pdb
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\bin\Debug\net10.0\Billeteras.Entidades.dll
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\bin\Debug\net10.0\Billeteras.Entidades.pdb
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.csproj.AssemblyReference.cache
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.GeneratedMSBuildEditorConfig.editorconfig
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.AssemblyInfoInputs.cache
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.AssemblyInfo.cs
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.csproj.CoreCompileInputs.cache
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.sourcelink.json
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeter.4224E23F.Up2Date
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.dll
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\refint\Billeteras.Datos.dll
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\Billeteras.Datos.pdb
+D:\Desktop\Proyectos Code\SAOT (Unificador de Billeteras)\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Datos\obj\Debug\net10.0\ref\Billeteras.Datos.dll

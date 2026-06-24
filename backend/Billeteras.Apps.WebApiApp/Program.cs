@@ -10,7 +10,7 @@ using Billeteras.Negocio.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Connection string (appsettings.json → IConfiguration, no hardcodeada)
+// Connection string (appsettings.json → IConfiguration)
 var connStr = builder.Configuration.GetConnectionString("BilleterasDB")
     ?? throw new InvalidOperationException("Falta la connection string 'BilleterasDB' en appsettings.json.");
 
@@ -24,8 +24,9 @@ builder.Services.AddScoped<ICategoriaRepository, CategoriaRepositoryEF>();
 builder.Services.AddScoped<ICuentaBilleteraRepository, CuentaBilleteraRepositoryEF>();
 builder.Services.AddScoped<IMovimientoRepository, MovimientoRepositoryEF>();
 
-// --- NUESTRO REPOSITORIO (BE-02) ---
+// --- NUESTROS REPOSITORIOS (BE-02) ---
 builder.Services.AddScoped<IMetodoPagoExternoRepository, MetodoPagoExternoRepositoryEF>();
+builder.Services.AddScoped<ITicketSoporteRepository, TicketSoporteRepositoryEF>();
 
 // Servicios de Negocio
 builder.Services.AddScoped<IUsuarioNegocio, UsuarioNegocio>();
@@ -33,6 +34,7 @@ builder.Services.AddScoped<IBilleteraNegocio, BilleteraNegocio>();
 builder.Services.AddScoped<ICategoriaNegocio, CategoriaNegocio>();
 builder.Services.AddScoped<ICuentaBilleteraNegocio, CuentaBilleteraNegocio>();
 builder.Services.AddScoped<IMovimientoNegocio, MovimientoNegocio>();
+builder.Services.AddScoped<IContactoRepository, ContactoRepositoryEF>();
 
 // Autenticación JWT (Key, Issuer, Audience, ExpiresInMinutes desde appsettings.json)
 var jwt = builder.Configuration.GetSection("Jwt");
