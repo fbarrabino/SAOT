@@ -32,6 +32,9 @@ public class Movimiento
     [MaxLength(10)]
     public string Tipo { get; set; } = string.Empty;
 
+    // ---- CAMPO JSON AGREGADO (BE-01) ----
+    public string? MetadataExtranjera { get; set; }
+
     // Propiedades de navegación.
     [ForeignKey(nameof(CuentaBilleteraId))]
     public CuentaBilletera? CuentaBilletera { get; set; }
