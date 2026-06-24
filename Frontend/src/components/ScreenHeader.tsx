@@ -1,57 +1,45 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import Svg, { Path } from 'react-native-svg';
-import { colors, fonts, radii } from '@/theme/tokens';
+import { colors, radii, type } from '@/theme/tokens';
 
-type Props = {
-  title?: string;
-  onBack?: () => void;
-};
-
-export function ScreenHeader({ title, onBack }: Props) {
-  const back = onBack ?? (() => router.back());
+export function ScreenHeader({ title }: { title: string }) {
   return (
-    <View style={styles.row}>
-      <Pressable onPress={back} style={styles.btn} hitSlop={8}>
-        <Svg width={16} height={16} viewBox="0 0 24 24">
-          <Path
-            d="M15 5l-7 7 7 7"
-            stroke={colors.text}
-            strokeWidth={2.2}
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </Svg>
+    <View style={styles.container}>
+      <Pressable style={styles.btn} onPress={() => router.canGoBack() ? router.back() : router.push('/')}>
+        <Feather name="chevron-left" size={24} color={colors.text} />
       </Pressable>
+
       <Text style={styles.title}>{title}</Text>
-      <View style={styles.btn} />
+
+      {/* Espacio invisible puro para mantener el título centrado flex, sin bordes fantasma */}
+      <View style={styles.emptySpace} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  row: {
+  container: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    height: 48,
+    paddingBottom: 16,
   },
   btn: {
-    width: 38,
-    height: 38,
-    borderRadius: radii.icon,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
+    width: 40,
+    height: 40,
+    borderRadius: radii.icon || 12,
     backgroundColor: 'rgba(255,255,255,0.05)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
-    fontFamily: fonts.display,
+    ...type.h4,
     fontSize: 16,
-    color: colors.text,
   },
+  emptySpace: {
+    width: 40,
+    height: 40,
+  }
 });

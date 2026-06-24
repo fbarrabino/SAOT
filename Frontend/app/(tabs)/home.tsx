@@ -151,7 +151,7 @@ export default function Home() {
             <QuickAction
               icon={<QRIcon />}
               label="Pagar QR"
-              onPress={() => router.push('/(payqr)/scanner')}
+              onPress={() => router.push('/payqr-scanning')}
             />
           </View>
 
