@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,9 +14,9 @@ namespace Billeteras.Entidades
         public int RolId { get; set; }
         [Required]
         [MaxLength(50)]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
         [MaxLength(255)]
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; } // Nullable
     }
 
     [Table("UsuarioRol")]
@@ -40,7 +39,7 @@ namespace Billeteras.Entidades
         [Key, Column(Order = 1)]
         public int UsuarioContactoId { get; set; }
         [MaxLength(50)]
-        public string AliasPersonalizado { get; set; }
+        public string? AliasPersonalizado { get; set; } // Nullable
         public DateTime FechaAgregado { get; set; } = DateTime.Now;
     }
 
@@ -54,10 +53,10 @@ namespace Billeteras.Entidades
         public int ComercioId { get; set; }
         [Required]
         [MaxLength(100)]
-        public string RazonSocial { get; set; }
+        public string RazonSocial { get; set; } = string.Empty;
         [Required]
         [MaxLength(20)]
-        public string Cuit { get; set; }
+        public string Cuit { get; set; } = string.Empty;
     }
 
     [Table("Sucursal")]
@@ -68,10 +67,10 @@ namespace Billeteras.Entidades
         public int ComercioId { get; set; }
         [Required]
         [MaxLength(200)]
-        public string Direccion { get; set; }
+        public string Direccion { get; set; } = string.Empty;
         [Required]
         [MaxLength(255)]
-        public string CodigoQRBase { get; set; }
+        public string CodigoQRBase { get; set; } = string.Empty;
     }
 
     [Table("ComercioBilletera")]
@@ -113,6 +112,17 @@ namespace Billeteras.Entidades
     // ==========================================
     // MÓDULO DE SOPORTE TÉCNICO
     // ==========================================
+    [Table("MotivoReporte")]
+    public class MotivoReporte
+    {
+        [Key]
+        public int MotivoId { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string Titulo { get; set; } = string.Empty;
+        public int Gravedad { get; set; } = 1;
+    }
+
     [Table("TicketSoporte")]
     public class TicketSoporte
     {
@@ -133,12 +143,26 @@ namespace Billeteras.Entidades
         public int TicketId { get; set; }
         public bool RemitenteEsSoporte { get; set; } = false;
         [Required]
-        public string CuerpoMensaje { get; set; }
+        public string CuerpoMensaje { get; set; } = string.Empty;
         public DateTime FechaEnvio { get; set; } = DateTime.Now;
     }
 
+    [Table("TicketAdjunto")]
+    public class TicketAdjunto
+    {
+        [Key]
+        public int AdjuntoId { get; set; }
+        public int MensajeId { get; set; }
+        [Required]
+        [MaxLength(255)]
+        public string UrlArchivo { get; set; } = string.Empty;
+        [Required]
+        [MaxLength(50)]
+        public string TipoMime { get; set; } = string.Empty;
+    }
+
     // ==========================================
-    // MÓDULO DE NOTIFICACIONES Y MÉTODOS
+    // MÓDULO DE NOTIFICACIONES Y MÉTODOS DE PAGO
     // ==========================================
     [Table("Notificacion")]
     public class Notificacion
@@ -148,11 +172,28 @@ namespace Billeteras.Entidades
         public int UsuarioId { get; set; }
         [Required]
         [MaxLength(100)]
-        public string Titulo { get; set; }
+        public string Titulo { get; set; } = string.Empty;
         [Required]
         [MaxLength(255)]
-        public string Mensaje { get; set; }
+        public string Mensaje { get; set; } = string.Empty;
         public bool Leida { get; set; } = false;
         public DateTime FechaEmision { get; set; } = DateTime.Now;
+    }
+
+    [Table("MetodoPagoExterno")]
+    public class MetodoPagoExterno
+    {
+        [Key]
+        public int MetodoId { get; set; }
+        public int UsuarioId { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string Tipo { get; set; } = string.Empty;
+        [Required]
+        [MaxLength(4)]
+        public string UltimosCuatro { get; set; } = string.Empty;
+        [Required]
+        [MaxLength(100)]
+        public string EntidadEmisora { get; set; } = string.Empty;
     }
 }
