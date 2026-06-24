@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, Link } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
@@ -8,16 +15,52 @@ import { Input } from '@/components/Input';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { SocialButton } from '@/components/SocialButton';
 import { colors, fonts, type } from '@/theme/tokens';
+import { useSession } from '@/context/SessionContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const { login, isLoading, isAuthenticated, error, clearError } = useSession();
+
+  // Cuando el login es exitoso, el contexto actualiza isAuthenticated.
+  // Navegamos desde acá para no mezclar lógica de sesión con navegación.
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/(tabs)/home');
+    }
+  }, [isAuthenticated]);
+
+  // Limpiamos el error cuando el usuario empieza a editar los campos
+  const handleEmailChange = (v: string) => {
+    setEmail(v);
+    if (error) clearError();
+  };
+
+  const handlePasswordChange = (v: string) => {
+    setPassword(v);
+    if (error) clearError();
+  };
+
+  const handleLogin = async () => {
+    try {
+      await login(email, password);
+      // La navegación la maneja el useEffect de arriba
+    } catch {
+      // El error ya fue guardado en el contexto (SessionContext.login lo setea)
+      // No hacemos nada extra acá — el mensaje se muestra en el banner de abajo
+    }
+  };
+
   return (
     <View style={styles.root}>
       <AuroraBackground />
       <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
-        <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          contentContainerStyle={styles.scroll}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
           <View style={styles.iconWrap}>
             <AppIcon size={72} />
           </View>
@@ -31,30 +74,49 @@ export default function Login() {
             <Input
               label="Email"
               value={email}
-              onChangeText={setEmail}
+              onChangeText={handleEmailChange}
               keyboardType="email-address"
               autoCapitalize="none"
+              autoComplete="email"
               placeholder="tu@email.com"
+              editable={!isLoading}
             />
             <Input
               label="Contraseña"
               value={password}
-              onChangeText={setPassword}
+              onChangeText={handlePasswordChange}
               password
               placeholder="••••••••"
+              editable={!isLoading}
             />
 
+            {/* Banner de error — solo visible cuando hay un error */}
+            {error ? (
+              <View style={styles.errorBanner}>
+                <Text style={styles.errorText}>{error}</Text>
+              </View>
+            ) : null}
+
             <Link href="/(auth)/forgot-password" asChild>
-              <Pressable style={styles.forgotWrap}>
+              <Pressable style={styles.forgotWrap} disabled={isLoading}>
                 <Text style={styles.forgot}>¿Olvidaste tu contraseña?</Text>
               </Pressable>
             </Link>
 
             <PrimaryButton
-              label="Ingresar"
-              onPress={() => router.replace('/(tabs)/home')}
+              label={isLoading ? '' : 'Ingresar'}
+              onPress={handleLogin}
               style={{ marginTop: 8 }}
+              disabled={isLoading}
             />
+
+            {/* Spinner superpuesto al botón mientras carga */}
+            {isLoading ? (
+              <View style={styles.loadingOverlay}>
+                <ActivityIndicator color={colors.cyan} size="small" />
+                <Text style={styles.loadingText}>Verificando credenciales...</Text>
+              </View>
+            ) : null}
 
             <View style={styles.divider}>
               <View style={styles.line} />
@@ -72,7 +134,7 @@ export default function Login() {
           <View style={styles.footer}>
             <Text style={styles.footerMuted}>¿No tenés cuenta? </Text>
             <Link href="/(auth)/signup" asChild>
-              <Pressable>
+              <Pressable disabled={isLoading}>
                 <Text style={styles.footerLink}>Crear cuenta</Text>
               </Pressable>
             </Link>
@@ -105,9 +167,48 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
   },
   form: { marginTop: 6 },
-  forgotWrap: { alignSelf: 'flex-end', marginTop: 2, marginBottom: 16, paddingVertical: 4 },
+  errorBanner: {
+    backgroundColor: 'rgba(239,68,68,0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(239,68,68,0.35)',
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    marginTop: 10,
+    marginBottom: 2,
+  },
+  errorText: {
+    fontFamily: fonts.body,
+    fontSize: 13,
+    color: '#f87171',
+    lineHeight: 18,
+  },
+  forgotWrap: {
+    alignSelf: 'flex-end',
+    marginTop: 8,
+    marginBottom: 16,
+    paddingVertical: 4,
+  },
   forgot: { ...type.link, fontSize: 13 },
-  divider: { flexDirection: 'row', alignItems: 'center', marginTop: 26, marginBottom: 16, gap: 12 },
+  loadingOverlay: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: 10,
+  },
+  loadingText: {
+    fontFamily: fonts.body,
+    fontSize: 13,
+    color: colors.muted,
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 26,
+    marginBottom: 16,
+    gap: 12,
+  },
   line: { flex: 1, height: 1, backgroundColor: colors.hairline },
   dividerText: { ...type.label, color: colors.dim, fontSize: 10.5 },
   socials: { flexDirection: 'row', gap: 10 },

@@ -1,16 +1,27 @@
-// Tab Actividad - Bloque 2 #01
+// Tab Actividad — Bloque 2 #01
 // Lista unificada (todas las billeteras) de movimientos en una timeline.
-// Header titulo + icono lupa, filtros pill (Todos / Ingresos / Salientes),
+// Header título + ícono lupa, filtros pill (Todos / Ingresos / Salientes),
 // filas agrupadas por bucket temporal (HOY / AYER / fechas).
+// Datos reales desde WalletsContext (GET /api/movimientos/me).
 import React, { useMemo, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  TextInput,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { WalletGlyph } from '@/components/WalletGlyph';
-import { ACTIVITY, type ActivityItem } from '@/data/activity';
 import { fmt } from '@/utils/format';
 import { colors, fonts, radii } from '@/theme/tokens';
+import { useWallets } from '@/context/WalletsContext';
+import type { ActivityItem } from '@/data/activity';
 
 type Filter = 'all' | 'in' | 'out';
 
@@ -28,21 +39,25 @@ export default function Activity() {
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
 
+  // Datos reales del backend (o mock si no hay conexión)
+  const { activity, isLoading, error, refresh } = useWallets();
+
+  // Filtrado y búsqueda local sobre los datos ya cargados
   const filtered = useMemo(() => {
-    return ACTIVITY.filter(a => {
-      if (filter === 'in' && a.kind !== 'in') return false;
+    return activity.filter(a => {
+      if (filter === 'in'  && a.kind !== 'in')  return false;
       if (filter === 'out' && a.kind !== 'out') return false;
       if (query) {
         const q = query.toLowerCase();
-        if (!a.title.toLowerCase().includes(q) && !a.walletName.toLowerCase().includes(q)) {
-          return false;
-        }
+        const matchTitle  = a.title.toLowerCase().includes(q);
+        const matchWallet = a.walletName.toLowerCase().includes(q);
+        if (!matchTitle && !matchWallet) return false;
       }
       return true;
     });
-  }, [filter, query]);
+  }, [activity, filter, query]);
 
-  // Re-group por bucket conservando el orden original.
+  // Re-agrupar por bucket conservando el orden (viene ordenado del backend)
   const grouped: Array<{ bucket: string; items: ActivityItem[] }> = [];
   for (const a of filtered) {
     const last = grouped[grouped.length - 1];
@@ -54,6 +69,8 @@ export default function Activity() {
     <View style={styles.root}>
       <AuroraBackground />
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+
+        {/* ── Header ───────────────────────────────────────────────────────── */}
         <View style={styles.head}>
           <Text style={styles.h1}>Actividad</Text>
           <Pressable
@@ -65,6 +82,7 @@ export default function Activity() {
           </Pressable>
         </View>
 
+        {/* ── Barra de búsqueda ─────────────────────────────────────────────── */}
         {searching ? (
           <View style={styles.searchWrap}>
             <SearchIcon />
@@ -79,17 +97,44 @@ export default function Activity() {
           </View>
         ) : null}
 
+        {/* ── Filtros pill ──────────────────────────────────────────────────── */}
         <View style={styles.filters}>
-          <FilterPill label="Todos" active={filter === 'all'} onPress={() => setFilter('all')} />
-          <FilterPill label="Ingresos" active={filter === 'in'} onPress={() => setFilter('in')} />
-          <FilterPill label="Salientes" active={filter === 'out'} onPress={() => setFilter('out')} />
+          <FilterPill label="Todos"    active={filter === 'all'} onPress={() => setFilter('all')} />
+          <FilterPill label="Ingresos" active={filter === 'in'}  onPress={() => setFilter('in')} />
+          <FilterPill label="Salientes"active={filter === 'out'} onPress={() => setFilter('out')} />
         </View>
 
+        {/* ── Banner de error ───────────────────────────────────────────────── */}
+        {error && !isLoading ? (
+          <View style={styles.errorBanner}>
+            <Text style={styles.errorText}>{error}</Text>
+            <Pressable onPress={refresh} style={styles.retryBtn}>
+              <Text style={styles.retryText}>Reintentar</Text>
+            </Pressable>
+          </View>
+        ) : null}
+
+        {/* ── Lista de movimientos ──────────────────────────────────────────── */}
         <ScrollView
           contentContainerStyle={styles.scroll}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            // Pull-to-refresh: llama a refresh() que vuelve a pedir al backend
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={refresh}
+              tintColor={colors.cyan}
+              colors={[colors.cyan]}
+            />
+          }
         >
-          {grouped.length === 0 ? (
+          {isLoading && activity.length === 0 ? (
+            // Primera carga — spinner centrado
+            <View style={styles.loadingWrap}>
+              <ActivityIndicator color={colors.cyan} />
+              <Text style={styles.loadingText}>Cargando actividad...</Text>
+            </View>
+          ) : grouped.length === 0 ? (
             <Text style={styles.empty}>Sin movimientos para este filtro.</Text>
           ) : (
             grouped.map(g => (
@@ -101,7 +146,7 @@ export default function Activity() {
                     <View style={{ flex: 1, marginLeft: 12 }}>
                       <Text style={styles.title}>{a.title}</Text>
                       <Text style={styles.sub}>
-                        {a.walletName} - {a.time}
+                        {a.walletName} · {a.time}
                       </Text>
                     </View>
                     <Text
@@ -124,6 +169,8 @@ export default function Activity() {
   );
 }
 
+// ─── Componente auxiliar ──────────────────────────────────────────────────────
+
 function FilterPill({
   label,
   active,
@@ -139,6 +186,8 @@ function FilterPill({
     </Pressable>
   );
 }
+
+// ─── Estilos ──────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
@@ -200,7 +249,35 @@ const styles = StyleSheet.create({
     borderColor: colors.text,
   },
   pillText: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.text },
+  errorBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 18,
+    marginBottom: 6,
+    backgroundColor: 'rgba(239,68,68,0.10)',
+    borderWidth: 1,
+    borderColor: 'rgba(239,68,68,0.30)',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    gap: 10,
+  },
+  errorText: { fontFamily: fonts.body, fontSize: 12.5, color: '#f87171', flex: 1 },
+  retryBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(239,68,68,0.4)',
+  },
+  retryText: { fontFamily: fonts.bodyBold, fontSize: 12, color: '#f87171' },
   scroll: { paddingHorizontal: 18, paddingTop: 8, paddingBottom: 130 },
+  loadingWrap: {
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 40,
+  },
+  loadingText: { fontFamily: fonts.body, fontSize: 13, color: colors.dim },
   bucket: {
     fontFamily: fonts.bodyBold,
     fontSize: 10.5,

@@ -4,16 +4,16 @@ namespace Billeteras.Negocio.Dtos;
 
 /// Datos para registrar un usuario (lo consume la capa de Negocio desde auth/register).
 public record RegistrarUsuarioRequest(
-    [property: Required, MaxLength(100)] string Nombre,
-    [property: Required, MaxLength(100)] string Apellido,
-    [property: Required, EmailAddress, MaxLength(200)] string Email,
-    [property: Required, MinLength(6), MaxLength(100)] string Password);
+    [Required, MaxLength(100)] string Nombre,
+    [Required, MaxLength(100)] string Apellido,
+    [Required, EmailAddress, MaxLength(200)] string Email,
+    [Required, MinLength(6), MaxLength(100)] string Password);
 
 /// Datos para actualizar un usuario vía CRUD (no incluye contraseña en este TP).
 public record UsuarioUpdateRequest(
-    [property: Required, MaxLength(100)] string Nombre,
-    [property: Required, MaxLength(100)] string Apellido,
-    [property: Required, EmailAddress, MaxLength(200)] string Email);
+    [Required, MaxLength(100)] string Nombre,
+    [Required, MaxLength(100)] string Apellido,
+    [Required, EmailAddress, MaxLength(200)] string Email);
 
 /// Representación de salida de un usuario (nunca expone el PasswordHash).
 public record UsuarioResponse(

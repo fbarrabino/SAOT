@@ -4,15 +4,17 @@ using Billeteras.Negocio.Dtos;
 namespace Billeteras.Apps.WebApiApp.Dtos;
 
 /// Cuerpo de POST /api/auth/register.
+// NOTA: en .NET 10 los atributos de validación en records con constructor primario
+// deben ir SIN "property:" para que el sistema de model binding los detecte.
 public record RegisterRequest(
-    [property: Required, MaxLength(100)] string Nombre,
-    [property: Required, MaxLength(100)] string Apellido,
-    [property: Required, EmailAddress, MaxLength(200)] string Email,
-    [property: Required, MinLength(6), MaxLength(100)] string Password);
+    [Required, MaxLength(100)] string Nombre,
+    [Required, MaxLength(100)] string Apellido,
+    [Required, EmailAddress, MaxLength(200)] string Email,
+    [Required, MinLength(6), MaxLength(100)] string Password);
 
 /// Cuerpo de POST /api/auth/login.
 public record LoginRequest(
-    [property: Required, EmailAddress] string Email,
-    [property: Required] string Password);
+    [Required, EmailAddress] string Email,
+    [Required] string Password);
 
 public record LoginResponse(string Token, DateTime ExpiresAt, UsuarioResponse Usuario);
