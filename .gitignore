@@ -1,0 +1,18 @@
+# Carpetas de compilación de .NET
+bin/
+obj/
+*.user
+*.suo
+
+# Carpetas de dependencias de Node
+node_modules/
+
+# Configuraciones de IDEs
+.idea/
+.vscode/
+
+# Logs y archivos temporales
+*.log
+.env*
+.DS_Store
+*.tsbuildinfo

@@ -10,7 +10,7 @@ using Billeteras.Negocio.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Connection string (appsettings.json → IConfiguration, no hardcodeada)
+// Connection string (appsettings.json → IConfiguration)
 var connStr = builder.Configuration.GetConnectionString("BilleterasDB")
     ?? throw new InvalidOperationException("Falta la connection string 'BilleterasDB' en appsettings.json.");
 
@@ -18,17 +18,15 @@ var connStr = builder.Configuration.GetConnectionString("BilleterasDB")
 builder.Services.AddDbContext<BilleterasContext>(opt => opt.UseSqlServer(connStr));
 
 // Repositorios: por DEFECTO EF Core.
-//    Para usar ADO.NET, se comenta la línea EF y se descomentá la ADO de al lado.
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepositoryEF>();
-// builder.Services.AddScoped<IUsuarioRepository>(_ => new UsuarioRepositoryAdo(connStr));
 builder.Services.AddScoped<IBilleteraRepository, BilleteraRepositoryEF>();
-// builder.Services.AddScoped<IBilleteraRepository>(_ => new BilleteraRepositoryAdo(connStr));
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepositoryEF>();
-// builder.Services.AddScoped<ICategoriaRepository>(_ => new CategoriaRepositoryAdo(connStr));
 builder.Services.AddScoped<ICuentaBilleteraRepository, CuentaBilleteraRepositoryEF>();
-// builder.Services.AddScoped<ICuentaBilleteraRepository>(_ => new CuentaBilleteraRepositoryAdo(connStr));
 builder.Services.AddScoped<IMovimientoRepository, MovimientoRepositoryEF>();
-// builder.Services.AddScoped<IMovimientoRepository>(_ => new MovimientoRepositoryAdo(connStr));
+
+// --- NUESTROS REPOSITORIOS (BE-02) ---
+builder.Services.AddScoped<IMetodoPagoExternoRepository, MetodoPagoExternoRepositoryEF>();
+builder.Services.AddScoped<ITicketSoporteRepository, TicketSoporteRepositoryEF>();
 
 // Servicios de Negocio
 builder.Services.AddScoped<IUsuarioNegocio, UsuarioNegocio>();
@@ -36,6 +34,7 @@ builder.Services.AddScoped<IBilleteraNegocio, BilleteraNegocio>();
 builder.Services.AddScoped<ICategoriaNegocio, CategoriaNegocio>();
 builder.Services.AddScoped<ICuentaBilleteraNegocio, CuentaBilleteraNegocio>();
 builder.Services.AddScoped<IMovimientoNegocio, MovimientoNegocio>();
+builder.Services.AddScoped<IContactoRepository, ContactoRepositoryEF>();
 
 // Autenticación JWT (Key, Issuer, Audience, ExpiresInMinutes desde appsettings.json)
 var jwt = builder.Configuration.GetSection("Jwt");

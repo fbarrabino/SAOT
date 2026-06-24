@@ -1,0 +1,48 @@
+using Microsoft.AspNetCore.Mvc;
+using Billeteras.Entidades;
+using Billeteras.Negocio.Dtos;
+using Billeteras.Datos.Interfaces;
+
+namespace Billeteras.Apps.WebApiApp.Controllers;
+
+[Route("api/metodos-pago")]
+[ApiController]
+public class MetodosPagoExternosController(IMetodoPagoExternoRepository repository) : ControllerBase
+{
+    [HttpGet("usuario/{usuarioId}")]
+    public async Task<IActionResult> GetByUsuario(int usuarioId)
+    {
+        var metodos = await repository.GetByUsuarioIdAsync(usuarioId);
+        var dtos = metodos.Select(m => new MetodoPagoExternoDto
+        {
+            MetodoId = m.MetodoId,
+            UsuarioId = m.UsuarioId,
+            Tipo = m.Tipo,
+            UltimosCuatro = m.UltimosCuatro,
+            EntidadEmisora = m.EntidadEmisora
+        });
+        return Ok(dtos);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateMetodoPagoExternoDto dto)
+    {
+        var entidad = new MetodoPagoExterno
+        {
+            UsuarioId = dto.UsuarioId,
+            Tipo = dto.Tipo,
+            UltimosCuatro = dto.UltimosCuatro,
+            EntidadEmisora = dto.EntidadEmisora
+        };
+
+        var creado = await repository.AddAsync(entidad);
+        return Ok(creado);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await repository.DeleteAsync(id);
+        return NoContent();
+    }
+}
