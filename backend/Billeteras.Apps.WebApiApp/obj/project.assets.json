@@ -3018,19 +3018,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {}
+    "C:\\Users\\USUARIO\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\Billeteras.Apps.WebApiApp.csproj",
+      "projectUniqueName": "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\Billeteras.Apps.WebApiApp.csproj",
       "projectName": "Billeteras.Apps.WebApiApp",
-      "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\Billeteras.Apps.WebApiApp.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\obj\\",
+      "projectPath": "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\Billeteras.Apps.WebApiApp.csproj",
+      "packagesPath": "C:\\Users\\USUARIO\\.nuget\\packages\\",
+      "outputPath": "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\USUARIO\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
@@ -3043,17 +3043,17 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj": {
-              "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj"
+            "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj": {
+              "projectPath": "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj"
             },
-            "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj": {
-              "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj"
+            "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj": {
+              "projectPath": "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj"
             },
-            "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {
-              "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj"
+            "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {
+              "projectPath": "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj"
             },
-            "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Negocio\\Billeteras.Negocio.csproj": {
-              "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Negocio\\Billeteras.Negocio.csproj"
+            "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Negocio\\Billeteras.Negocio.csproj": {
+              "projectPath": "D:\\Desktop\\Proyectos Code\\SAOT (Unificador de Billeteras)\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Negocio\\Billeteras.Negocio.csproj"
             }
           }
         }
@@ -3105,7 +3105,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

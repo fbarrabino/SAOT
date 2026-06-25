@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Billeteras.Apps.WebApiApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+256b5961ae27921470777b965c82e89a25fe7960")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+19db0c51f77ec4e30d4cee935a3667bb647a8f95")]
 [assembly: System.Reflection.AssemblyProductAttribute("Billeteras.Apps.WebApiApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Billeteras.Apps.WebApiApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

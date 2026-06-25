@@ -54,7 +54,12 @@ export default function Profile() {
           </Pressable>
 
           <View style={styles.group}>
-            <Row label="Métodos de pago" sub="3 billeteras vinculadas">
+            {/* ACÁ ESTÁ EL ENLACE A TU NUEVA PANTALLA */}
+            <Row
+              label="Métodos de pago"
+              sub="3 billeteras vinculadas"
+              onPress={() => router.push('/payment-methods')}
+            >
               <RowIcon>
                 <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.cyan)}>
                   <Rect x={3} y={6} width={18} height={14} rx={2} />
