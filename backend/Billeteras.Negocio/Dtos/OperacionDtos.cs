@@ -20,6 +20,15 @@ public record CambiarRequest(
     [Range(0.01, double.MaxValue)] decimal Monto,
     [MaxLength(250)] string? Descripcion);
 
+// ─── Pagar QR (BE-05) ─────────────────────────────────────────────────────────
+// Egreso a un comercio identificado por QR (referencia opcional para auditoría).
+public record PagarQrRequest(
+    [Range(1, int.MaxValue)] int CuentaOrigenId,
+    [Range(1, int.MaxValue)] int CategoriaId,
+    [Range(0.01, double.MaxValue)] decimal Monto,
+    [MaxLength(250)] string? Descripcion,
+    [MaxLength(255)] string? CodigoQR);
+
 public record OperacionResponse(
     string Operacion,
     List<int> MovimientosCreados,

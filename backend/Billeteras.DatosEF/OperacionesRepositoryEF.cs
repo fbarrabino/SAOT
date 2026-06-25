@@ -120,6 +120,50 @@ public class OperacionesRepositoryEF(BilleterasContext ctx) : IOperacionesReposi
         }
     }
 
+    // ─── BE-05 Pagar QR ───────────────────────────────────────────────────────
+    public async Task<(int movimientoId, decimal saldoOrigenFinal)> PagarQrAsync(
+        int cuentaOrigenId,
+        int categoriaId,
+        decimal monto,
+        string? descripcion,
+        string? codigoQR)
+    {
+        await using IDbContextTransaction tx = await ctx.Database.BeginTransactionAsync();
+        try
+        {
+            var cuenta = await ObtenerCuentaParaEgresoAsync(cuentaOrigenId, monto);
+            await ValidarCategoriaAsync(categoriaId, TipoEgreso);
+
+            var movimiento = new Movimiento
+            {
+                CuentaBilleteraId = cuenta.CuentaBilleteraId,
+                CategoriaId = categoriaId,
+                Fecha = DateTime.Now,
+                Descripcion = descripcion,
+                Monto = monto,
+                Tipo = TipoEgreso,
+                // Guardamos el QR escaneado en el campo JSON ya existente del modelo (BE-01)
+                // para que quede trazable la operación que originó el pago.
+                MetadataExtranjera = codigoQR is null
+                    ? null
+                    : System.Text.Json.JsonSerializer.Serialize(new { qr = codigoQR })
+            };
+            ctx.Movimientos.Add(movimiento);
+
+            cuenta.SaldoActual -= monto;
+
+            await ctx.SaveChangesAsync();
+            await tx.CommitAsync();
+
+            return (movimiento.MovimientoId, cuenta.SaldoActual);
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
+    }
+
     // ─── Helpers ──────────────────────────────────────────────────────────────
 
     private async Task<CuentaBilletera> ObtenerCuentaParaEgresoAsync(int cuentaId, decimal monto)

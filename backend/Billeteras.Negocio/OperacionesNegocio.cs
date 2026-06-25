@@ -40,4 +40,20 @@ public class OperacionesNegocio(IOperacionesRepository repo) : IOperacionesNegoc
             SaldoOrigenFinal: saldoOrigen,
             SaldoDestinoFinal: saldoDestino);
     }
+
+    public async Task<OperacionResponse> PagarQrAsync(PagarQrRequest req)
+    {
+        var (movId, saldo) = await repo.PagarQrAsync(
+            req.CuentaOrigenId,
+            req.CategoriaId,
+            req.Monto,
+            req.Descripcion,
+            req.CodigoQR);
+
+        return new OperacionResponse(
+            Operacion: "PagarQR",
+            MovimientosCreados: [movId],
+            SaldoOrigenFinal: saldo,
+            SaldoDestinoFinal: null);
+    }
 }

@@ -29,4 +29,14 @@ public interface IOperacionesRepository
             int categoriaIngresoId,
             decimal monto,
             string? descripcion);
+
+    /// BE-05 — Egreso a comercio (pago QR). Resta saldo e inserta un
+    /// movimiento de egreso, guardando opcionalmente el código QR como
+    /// metadata para auditoría.
+    Task<(int movimientoId, decimal saldoOrigenFinal)> PagarQrAsync(
+        int cuentaOrigenId,
+        int categoriaId,
+        decimal monto,
+        string? descripcion,
+        string? codigoQR);
 }
