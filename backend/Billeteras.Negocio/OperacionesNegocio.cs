@@ -23,4 +23,21 @@ public class OperacionesNegocio(IOperacionesRepository repo) : IOperacionesNegoc
             SaldoOrigenFinal: saldo,
             SaldoDestinoFinal: null);
     }
+
+    public async Task<OperacionResponse> CambiarAsync(CambiarRequest req)
+    {
+        var (egId, inId, saldoOrigen, saldoDestino) = await repo.CambiarAsync(
+            req.CuentaOrigenId,
+            req.CuentaDestinoId,
+            req.CategoriaEgresoId,
+            req.CategoriaIngresoId,
+            req.Monto,
+            req.Descripcion);
+
+        return new OperacionResponse(
+            Operacion: "Cambiar",
+            MovimientosCreados: [egId, inId],
+            SaldoOrigenFinal: saldoOrigen,
+            SaldoDestinoFinal: saldoDestino);
+    }
 }

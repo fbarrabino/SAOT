@@ -18,4 +18,15 @@ public interface IOperacionesRepository
         int categoriaId,
         decimal monto,
         string? descripcion);
+
+    /// BE-04 — Resta de la cuenta origen, suma a la cuenta destino. Inserta
+    /// dos movimientos atómicos. Devuelve los ids creados y los dos saldos.
+    Task<(int movEgresoId, int movIngresoId, decimal saldoOrigenFinal, decimal saldoDestinoFinal)>
+        CambiarAsync(
+            int cuentaOrigenId,
+            int cuentaDestinoId,
+            int categoriaEgresoId,
+            int categoriaIngresoId,
+            decimal monto,
+            string? descripcion);
 }

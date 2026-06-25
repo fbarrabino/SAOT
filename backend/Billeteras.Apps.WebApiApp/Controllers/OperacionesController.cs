@@ -17,6 +17,10 @@ public class OperacionesController(IOperacionesNegocio negocio) : ControllerBase
     public async Task<ActionResult<OperacionResponse>> Enviar([FromBody] EnviarRequest req)
         => await EjecutarAsync(() => negocio.EnviarAsync(req));
 
+    [HttpPost("cambiar")]
+    public async Task<ActionResult<OperacionResponse>> Cambiar([FromBody] CambiarRequest req)
+        => await EjecutarAsync(() => negocio.CambiarAsync(req));
+
     /// Envoltorio común: las validaciones del negocio se traducen a 409 Conflict
     /// (saldo insuficiente, categoría inválida, cuentas inexistentes) y el resto
     /// queda en 500.

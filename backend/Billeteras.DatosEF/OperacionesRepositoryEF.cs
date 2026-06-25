@@ -15,6 +15,7 @@ namespace Billeteras.DatosEF;
 ///   5. CommitAsync() — o RollbackAsync() vía try/catch ante cualquier excepción
 public class OperacionesRepositoryEF(BilleterasContext ctx) : IOperacionesRepository
 {
+    private const string TipoIngreso = "Ingreso";
     private const string TipoEgreso = "Egreso";
 
     // ─── BE-03 Enviar ─────────────────────────────────────────────────────────
@@ -47,6 +48,70 @@ public class OperacionesRepositoryEF(BilleterasContext ctx) : IOperacionesReposi
             await tx.CommitAsync();
 
             return (movimiento.MovimientoId, cuenta.SaldoActual);
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
+    }
+
+    // ─── BE-04 Cambiar ────────────────────────────────────────────────────────
+    public async Task<(int movEgresoId, int movIngresoId, decimal saldoOrigenFinal, decimal saldoDestinoFinal)>
+        CambiarAsync(
+            int cuentaOrigenId,
+            int cuentaDestinoId,
+            int categoriaEgresoId,
+            int categoriaIngresoId,
+            decimal monto,
+            string? descripcion)
+    {
+        if (cuentaOrigenId == cuentaDestinoId)
+            throw new InvalidOperationException("La cuenta origen y destino no pueden ser la misma.");
+
+        await using IDbContextTransaction tx = await ctx.Database.BeginTransactionAsync();
+        try
+        {
+            var origen = await ObtenerCuentaParaEgresoAsync(cuentaOrigenId, monto);
+            var destino = await ctx.CuentasBilletera.FirstOrDefaultAsync(c => c.CuentaBilleteraId == cuentaDestinoId)
+                ?? throw new InvalidOperationException($"La cuenta destino {cuentaDestinoId} no existe.");
+
+            if (origen.UsuarioId != destino.UsuarioId)
+                throw new InvalidOperationException("Las cuentas origen y destino deben pertenecer al mismo usuario.");
+
+            await ValidarCategoriaAsync(categoriaEgresoId, TipoEgreso);
+            await ValidarCategoriaAsync(categoriaIngresoId, TipoIngreso);
+
+            var fecha = DateTime.Now;
+
+            var movEgreso = new Movimiento
+            {
+                CuentaBilleteraId = origen.CuentaBilleteraId,
+                CategoriaId = categoriaEgresoId,
+                Fecha = fecha,
+                Descripcion = descripcion,
+                Monto = monto,
+                Tipo = TipoEgreso
+            };
+            var movIngreso = new Movimiento
+            {
+                CuentaBilleteraId = destino.CuentaBilleteraId,
+                CategoriaId = categoriaIngresoId,
+                Fecha = fecha,
+                Descripcion = descripcion,
+                Monto = monto,
+                Tipo = TipoIngreso
+            };
+            ctx.Movimientos.Add(movEgreso);
+            ctx.Movimientos.Add(movIngreso);
+
+            origen.SaldoActual -= monto;
+            destino.SaldoActual += monto;
+
+            await ctx.SaveChangesAsync();
+            await tx.CommitAsync();
+
+            return (movEgreso.MovimientoId, movIngreso.MovimientoId, origen.SaldoActual, destino.SaldoActual);
         }
         catch
         {

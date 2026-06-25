@@ -7,4 +7,5 @@ namespace Billeteras.Negocio.Interfaces;
 public interface IOperacionesNegocio
 {
     Task<OperacionResponse> EnviarAsync(EnviarRequest req);
+    Task<OperacionResponse> CambiarAsync(CambiarRequest req);
 }
