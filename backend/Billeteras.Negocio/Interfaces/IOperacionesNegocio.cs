@@ -9,4 +9,5 @@ public interface IOperacionesNegocio
     Task<OperacionResponse> EnviarAsync(EnviarRequest req);
     Task<OperacionResponse> CambiarAsync(CambiarRequest req);
     Task<OperacionResponse> PagarQrAsync(PagarQrRequest req);
+    Task<OperacionResponse> AnularAsync(int movimientoId);
 }

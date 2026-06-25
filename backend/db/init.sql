@@ -226,4 +226,14 @@ ALTER TABLE [dbo].[Movimiento] ADD [MetadataExtranjera] NVARCHAR(MAX) NULL;
 ALTER TABLE [dbo].[Movimiento] ADD CONSTRAINT [CHK_Movimiento_Metadata_JSON] CHECK (ISJSON([MetadataExtranjera]) = 1);
 GO
 
+-- 8. ANULACIÓN DE MOVIMIENTOS (BE-09)
+-- Flag + timestamp para anular operaciones sin perder la traza original.
+-- La reversión de saldo se ejecuta en la misma transacción desde la API.
+IF COL_LENGTH(N'dbo.Movimiento', N'Anulado') IS NULL
+    ALTER TABLE [dbo].[Movimiento] ADD [Anulado] BIT NOT NULL CONSTRAINT [DF_Movimiento_Anulado] DEFAULT (0);
+GO
+IF COL_LENGTH(N'dbo.Movimiento', N'FechaAnulacion') IS NULL
+    ALTER TABLE [dbo].[Movimiento] ADD [FechaAnulacion] DATETIME NULL;
+GO
+
 

@@ -39,4 +39,10 @@ public interface IOperacionesRepository
         decimal monto,
         string? descripcion,
         string? codigoQR);
+
+    /// BE-09 — Anula un movimiento existente: marca Anulado=true y revierte
+    /// el saldo de la cuenta (suma si era Egreso, resta si era Ingreso).
+    /// Lanza InvalidOperationException si el movimiento no existe, ya estaba
+    /// anulado, o si revertir un Ingreso dejaría la cuenta en negativo.
+    Task<(int movimientoId, decimal saldoFinal)> AnularAsync(int movimientoId);
 }

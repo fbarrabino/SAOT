@@ -25,6 +25,13 @@ public class OperacionesController(IOperacionesNegocio negocio) : ControllerBase
     public async Task<ActionResult<OperacionResponse>> PagarQr([FromBody] PagarQrRequest req)
         => await EjecutarAsync(() => negocio.PagarQrAsync(req));
 
+    /// BE-09 — Anula un movimiento existente y revierte el saldo en una
+    /// misma transacción. La idempotencia la garantiza el flag Anulado:
+    /// un segundo POST devuelve 409 con "ya estaba anulado".
+    [HttpPost("{movimientoId:int}/anular")]
+    public async Task<ActionResult<OperacionResponse>> Anular(int movimientoId)
+        => await EjecutarAsync(() => negocio.AnularAsync(movimientoId));
+
     /// Envoltorio común: las validaciones del negocio se traducen a 409 Conflict
     /// (saldo insuficiente, categoría inválida, cuentas inexistentes) y el resto
     /// queda en 500.

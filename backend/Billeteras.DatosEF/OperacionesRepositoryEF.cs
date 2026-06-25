@@ -164,6 +164,52 @@ public class OperacionesRepositoryEF(BilleterasContext ctx) : IOperacionesReposi
         }
     }
 
+    // ─── BE-09 Anular ─────────────────────────────────────────────────────────
+    public async Task<(int movimientoId, decimal saldoFinal)> AnularAsync(int movimientoId)
+    {
+        await using IDbContextTransaction tx = await ctx.Database.BeginTransactionAsync();
+        try
+        {
+            var mov = await ctx.Movimientos.FirstOrDefaultAsync(m => m.MovimientoId == movimientoId)
+                ?? throw new InvalidOperationException($"El movimiento {movimientoId} no existe.");
+
+            if (mov.Anulado)
+                throw new InvalidOperationException($"El movimiento {movimientoId} ya estaba anulado.");
+
+            var cuenta = await ctx.CuentasBilletera.FirstOrDefaultAsync(c => c.CuentaBilleteraId == mov.CuentaBilleteraId)
+                ?? throw new InvalidOperationException($"La cuenta {mov.CuentaBilleteraId} del movimiento no existe.");
+
+            // Reversión:
+            //   Egreso original  → devolvemos el monto a la cuenta (+monto).
+            //   Ingreso original → sacamos el monto de la cuenta (-monto), pero sólo si hay saldo.
+            if (string.Equals(mov.Tipo, TipoEgreso, StringComparison.OrdinalIgnoreCase))
+            {
+                cuenta.SaldoActual += mov.Monto;
+            }
+            else
+            {
+                if (cuenta.SaldoActual < mov.Monto)
+                    throw new InvalidOperationException(
+                        $"No se puede anular el ingreso: el saldo actual ({cuenta.SaldoActual}) " +
+                        $"no alcanza para revertir {mov.Monto}.");
+                cuenta.SaldoActual -= mov.Monto;
+            }
+
+            mov.Anulado = true;
+            mov.FechaAnulacion = DateTime.Now;
+
+            await ctx.SaveChangesAsync();
+            await tx.CommitAsync();
+
+            return (mov.MovimientoId, cuenta.SaldoActual);
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
+    }
+
     // ─── Helpers ──────────────────────────────────────────────────────────────
 
     private async Task<CuentaBilletera> ObtenerCuentaParaEgresoAsync(int cuentaId, decimal monto)

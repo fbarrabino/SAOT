@@ -56,4 +56,14 @@ public class OperacionesNegocio(IOperacionesRepository repo) : IOperacionesNegoc
             SaldoOrigenFinal: saldo,
             SaldoDestinoFinal: null);
     }
+
+    public async Task<OperacionResponse> AnularAsync(int movimientoId)
+    {
+        var (movId, saldo) = await repo.AnularAsync(movimientoId);
+        return new OperacionResponse(
+            Operacion: "Anular",
+            MovimientosCreados: [movId],
+            SaldoOrigenFinal: saldo,
+            SaldoDestinoFinal: null);
+    }
 }
