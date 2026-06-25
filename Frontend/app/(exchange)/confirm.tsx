@@ -1,7 +1,9 @@
 // Cambiar #2 — Confirmar cambio.
 // Resumen Desde/A/Monto/Tasa/Comisión/Llega + CTA "Confirmar cambio" con gradiente lime.
-import React from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+// FE-19: el CTA invoca POST /api/operaciones/cambiar (BE-04), espera el
+// commit del backend y recién ahí navega a success.
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -9,9 +11,16 @@ import { AuroraBackground } from '@/components/AuroraBackground';
 import { AmountDisplay } from '@/components/AmountDisplay';
 import { TxHeader } from '@/components/TxHeader';
 import { WalletGlyph } from '@/components/WalletGlyph';
-import { findWallet, type WalletKey } from '@/data/wallets';
+import { type WalletKey } from '@/data/wallets';
 import { fmt } from '@/utils/format';
 import { colors, fonts, gradients, radii, shadow } from '@/theme/tokens';
+import { useWallets } from '@/context/WalletsContext';
+import {
+  cambiar,
+  CATEGORIA_EGRESO_DEFAULT,
+  CATEGORIA_INGRESO_DEFAULT,
+} from '@/api/operaciones';
+import { ApiError } from '@/api/client';
 
 export default function ExchangeConfirm() {
   const { from, to, amt, fee } = useLocalSearchParams<{
@@ -21,17 +30,62 @@ export default function ExchangeConfirm() {
     fee?: string;
   }>();
 
-  const fromWallet = findWallet((from as WalletKey) ?? 'mp');
-  const toWallet = findWallet((to as WalletKey) ?? 'lm');
+  const { wallets, refresh } = useWallets();
+  const fromWallet =
+    wallets.find((w) => w.key === ((from as WalletKey) ?? 'mp')) ?? wallets[0];
+  const toWallet =
+    wallets.find((w) => w.key === ((to as WalletKey) ?? 'lm')) ?? wallets[0];
+
   const n = Number(amt ?? 0);
   const f = Number(fee ?? 0);
   const willReceive = +Math.max(0, n - f).toFixed(2);
+  const [submitting, setSubmitting] = useState(false);
 
-  function confirm() {
-    router.replace({
-      pathname: '/(exchange)/success',
-      params: { from: fromWallet.key, to: toWallet.key, amt: String(n), receive: String(willReceive) },
-    });
+  async function confirm() {
+    if (!fromWallet?.cuentaId || !toWallet?.cuentaId) {
+      Alert.alert('No se puede cambiar', 'Faltan cuentas vinculadas en el backend.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await cambiar({
+        cuentaOrigenId: fromWallet.cuentaId,
+        cuentaDestinoId: toWallet.cuentaId,
+        categoriaEgresoId: CATEGORIA_EGRESO_DEFAULT,
+        categoriaIngresoId: CATEGORIA_INGRESO_DEFAULT,
+        monto: n,
+        descripcion: `Cambio ${fromWallet.name} → ${toWallet.name}`,
+      });
+      await refresh();
+      router.replace({
+        pathname: '/(exchange)/success',
+        params: {
+          from: fromWallet.key,
+          to: toWallet.key,
+          amt: String(n),
+          receive: String(willReceive),
+        },
+      });
+    } catch (err) {
+      const mensaje = err instanceof ApiError ? err.mensaje : 'No se pudo realizar el cambio.';
+      Alert.alert('Operación rechazada', mensaje);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (!fromWallet || !toWallet) {
+    return (
+      <View style={styles.root}>
+        <AuroraBackground />
+        <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
+          <TxHeader title="Confirmar cambio" />
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <ActivityIndicator color={colors.cyan} />
+          </View>
+        </SafeAreaView>
+      </View>
+    );
   }
 
   return (
@@ -71,15 +125,19 @@ export default function ExchangeConfirm() {
         </ScrollView>
 
         <View style={styles.footer}>
-          <View style={[shadow.cta, { borderRadius: radii.button }]}>
-            <Pressable onPress={confirm} android_ripple={{ color: 'rgba(0,0,0,0.12)' }}>
+          <View style={[shadow.cta, { borderRadius: radii.button, opacity: submitting ? 0.6 : 1 }]}>
+            <Pressable disabled={submitting} onPress={confirm} android_ripple={{ color: 'rgba(0,0,0,0.12)' }}>
               <LinearGradient
                 colors={gradients.lime}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.cta}
               >
-                <Text style={styles.ctaText}>Confirmar cambio</Text>
+                {submitting ? (
+                  <ActivityIndicator color={colors.ctaText} />
+                ) : (
+                  <Text style={styles.ctaText}>Confirmar cambio</Text>
+                )}
               </LinearGradient>
             </Pressable>
           </View>
