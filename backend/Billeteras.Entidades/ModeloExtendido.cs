@@ -173,6 +173,13 @@ namespace Billeteras.Entidades
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
         [MaxLength(20)]
         public string Estado { get; set; } = "Abierto";
+
+        // Navegación
+        [ForeignKey(nameof(UsuarioId))]
+        public Usuario? Usuario { get; set; }
+        [ForeignKey(nameof(MotivoId))]
+        public MotivoReporte? Motivo { get; set; }
+        public ICollection<TicketMensaje> Mensajes { get; set; } = [];
     }
 
     [Table("TicketMensaje")]
@@ -185,6 +192,11 @@ namespace Billeteras.Entidades
         [Required]
         public string CuerpoMensaje { get; set; } = string.Empty;
         public DateTime FechaEnvio { get; set; } = DateTime.Now;
+
+        // Navegación
+        [ForeignKey(nameof(TicketId))]
+        public TicketSoporte? Ticket { get; set; }
+        public ICollection<TicketAdjunto> Adjuntos { get; set; } = [];
     }
 
     [Table("TicketAdjunto")]
@@ -199,6 +211,10 @@ namespace Billeteras.Entidades
         [Required]
         [MaxLength(50)]
         public string TipoMime { get; set; } = string.Empty;
+
+        // Navegación
+        [ForeignKey(nameof(MensajeId))]
+        public TicketMensaje? Mensaje { get; set; }
     }
 
     // ==========================================

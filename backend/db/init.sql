@@ -281,7 +281,8 @@ GO
 -- MÓDULO DE AUDITORÍA (TAREA BE-10), Franco
 -- =================================================================
 
--- 1. Crear tabla de Auditoría
+-- 1. Crear tabla de Auditoría (idempotente)
+IF OBJECT_ID(N'dbo.Auditoria', N'U') IS NULL
 CREATE TABLE Auditoria (
     AuditoriaId INT IDENTITY(1,1) PRIMARY KEY,
     TablaAfectada NVARCHAR(50) NOT NULL,
@@ -292,9 +293,12 @@ CREATE TABLE Auditoria (
 );
 GO
 
--- 2. Trigger para la tabla Movimientos
+-- 2. Trigger para la tabla Movimiento (nombre real de la tabla, sin 's')
+IF OBJECT_ID(N'dbo.trg_Auditar_Movimientos', N'TR') IS NOT NULL
+    DROP TRIGGER dbo.trg_Auditar_Movimientos;
+GO
 CREATE TRIGGER trg_Auditar_Movimientos
-ON Movimientos
+ON dbo.Movimiento
 AFTER INSERT, UPDATE, DELETE
 AS
 BEGIN
@@ -312,16 +316,19 @@ BEGIN
 
     INSERT INTO Auditoria (TablaAfectada, Accion, Detalle)
     VALUES (
-        'Movimientos',
+        'Movimiento',
         @Accion,
-        (SELECT * FROM inserted FOR JSON AUTO) -- Guardamos el estado en formato JSON
+        (SELECT * FROM inserted FOR JSON AUTO)
     );
 END;
 GO
 
--- 3. Trigger para la tabla CuentasBilletera
+-- 3. Trigger para la tabla CuentaBilletera (nombre real de la tabla, sin 's')
+IF OBJECT_ID(N'dbo.trg_Auditar_CuentasBilletera', N'TR') IS NOT NULL
+    DROP TRIGGER dbo.trg_Auditar_CuentasBilletera;
+GO
 CREATE TRIGGER trg_Auditar_CuentasBilletera
-ON CuentasBilletera
+ON dbo.CuentaBilletera
 AFTER INSERT, UPDATE, DELETE
 AS
 BEGIN
@@ -339,7 +346,7 @@ BEGIN
 
     INSERT INTO Auditoria (TablaAfectada, Accion, Detalle)
     VALUES (
-        'CuentasBilletera',
+        'CuentaBilletera',
         @Accion,
         (SELECT * FROM inserted FOR JSON AUTO)
     );

@@ -101,5 +101,34 @@ public class BilleterasContext(DbContextOptions<BilleterasContext> options) : Db
             .WithMany()
             .HasForeignKey(d => d.MovimientoId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        // ── TicketSoporte / Maestro-Detalle (BE-07) ───────────────────────────────
+        // Ticket → Usuario (NoAction: evita ciclo cascade con Usuario)
+        modelBuilder.Entity<TicketSoporte>()
+            .HasOne(t => t.Usuario)
+            .WithMany()
+            .HasForeignKey(t => t.UsuarioId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // Ticket → MotivoReporte (NoAction)
+        modelBuilder.Entity<TicketSoporte>()
+            .HasOne(t => t.Motivo)
+            .WithMany()
+            .HasForeignKey(t => t.MotivoId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // Mensaje → Ticket (Cascade: al borrar ticket se borran sus mensajes)
+        modelBuilder.Entity<TicketMensaje>()
+            .HasOne(m => m.Ticket)
+            .WithMany(t => t.Mensajes)
+            .HasForeignKey(m => m.TicketId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Adjunto → Mensaje (Cascade: al borrar mensaje se borran sus adjuntos)
+        modelBuilder.Entity<TicketAdjunto>()
+            .HasOne(a => a.Mensaje)
+            .WithMany(m => m.Adjuntos)
+            .HasForeignKey(a => a.MensajeId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

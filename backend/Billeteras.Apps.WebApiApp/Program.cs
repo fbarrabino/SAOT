@@ -30,6 +30,9 @@ builder.Services.AddScoped<IMovimientoRepository, MovimientoRepositoryEF>();
 builder.Services.AddScoped<IMetodoPagoExternoRepository, MetodoPagoExternoRepositoryEF>();
 builder.Services.AddScoped<ITicketSoporteRepository, TicketSoporteRepositoryEF>();
 
+// --- MAESTRO-DETALLE: Tickets de Soporte (BE-07) ---
+builder.Services.AddScoped<ITicketSoporteNegocio, TicketSoporteNegocio>();
+
 // --- MAESTRO-DETALLE: Solicitudes de Cobro ---
 builder.Services.AddScoped<ISolicitudCobroRepository, SolicitudCobroRepositoryEF>();
 builder.Services.AddScoped<ISolicitudCobroNegocio, SolicitudCobroNegocio>();
