@@ -10,7 +10,9 @@
  * En producción cambiar BASE_URL por la URL del servidor real.
  */
 
-export const BASE_URL = 'http://localhost:5001';
+// Para probar desde el celular vía Expo Go necesitamos la IP LAN, no localhost.
+// Cambiar a 'http://localhost:5001' si volvés a desarrollar solo en web.
+export const BASE_URL = 'http://192.168.0.4:5001';
 
 // ─── Token en memoria ─────────────────────────────────────────────────────────
 // En producción migrar a expo-secure-store para que persista entre sesiones.
