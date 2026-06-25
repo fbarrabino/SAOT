@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Billeteras.Entidades;
 using Billeteras.Negocio.Dtos;
@@ -7,6 +8,7 @@ namespace Billeteras.Apps.WebApiApp.Controllers;
 
 [Route("api/metodos-pago")]
 [ApiController]
+[Authorize]
 public class MetodosPagoExternosController(IMetodoPagoExternoRepository repository) : ControllerBase
 {
     [HttpGet("usuario/{usuarioId}")]

@@ -35,6 +35,13 @@ public class Movimiento
     // ---- CAMPO JSON AGREGADO (BE-01) ----
     public string? MetadataExtranjera { get; set; }
 
+    // ---- ANULACIÓN (BE-09) ----
+    // Cuando se anula la operación se setea Anulado=true y se revierte el saldo
+    // en la misma transacción. El registro original no se elimina (queda como
+    // traza), por eso conviene un flag y no un DELETE.
+    public bool Anulado { get; set; }
+    public DateTime? FechaAnulacion { get; set; }
+
     // Propiedades de navegación.
     [ForeignKey(nameof(CuentaBilleteraId))]
     public CuentaBilletera? CuentaBilletera { get; set; }

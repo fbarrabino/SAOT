@@ -77,7 +77,7 @@ export default function ConnectPermissionsScreen() {
                 <View style={[shadow.cta, { borderRadius: radii.button, flex: 1 }]}>
                     <Pressable
                         android_ripple={{ color: 'rgba(0,0,0,0.12)' }}
-                        onPress={() => router.push('/connect-success')}
+                        onPress={() => router.push('/connect-syncing')}
                     >
                         <LinearGradient
                             colors={gradients.cyan}

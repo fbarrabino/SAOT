@@ -1,50 +1,68 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
-import { colors, radii, spacing, type, gradients } from '@/theme/tokens';
+import { WalletGlyph } from '@/components/WalletGlyph';
+import { colors, radii, spacing, type } from '@/theme/tokens';
 import { fmt } from '@/utils/format';
+import { useWallets } from '@/context/WalletsContext';
+import type { WalletKey } from '@/data/wallets';
 
 export default function WalletDetailScreen() {
-    const balance = 3200.50;
+    // FE-01: pantalla parametrizada por billetera (mp/ua/lm).
+    // El gradient, logo y nombre salen del propio Wallet del contexto,
+    // así Ualá usa uaTint (violeta) y Lemon lmTint (lima) sin duplicar componentes.
+    const { wallet: walletParam } = useLocalSearchParams<{ wallet?: WalletKey }>();
+    const { wallets, activity } = useWallets();
 
-    const mockTransactions = [
-        { id: '1', title: 'Supermercado', date: 'Hoy · 14:22', amount: -45.20 },
-        { id: '2', title: 'Café', date: 'Ayer · 09:12', amount: -6.80 },
-    ];
+    const walletKey: WalletKey = (walletParam ?? 'mp') as WalletKey;
+    const wallet = wallets.find((w) => w.key === walletKey) ?? wallets[0];
+
+    if (!wallet) {
+        return (
+            <View style={styles.container}>
+                <AuroraBackground />
+                <View style={{ paddingTop: 48 }}>
+                    <ScreenHeader title="Billetera" />
+                </View>
+                <View style={styles.emptyBox}>
+                    <Text style={type.body}>No se encontró la billetera.</Text>
+                </View>
+            </View>
+        );
+    }
+
+    const walletTransactions = activity.filter((a) => a.wallet === wallet.key);
 
     return (
         <View style={styles.container}>
             <AuroraBackground />
 
             <View style={{ paddingTop: 48 }}>
-                <ScreenHeader title="Mercado Pago" />
+                <ScreenHeader title={wallet.name} />
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
                 <LinearGradient
-                    colors={gradients.mpTint}
+                    colors={wallet.tint}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.card}
                 >
                     <View style={styles.cardHeader}>
-                        <Image
-                            source={require('@/assets/wallets/logo-mp.png')}
-                            style={styles.logo}
-                        />
+                        <WalletGlyph wallet={wallet.key} size={48} />
                     </View>
 
                     <Text style={styles.balanceLabel}>Balance disponible</Text>
-                    <Text style={type.balance}>{fmt(balance)}</Text>
+                    <Text style={type.balance}>{fmt(wallet.bal)}</Text>
 
                     <View style={styles.actionsRow}>
-                        <ActionButton icon="send" label="Enviar" />
-                        <ActionButton icon="download" label="Pedir" />
-                        <ActionButton icon="repeat" label="Cambiar" />
+                        <ActionButton icon="send" label="Enviar" onPress={() => router.push('/(send)/recipient')} />
+                        <ActionButton icon="download" label="Pedir" onPress={() => router.push('/(request)/amount')} />
+                        <ActionButton icon="repeat" label="Cambiar" onPress={() => router.push('/(exchange)/amount')} />
                     </View>
                 </LinearGradient>
 
@@ -54,29 +72,42 @@ export default function WalletDetailScreen() {
                 </View>
 
                 <View style={styles.transactionsList}>
-                    {mockTransactions.map((tx) => (
-                        <Pressable key={tx.id} onPress={() => router.push('/transaction-detail')}>
-                            <View style={styles.txRow}>
-                                <View style={styles.txIconContainer}>
-                                    <Feather name="arrow-up-right" size={16} color={colors.text} />
+                    {walletTransactions.length === 0 ? (
+                        <Text style={[type.body, { textAlign: 'center', marginTop: spacing.lg }]}>
+                            Sin movimientos en esta billetera.
+                        </Text>
+                    ) : (
+                        walletTransactions.map((tx) => (
+                            <Pressable key={tx.id} onPress={() => router.push('/transaction-detail')}>
+                                <View style={styles.txRow}>
+                                    <View style={styles.txIconContainer}>
+                                        <Feather
+                                            name={tx.kind === 'in' ? 'arrow-down-left' : 'arrow-up-right'}
+                                            size={16}
+                                            color={tx.kind === 'in' ? colors.green : colors.text}
+                                        />
+                                    </View>
+                                    <View style={styles.txInfo}>
+                                        <Text style={type.bodyText}>{tx.title}</Text>
+                                        <Text style={type.small}>{`${tx.bucket} · ${tx.time}`}</Text>
+                                    </View>
+                                    <Text style={[type.h4, tx.kind === 'in' && { color: colors.green }]}>
+                                        {tx.kind === 'in' ? '+' : '-'}
+                                        {fmt(Math.abs(tx.amount))}
+                                    </Text>
                                 </View>
-                                <View style={styles.txInfo}>
-                                    <Text style={type.bodyText}>{tx.title}</Text>
-                                    <Text style={type.small}>{tx.date}</Text>
-                                </View>
-                                <Text style={type.h4}>{fmt(tx.amount)}</Text>
-                            </View>
-                        </Pressable>
-                    ))}
+                            </Pressable>
+                        ))
+                    )}
                 </View>
             </ScrollView>
         </View>
     );
 }
 
-function ActionButton({ icon, label }: { icon: keyof typeof Feather.glyphMap; label: string }) {
+function ActionButton({ icon, label, onPress }: { icon: keyof typeof Feather.glyphMap; label: string; onPress?: () => void }) {
     return (
-        <Pressable style={styles.actionBtn}>
+        <Pressable style={styles.actionBtn} onPress={onPress}>
             <Feather name={icon} size={14} color={colors.text} style={{ marginRight: spacing.xs }} />
             <Text style={[type.button, { color: colors.text }]}>{label}</Text>
         </Pressable>
@@ -93,6 +124,12 @@ const styles = StyleSheet.create({
         paddingTop: spacing.lg,
         paddingBottom: 40,
     },
+    emptyBox: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: spacing.xl,
+    },
     card: {
         borderRadius: radii.cardLg,
         borderWidth: 1,
@@ -102,14 +139,6 @@ const styles = StyleSheet.create({
     },
     cardHeader: {
         marginBottom: spacing.lg,
-    },
-    logo: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: '#FFFFFF',
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     balanceLabel: {
         ...type.body,

@@ -18,6 +18,9 @@ export type Wallet = {
   short: string;
   bal: number;
   tint: readonly [string, string];
+  /** Id de la cuenta del usuario en el backend (CuentaBilleteraId).
+   *  Indefinido cuando la wallet viene del mock de desarrollo. */
+  cuentaId?: number;
 };
 
 /** Datos de desarrollo — solo se usan si el backend no responde. */

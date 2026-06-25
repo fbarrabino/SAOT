@@ -28,6 +28,10 @@ builder.Services.AddScoped<IMovimientoRepository, MovimientoRepositoryEF>();
 builder.Services.AddScoped<IMetodoPagoExternoRepository, MetodoPagoExternoRepositoryEF>();
 builder.Services.AddScoped<ITicketSoporteRepository, TicketSoporteRepositoryEF>();
 
+// --- OPERACIONES TRANSACCIONALES (BE-03/04/05) ---
+builder.Services.AddScoped<IOperacionesRepository, OperacionesRepositoryEF>();
+builder.Services.AddScoped<IOperacionesNegocio, OperacionesNegocio>();
+
 // Servicios de Negocio
 builder.Services.AddScoped<IUsuarioNegocio, UsuarioNegocio>();
 builder.Services.AddScoped<IBilleteraNegocio, BilleteraNegocio>();
