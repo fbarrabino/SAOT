@@ -12,4 +12,9 @@ public interface IUsuarioRepository
     Task<int> InsertarAsync(Usuario entidad);
     Task<bool> ActualizarAsync(Usuario entidad);
     Task<bool> EliminarAsync(int id);
+
+    /// BE-11 — Devuelve los nombres de los roles asignados al usuario
+    /// (UsuarioRol JOIN Rol). Lista vacía si el usuario no tiene roles
+    /// explícitos: el AuthController igual le asigna "User" por defecto.
+    Task<List<string>> ObtenerNombresRolesAsync(int usuarioId);
 }

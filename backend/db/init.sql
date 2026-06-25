@@ -113,19 +113,24 @@ GO
 -- ===================================================================
 
 -- 1. MÓDULO DE SEGURIDAD (Requisito para BE-11)
+IF OBJECT_ID(N'dbo.Rol', N'U') IS NULL
 CREATE TABLE [dbo].[Rol] (
     [RolId] INT IDENTITY(1,1) PRIMARY KEY,
     [Nombre] VARCHAR(50) NOT NULL UNIQUE,
     [Descripcion] VARCHAR(255) NULL
 );
+GO
 
+IF OBJECT_ID(N'dbo.UsuarioRol', N'U') IS NULL
 CREATE TABLE [dbo].[UsuarioRol] (
     [UsuarioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
     [RolId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Rol]([RolId]),
     PRIMARY KEY ([UsuarioId], [RolId])
 );
+GO
 
 -- 2. MÓDULO DE RED Y CONTACTOS (Requisito para BE-03)
+IF OBJECT_ID(N'dbo.Contacto', N'U') IS NULL
 CREATE TABLE [dbo].[Contacto] (
     [UsuarioPropietarioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
     [UsuarioContactoId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
@@ -133,29 +138,37 @@ CREATE TABLE [dbo].[Contacto] (
     [FechaAgregado] DATETIME DEFAULT GETDATE(),
     PRIMARY KEY ([UsuarioPropietarioId], [UsuarioContactoId])
 );
+GO
 
 -- 3. MÓDULO DE COMERCIOS Y PAGOS QR (Requisito para BE-05)
+IF OBJECT_ID(N'dbo.Comercio', N'U') IS NULL
 CREATE TABLE [dbo].[Comercio] (
     [ComercioId] INT IDENTITY(1,1) PRIMARY KEY,
     [RazonSocial] VARCHAR(100) NOT NULL,
     [Cuit] VARCHAR(20) NOT NULL UNIQUE
 );
+GO
 
+IF OBJECT_ID(N'dbo.Sucursal', N'U') IS NULL
 CREATE TABLE [dbo].[Sucursal] (
     [SucursalId] INT IDENTITY(1,1) PRIMARY KEY,
     [ComercioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Comercio]([ComercioId]),
     [Direccion] VARCHAR(200) NOT NULL,
     [CodigoQRBase] VARCHAR(255) NOT NULL UNIQUE
 );
+GO
 
+IF OBJECT_ID(N'dbo.ComercioBilletera', N'U') IS NULL
 CREATE TABLE [dbo].[ComercioBilletera] (
     [ComercioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Comercio]([ComercioId]),
     [BilleteraId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Billetera]([BilleteraId]),
     [TasaComision] DECIMAL(5,2) DEFAULT 0,
     PRIMARY KEY ([ComercioId], [BilleteraId])
 );
+GO
 
 -- 4. MÓDULO DE SOLICITUDES DE PAGO/COBRO (Requisito para BE-06)
+IF OBJECT_ID(N'dbo.SolicitudCobro', N'U') IS NULL
 CREATE TABLE [dbo].[SolicitudCobro] (
     [SolicitudId] INT IDENTITY(1,1) PRIMARY KEY,
     [UsuarioSolicitanteId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
@@ -163,7 +176,9 @@ CREATE TABLE [dbo].[SolicitudCobro] (
     [FechaVencimiento] DATETIME NOT NULL,
     [Estado] VARCHAR(20) DEFAULT 'Pendiente'
 );
+GO
 
+IF OBJECT_ID(N'dbo.SolicitudCobroDetalle', N'U') IS NULL
 CREATE TABLE [dbo].[SolicitudCobroDetalle] (
     [DetalleSolicitudId] INT IDENTITY(1,1) PRIMARY KEY,
     [SolicitudId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[SolicitudCobro]([SolicitudId]),
@@ -171,14 +186,18 @@ CREATE TABLE [dbo].[SolicitudCobroDetalle] (
     [MontoMita] DECIMAL(18,2) NOT NULL,
     [Pagado] BIT DEFAULT 0
 );
+GO
 
 -- 5. MÓDULO DE SOPORTE TÉCNICO (Requisito para BE-07)
+IF OBJECT_ID(N'dbo.MotivoReporte', N'U') IS NULL
 CREATE TABLE [dbo].[MotivoReporte] (
     [MotivoId] INT IDENTITY(1,1) PRIMARY KEY,
     [Titulo] VARCHAR(100) NOT NULL,
     [Gravedad] INT DEFAULT 1
 );
+GO
 
+IF OBJECT_ID(N'dbo.TicketSoporte', N'U') IS NULL
 CREATE TABLE [dbo].[TicketSoporte] (
     [TicketId] INT IDENTITY(1,1) PRIMARY KEY,
     [UsuarioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
@@ -186,7 +205,9 @@ CREATE TABLE [dbo].[TicketSoporte] (
     [FechaCreacion] DATETIME DEFAULT GETDATE(),
     [Estado] VARCHAR(20) DEFAULT 'Abierto'
 );
+GO
 
+IF OBJECT_ID(N'dbo.TicketMensaje', N'U') IS NULL
 CREATE TABLE [dbo].[TicketMensaje] (
     [MensajeId] INT IDENTITY(1,1) PRIMARY KEY,
     [TicketId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[TicketSoporte]([TicketId]),
@@ -194,15 +215,19 @@ CREATE TABLE [dbo].[TicketMensaje] (
     [CuerpoMensaje] TEXT NOT NULL,
     [FechaEnvio] DATETIME DEFAULT GETDATE()
 );
+GO
 
+IF OBJECT_ID(N'dbo.TicketAdjunto', N'U') IS NULL
 CREATE TABLE [dbo].[TicketAdjunto] (
     [AdjuntoId] INT IDENTITY(1,1) PRIMARY KEY,
     [MensajeId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[TicketMensaje]([MensajeId]),
     [UrlArchivo] VARCHAR(255) NOT NULL,
     [TipoMime] VARCHAR(50) NOT NULL
 );
+GO
 
 -- 6. MÓDULO DE MÉTODOS DE PAGO Y NOTIFICACIONES
+IF OBJECT_ID(N'dbo.Notificacion', N'U') IS NULL
 CREATE TABLE [dbo].[Notificacion] (
     [NotificacionId] INT IDENTITY(1,1) PRIMARY KEY,
     [UsuarioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
@@ -211,19 +236,45 @@ CREATE TABLE [dbo].[Notificacion] (
     [Leida] BIT DEFAULT 0,
     [FechaEmision] DATETIME DEFAULT GETDATE()
 );
+GO
 
+IF OBJECT_ID(N'dbo.MetodoPagoExterno', N'U') IS NULL
 CREATE TABLE [dbo].[MetodoPagoExterno] (
     [MetodoId] INT IDENTITY(1,1) PRIMARY KEY,
     [UsuarioId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Usuario]([UsuarioId]),
-    [Tipo] VARCHAR(50) NOT NULL, 
+    [Tipo] VARCHAR(50) NOT NULL,
     [UltimosCuatro] CHAR(4) NOT NULL,
     [EntidadEmisora] VARCHAR(100) NOT NULL
 );
+GO
 
 -- 7. REQUERIMIENTO TPI CLASE 7: ALTER TABLE PARA CAMPO JSON
 -- Nota Franco: Se agrega a la tabla Movimiento (creada por Lautaro/Fabri)
-ALTER TABLE [dbo].[Movimiento] ADD [MetadataExtranjera] NVARCHAR(MAX) NULL;
-ALTER TABLE [dbo].[Movimiento] ADD CONSTRAINT [CHK_Movimiento_Metadata_JSON] CHECK (ISJSON([MetadataExtranjera]) = 1);
+-- IMPORTANTE: GO entre las dos ALTER. Sin él, el parser de T-SQL no ve la
+-- columna MetadataExtranjera al compilar la CHECK y rechaza todo el batch.
+IF COL_LENGTH(N'dbo.Movimiento', N'MetadataExtranjera') IS NULL
+    ALTER TABLE [dbo].[Movimiento] ADD [MetadataExtranjera] NVARCHAR(MAX) NULL;
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.check_constraints WHERE name = N'CHK_Movimiento_Metadata_JSON')
+    ALTER TABLE [dbo].[Movimiento] ADD CONSTRAINT [CHK_Movimiento_Metadata_JSON] CHECK (ISJSON([MetadataExtranjera]) = 1);
+GO
+
+-- 7b. SEEDS DE ROLES (BE-11)
+-- Mínimo necesario para que [Authorize(Roles="...")] tenga datos contra los que matchear.
+IF NOT EXISTS (SELECT 1 FROM dbo.Rol WHERE Nombre = N'User')
+    INSERT INTO dbo.Rol (Nombre, Descripcion) VALUES (N'User', N'Usuario final de la app');
+IF NOT EXISTS (SELECT 1 FROM dbo.Rol WHERE Nombre = N'Admin')
+    INSERT INTO dbo.Rol (Nombre, Descripcion) VALUES (N'Admin', N'Operador con acceso administrativo');
+GO
+
+-- 8. ANULACIÓN DE MOVIMIENTOS (BE-09)
+-- Flag + timestamp para anular operaciones sin perder la traza original.
+-- La reversión de saldo se ejecuta en la misma transacción desde la API.
+IF COL_LENGTH(N'dbo.Movimiento', N'Anulado') IS NULL
+    ALTER TABLE [dbo].[Movimiento] ADD [Anulado] BIT NOT NULL CONSTRAINT [DF_Movimiento_Anulado] DEFAULT (0);
+GO
+IF COL_LENGTH(N'dbo.Movimiento', N'FechaAnulacion') IS NULL
+    ALTER TABLE [dbo].[Movimiento] ADD [FechaAnulacion] DATETIME NULL;
 GO
 
 

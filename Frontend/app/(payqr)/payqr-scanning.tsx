@@ -55,8 +55,25 @@ export default function PayQRScanningScreen() {
             </View>
 
             <View style={styles.footer}>
-                {/* TRUCO DE UI/UX: Al tocar esta etiqueta simulamos que la cámara leyó un QR exitosamente */}
-                <Pressable onPress={() => router.push('/payqr-detected')}>
+                {/* TRUCO DE UI/UX: Al tocar esta etiqueta simulamos que la cámara leyó un QR.
+                    Mientras no exista cámara real, hidratamos el detected con un QR demo
+                    (mismo merchant del mockup) para que la pantalla siguiente pueda mostrar
+                    datos consistentes y disparar el POST /api/operaciones/pagar-qr. */}
+                <Pressable
+                    onPress={() =>
+                        router.push({
+                            pathname: '/payqr-detected',
+                            params: {
+                                merchant: 'Café Buenos Aires',
+                                merchantSub: 'Comercio verificado · Palermo',
+                                amount: '24.80',
+                                reference: 'ORD-44821',
+                                qr: 'DEMO-QR-CAFE-BSAS-24.80',
+                                wallet: 'mp',
+                            },
+                        })
+                    }
+                >
                     <View style={styles.instructionPill}>
                         <Text style={styles.instructionText}>Enfocá el código QR para pagar</Text>
                     </View>

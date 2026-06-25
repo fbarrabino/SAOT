@@ -1,17 +1,32 @@
-import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+// FE-04 — Estado intermedio entre "Conceder permisos" y "Conectada".
+// Muestra "Sincronizando..." con spinner mientras simulamos el primer
+// snapshot de saldo/historial de la billetera externa; al cabo de un
+// tiempo corto navega a /connect-success con la wallet ya en estado ACTIVA.
+//
+// Por ahora la sincronización es un timeout; cuando exista la integración
+// real con el proveedor (FE-08+) acá se va a esperar a que el polling de
+// /api/cuentas-billetera/me devuelva la nueva cuenta vinculada.
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
-import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
+import { colors, radii, spacing, type } from '@/theme/tokens';
 
-export default function ConnectSuccessScreen() {
+const SYNC_DURATION_MS = 2200;
+
+export default function ConnectSyncingScreen() {
+    useEffect(() => {
+        const t = setTimeout(() => {
+            router.replace('/connect-success');
+        }, SYNC_DURATION_MS);
+        return () => clearTimeout(t);
+    }, []);
+
     return (
         <View style={styles.container}>
             <AuroraBackground />
 
-            {/* Botón de cerrar superior */}
             <View style={styles.header}>
                 <Pressable style={styles.closeBtn} onPress={() => router.replace('/(tabs)/wallets')}>
                     <Feather name="x" size={24} color={colors.text} />
@@ -19,17 +34,17 @@ export default function ConnectSuccessScreen() {
             </View>
 
             <View style={styles.content}>
-                <View style={styles.successCircleOuter}>
-                    <View style={styles.successCircleInner}>
-                        <Feather name="check" size={32} color="#FFFFFF" />
+                <View style={styles.syncCircleOuter}>
+                    <View style={styles.syncCircleInner}>
+                        <ActivityIndicator color="#FFFFFF" size="large" />
                     </View>
                 </View>
 
                 <View style={styles.textContainer}>
                     <Text style={type.display}>Brubank</Text>
-                    <Text style={styles.successLabel}>¡Conectada!</Text>
+                    <Text style={styles.syncLabel}>Sincronizando…</Text>
                     <Text style={styles.subtitle}>
-                        Ya podés ver el balance desde tu dashboard.
+                        Estamos recibiendo el balance y los últimos movimientos.
                     </Text>
                 </View>
 
@@ -40,34 +55,18 @@ export default function ConnectSuccessScreen() {
                         </View>
                         <View>
                             <Text style={type.h4}>Brubank</Text>
-                            <Text style={type.small}>Listo para usar</Text>
+                            <Text style={type.small}>Recibiendo datos…</Text>
                         </View>
                     </View>
-                    <Text style={styles.activeLabel}>ACTIVA</Text>
+                    <ActivityIndicator color={colors.cyan} size="small" />
                 </View>
             </View>
 
-            {/* Footer con botones de acción */}
-            <View style={styles.footer}>
-                <View style={[shadow.cta, { borderRadius: radii.button, marginBottom: spacing.md }]}>
-                    <Pressable 
-                        android_ripple={{ color: 'rgba(0,0,0,0.12)' }} 
-                        onPress={() => router.replace('/(tabs)/wallets')}
-                    >
-                        <LinearGradient
-                            colors={gradients.cyan}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 0 }}
-                            style={styles.primaryBtn}
-                        >
-                            <Text style={type.button}>Ver mis billeteras</Text>
-                        </LinearGradient>
-                    </Pressable>
-                </View>
-
-                <Pressable style={styles.ghostBtn} onPress={() => router.replace('/connect-list')}>
-                    <Text style={[type.button, { color: colors.text }]}>Conectar otra</Text>
-                </Pressable>
+            <View style={styles.footerNote}>
+                <Feather name="lock" size={14} color={colors.dim} />
+                <Text style={styles.securityText}>
+                    Conexión cifrada · OAuth 2.0
+                </Text>
             </View>
         </View>
     );
@@ -99,23 +98,23 @@ const styles = StyleSheet.create({
         paddingHorizontal: spacing.xl,
         marginTop: -60,
     },
-    successCircleOuter: {
+    syncCircleOuter: {
         width: 96,
         height: 96,
         borderRadius: 48,
-        backgroundColor: 'rgba(74,222,128,0.15)',
+        backgroundColor: 'rgba(57,195,242,0.15)',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: spacing.xxl,
     },
-    successCircleInner: {
+    syncCircleInner: {
         width: 64,
         height: 64,
         borderRadius: 32,
-        backgroundColor: colors.green,
+        backgroundColor: colors.cyan,
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: colors.green,
+        shadowColor: colors.cyan,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.4,
         shadowRadius: 16,
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 40,
     },
-    successLabel: {
+    syncLabel: {
         ...type.display,
         fontSize: 22,
         color: colors.text,
@@ -164,25 +163,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
     },
-    activeLabel: {
-        ...type.label,
-        color: colors.green,
-    },
-    footer: {
-        paddingHorizontal: spacing.lg,
+    footerNote: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: spacing.sm,
         paddingBottom: 40,
     },
-    primaryBtn: {
-        height: 52,
-        borderRadius: radii.button,
-        alignItems: 'center',
-        justifyContent: 'center',
+    securityText: {
+        ...type.small,
+        fontSize: 11,
     },
-    ghostBtn: {
-        height: 52,
-        borderRadius: radii.button,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'transparent',
-    }
 });

@@ -35,7 +35,13 @@ public class AuthController(IUsuarioNegocio usuarios, IConfiguration config) : C
         if (usuario is null)
             return Unauthorized(new { mensaje = "Email o contraseña inválidos." });
 
-        var (token, expiraEn) = GenerarToken(usuario);
+        // BE-11: cargamos los roles del usuario para inyectarlos como claims;
+        // si no tiene roles explícitos en UsuarioRol le asignamos "User" por
+        // defecto para que todos los endpoints [Authorize] sigan funcionando.
+        var roles = await usuarios.ObtenerNombresRolesAsync(usuario.UsuarioId);
+        if (roles.Count == 0) roles.Add("User");
+
+        var (token, expiraEn) = GenerarToken(usuario, roles);
         return Ok(new LoginResponse(token, expiraEn, usuario));
     }
 
@@ -52,7 +58,7 @@ public class AuthController(IUsuarioNegocio usuarios, IConfiguration config) : C
         return usuario is null ? NotFound() : Ok(usuario);
     }
 
-    private (string token, DateTime expiraEn) GenerarToken(UsuarioResponse usuario)
+    private (string token, DateTime expiraEn) GenerarToken(UsuarioResponse usuario, IEnumerable<string> roles)
     {
         var jwt = config.GetSection("Jwt");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!));
@@ -60,13 +66,13 @@ public class AuthController(IUsuarioNegocio usuarios, IConfiguration config) : C
         var minutos = int.Parse(jwt["ExpiresInMinutes"] ?? "120");
         var expiraEn = DateTime.UtcNow.AddMinutes(minutos);
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, usuario.UsuarioId.ToString()),
-            new Claim(ClaimTypes.Name, usuario.Email),
-            new Claim(ClaimTypes.Role, "User"),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new(ClaimTypes.NameIdentifier, usuario.UsuarioId.ToString()),
+            new(ClaimTypes.Name, usuario.Email),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
+        claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
         var token = new JwtSecurityToken(
             issuer: jwt["Issuer"],

@@ -64,6 +64,9 @@ public class UsuarioNegocio(IUsuarioRepository repo) : IUsuarioNegocio
 
     public Task<bool> EliminarAsync(int id) => repo.EliminarAsync(id);
 
+    public Task<List<string>> ObtenerNombresRolesAsync(int usuarioId)
+        => repo.ObtenerNombresRolesAsync(usuarioId);
+
     private static UsuarioResponse Map(Usuario u)
         => new(u.UsuarioId, u.Nombre, u.Apellido, u.Email, u.FechaAlta);
 }

@@ -33,23 +33,29 @@ export default function Wallets() {
 
           <View style={styles.list}>
             {WALLETS.map(w => (
-              <LinearGradient
+              <Pressable
                 key={w.key}
-                colors={w.tint}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.row}
+                onPress={() =>
+                  router.push({ pathname: '/wallet-detail', params: { wallet: w.key } })
+                }
               >
-                <WalletGlyph wallet={w.key} size={42} />
-                <View style={{ flex: 1, marginLeft: 12 }}>
-                  <Text style={styles.name}>{w.name}</Text>
-                  <Text style={styles.sub}>{w.sub}</Text>
-                </View>
-                <View style={{ alignItems: 'flex-end' }}>
-                  <Text style={styles.amt}>{fmt(w.bal)}</Text>
-                  <Text style={styles.amtSub}>Disponible</Text>
-                </View>
-              </LinearGradient>
+                <LinearGradient
+                  colors={w.tint}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.row}
+                >
+                  <WalletGlyph wallet={w.key} size={42} />
+                  <View style={{ flex: 1, marginLeft: 12 }}>
+                    <Text style={styles.name}>{w.name}</Text>
+                    <Text style={styles.sub}>{w.sub}</Text>
+                  </View>
+                  <View style={{ alignItems: 'flex-end' }}>
+                    <Text style={styles.amt}>{fmt(w.bal)}</Text>
+                    <Text style={styles.amtSub}>Disponible</Text>
+                  </View>
+                </LinearGradient>
+              </Pressable>
             ))}
 
             <Pressable style={styles.addRow} onPress={() => router.push('/connect-list')}>

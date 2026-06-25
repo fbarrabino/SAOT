@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj": {}
+    "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj": {}
   },
   "projects": {
-    "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj": {
+    "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj",
         "projectName": "Billeteras.DatosEF",
-        "projectPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\Billeteras.DatosEF.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.DatosEF\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -27,11 +27,11 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj": {
-                "projectPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj"
+              "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj": {
+                "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj"
               },
-              "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {
-                "projectPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj"
+              "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {
+                "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj"
               }
             }
           }
@@ -352,17 +352,17 @@
         }
       }
     },
-    "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj": {
+    "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj",
         "projectName": "Billeteras.Datos",
-        "projectPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\Billeteras.Datos.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Datos\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -375,8 +375,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {
-                "projectPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj"
+              "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {
+                "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj"
               }
             }
           }
@@ -697,17 +697,17 @@
         }
       }
     },
-    "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {
+    "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj",
         "projectName": "Billeteras.Entidades",
-        "projectPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\Billeteras.Entidades.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Fabri\\Facultad\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Entidades\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
