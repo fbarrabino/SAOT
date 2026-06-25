@@ -8,12 +8,14 @@ namespace Billeteras.Apps.WebApiApp.Controllers;
 
 [ApiController]
 [Route("api/movimientos")]
+[Authorize]
 public class MovimientosController(
     IMovimientoNegocio negocio,
     ICuentaBilleteraNegocio cuentas) : ControllerBase
 {
-    /// GET /api/movimientos — admin/debug, sin filtro de usuario.
+    /// GET /api/movimientos — admin only (cross-user).
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<List<MovimientoResponse>>> ObtenerTodos()
         => Ok(await negocio.ObtenerTodosAsync());
 

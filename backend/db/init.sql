@@ -226,6 +226,14 @@ ALTER TABLE [dbo].[Movimiento] ADD [MetadataExtranjera] NVARCHAR(MAX) NULL;
 ALTER TABLE [dbo].[Movimiento] ADD CONSTRAINT [CHK_Movimiento_Metadata_JSON] CHECK (ISJSON([MetadataExtranjera]) = 1);
 GO
 
+-- 7b. SEEDS DE ROLES (BE-11)
+-- Mínimo necesario para que [Authorize(Roles="...")] tenga datos contra los que matchear.
+IF NOT EXISTS (SELECT 1 FROM dbo.Rol WHERE Nombre = N'User')
+    INSERT INTO dbo.Rol (Nombre, Descripcion) VALUES (N'User', N'Usuario final de la app');
+IF NOT EXISTS (SELECT 1 FROM dbo.Rol WHERE Nombre = N'Admin')
+    INSERT INTO dbo.Rol (Nombre, Descripcion) VALUES (N'Admin', N'Operador con acceso administrativo');
+GO
+
 -- 8. ANULACIÓN DE MOVIMIENTOS (BE-09)
 -- Flag + timestamp para anular operaciones sin perder la traza original.
 -- La reversión de saldo se ejecuta en la misma transacción desde la API.

@@ -36,4 +36,10 @@ public class UsuarioRepositoryEF(BilleterasContext ctx) : IUsuarioRepository
         ctx.Usuarios.Remove(entidad);
         return await ctx.SaveChangesAsync() > 0;
     }
+
+    public Task<List<string>> ObtenerNombresRolesAsync(int usuarioId)
+        => (from ur in ctx.UsuariosRoles
+            join r in ctx.Roles on ur.RolId equals r.RolId
+            where ur.UsuarioId == usuarioId
+            select r.Nombre).ToListAsync();
 }
