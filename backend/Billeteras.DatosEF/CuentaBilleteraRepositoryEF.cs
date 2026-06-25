@@ -40,4 +40,82 @@ public class CuentaBilleteraRepositoryEF(BilleterasContext ctx) : ICuentaBillete
         ctx.CuentasBilletera.Remove(entidad);
         return await ctx.SaveChangesAsync() > 0;
     }
+
+    public async Task<CuentaBilletera> VincularAsync(int usuarioId, int billeteraId, string? alias)
+    {
+        await using var tx = await ctx.Database.BeginTransactionAsync();
+        try
+        {
+            // Validar que la billetera exista
+            var billeteraExiste = await ctx.Billeteras.AnyAsync(b => b.BilleteraId == billeteraId);
+            if (!billeteraExiste)
+                throw new KeyNotFoundException($"No existe una billetera con Id {billeteraId}.");
+
+            // Validar que no haya un vínculo activo para el mismo usuario + billetera
+            var yaVinculada = await ctx.CuentasBilletera
+                .AnyAsync(c => c.UsuarioId == usuarioId
+                            && c.BilleteraId == billeteraId
+                            && c.Estado == "Activa");
+            if (yaVinculada)
+                throw new InvalidOperationException("Ya existe un vínculo activo con esa billetera.");
+
+            var cuenta = new CuentaBilletera
+            {
+                UsuarioId        = usuarioId,
+                BilleteraId      = billeteraId,
+                Alias            = alias,
+                SaldoActual      = 0,
+                FechaVinculacion = DateTime.UtcNow,
+                Estado           = "Activa"
+            };
+
+            ctx.CuentasBilletera.Add(cuenta);
+            await ctx.SaveChangesAsync();
+            await tx.CommitAsync();
+
+            // Recargar navegaciones para el response
+            await ctx.Entry(cuenta).Reference(c => c.Billetera).LoadAsync();
+            await ctx.Entry(cuenta).Reference(c => c.Usuario).LoadAsync();
+            return cuenta;
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
+    }
+
+    public async Task<CuentaBilletera> DesvincularAsync(int cuentaBilleteraId, int usuarioId)
+    {
+        await using var tx = await ctx.Database.BeginTransactionAsync();
+        try
+        {
+            var cuenta = await ctx.CuentasBilletera
+                .Include(c => c.Billetera)
+                .Include(c => c.Usuario)
+                .FirstOrDefaultAsync(c => c.CuentaBilleteraId == cuentaBilleteraId)
+                ?? throw new KeyNotFoundException($"No existe una cuenta con Id {cuentaBilleteraId}.");
+
+            if (cuenta.UsuarioId != usuarioId)
+                throw new UnauthorizedAccessException("No tenés permiso para desvincular esta cuenta.");
+
+            if (cuenta.Estado != "Activa")
+                throw new InvalidOperationException("La cuenta ya se encuentra desvinculada.");
+
+            if (cuenta.SaldoActual != 0)
+                throw new InvalidOperationException(
+                    $"No se puede desvincular la cuenta con saldo pendiente de ${cuenta.SaldoActual:F2}.");
+
+            cuenta.Estado = "Desvinculada";
+            await ctx.SaveChangesAsync();
+            await tx.CommitAsync();
+
+            return cuenta;
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
+    }
 }

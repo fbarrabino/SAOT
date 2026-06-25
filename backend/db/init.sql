@@ -60,10 +60,17 @@ CREATE TABLE dbo.CuentaBilletera
     Alias             NVARCHAR(100)     NULL,
     SaldoActual       DECIMAL(18,2)     NOT NULL CONSTRAINT DF_CuentaBilletera_SaldoActual DEFAULT (0),
     FechaVinculacion  DATETIME          NOT NULL CONSTRAINT DF_CuentaBilletera_FechaVinculacion DEFAULT (GETDATE()),
+    Estado            NVARCHAR(20)      NOT NULL CONSTRAINT DF_CuentaBilletera_Estado DEFAULT ('Activa'),
     CONSTRAINT PK_CuentaBilletera PRIMARY KEY (CuentaBilleteraId),
     CONSTRAINT FK_CuentaBilletera_Usuario   FOREIGN KEY (UsuarioId)   REFERENCES dbo.Usuario (UsuarioId)     ON DELETE NO ACTION,
     CONSTRAINT FK_CuentaBilletera_Billetera FOREIGN KEY (BilleteraId) REFERENCES dbo.Billetera (BilleteraId) ON DELETE NO ACTION
 );
+GO
+
+-- Agregar columna Estado si ya existe la tabla (idempotente para BDs existentes)
+IF COL_LENGTH(N'dbo.CuentaBilletera', N'Estado') IS NULL
+    ALTER TABLE dbo.CuentaBilletera
+    ADD Estado NVARCHAR(20) NOT NULL CONSTRAINT DF_CuentaBilletera_Estado DEFAULT ('Activa');
 GO
 
 IF OBJECT_ID(N'dbo.Movimiento', N'U') IS NULL

@@ -46,6 +46,27 @@ public class CuentaBilleteraNegocio(ICuentaBilleteraRepository repo) : ICuentaBi
 
     public Task<bool> EliminarAsync(int id) => repo.EliminarAsync(id);
 
+    public async Task<List<CuentaBilleteraResponse>> ObtenerActivasDeUsuarioAsync(int usuarioId)
+    {
+        var todas = await repo.ObtenerTodosAsync();
+        return todas
+            .Where(c => c.UsuarioId == usuarioId && c.Estado == "Activa")
+            .Select(Map)
+            .ToList();
+    }
+
+    public async Task<CuentaBilleteraResponse> VincularAsync(int usuarioId, VincularBilleteraRequest req)
+    {
+        var cuenta = await repo.VincularAsync(usuarioId, req.BilleteraId, req.Alias);
+        return Map(cuenta);
+    }
+
+    public async Task<CuentaBilleteraResponse> DesvincularAsync(int cuentaId, int usuarioId)
+    {
+        var cuenta = await repo.DesvincularAsync(cuentaId, usuarioId);
+        return Map(cuenta);
+    }
+
     private static CuentaBilleteraResponse Map(CuentaBilletera c)
         => new(
             c.CuentaBilleteraId,
@@ -55,5 +76,6 @@ public class CuentaBilleteraNegocio(ICuentaBilleteraRepository repo) : ICuentaBi
             c.SaldoActual,
             c.FechaVinculacion,
             c.Billetera?.Nombre,
-            c.Usuario is null ? null : $"{c.Usuario.Nombre} {c.Usuario.Apellido}".Trim());
+            c.Usuario is null ? null : $"{c.Usuario.Nombre} {c.Usuario.Apellido}".Trim(),
+            c.Estado);
 }

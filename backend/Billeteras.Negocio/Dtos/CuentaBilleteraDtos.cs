@@ -16,4 +16,10 @@ public record CuentaBilleteraResponse(
     decimal SaldoActual,
     DateTime FechaVinculacion,
     string? BilleteraNombre,
-    string? UsuarioNombre);
+    string? UsuarioNombre,
+    string Estado);
+
+/// <summary>Request para vincular una billetera al usuario autenticado (UsuarioId viene del JWT).</summary>
+public record VincularBilleteraRequest(
+    [Range(1, int.MaxValue)] int BilleteraId,
+    [MaxLength(100)] string? Alias);

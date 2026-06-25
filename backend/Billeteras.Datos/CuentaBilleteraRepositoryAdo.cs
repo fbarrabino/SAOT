@@ -9,7 +9,7 @@ namespace Billeteras.Datos;
 public class CuentaBilleteraRepositoryAdo(string connectionString) : ICuentaBilleteraRepository
 {
     private const string SelectBase = @"
-        SELECT c.CuentaBilleteraId, c.UsuarioId, c.BilleteraId, c.Alias, c.SaldoActual, c.FechaVinculacion,
+        SELECT c.CuentaBilleteraId, c.UsuarioId, c.BilleteraId, c.Alias, c.SaldoActual, c.FechaVinculacion, c.Estado,
                b.Nombre AS BilleteraNombre,
                u.Nombre AS UsuarioNombre, u.Apellido AS UsuarioApellido
         FROM CuentaBilletera c
@@ -88,6 +88,16 @@ public class CuentaBilleteraRepositoryAdo(string connectionString) : ICuentaBill
         return await cmd.ExecuteNonQueryAsync() > 0;
     }
 
+    /// <summary>
+    /// VincularAsync y DesvincularAsync no están implementados en ADO.NET — delegar a EF.
+    /// Este repositorio ADO se usa solo para el módulo MVC (vista), no para la API REST.
+    /// </summary>
+    public Task<CuentaBilletera> VincularAsync(int usuarioId, int billeteraId, string? alias)
+        => throw new NotSupportedException("VincularAsync solo está implementado en CuentaBilleteraRepositoryEF.");
+
+    public Task<CuentaBilletera> DesvincularAsync(int cuentaBilleteraId, int usuarioId)
+        => throw new NotSupportedException("DesvincularAsync solo está implementado en CuentaBilleteraRepositoryEF.");
+
     private static CuentaBilletera Map(SqlDataReader reader) => new()
     {
         CuentaBilleteraId = reader.GetInt32(reader.GetOrdinal("CuentaBilleteraId")),
@@ -96,6 +106,7 @@ public class CuentaBilleteraRepositoryAdo(string connectionString) : ICuentaBill
         Alias = reader.IsDBNull(reader.GetOrdinal("Alias")) ? null : reader.GetString(reader.GetOrdinal("Alias")),
         SaldoActual = reader.GetDecimal(reader.GetOrdinal("SaldoActual")),
         FechaVinculacion = reader.GetDateTime(reader.GetOrdinal("FechaVinculacion")),
+        Estado = reader.IsDBNull(reader.GetOrdinal("Estado")) ? "Activa" : reader.GetString(reader.GetOrdinal("Estado")),
         // Navegaciones parcialmente cargadas vía JOIN (solo los nombres que necesita la vista).
         Billetera = new Billetera { Nombre = reader.GetString(reader.GetOrdinal("BilleteraNombre")) },
         Usuario = new Usuario

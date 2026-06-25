@@ -45,9 +45,14 @@ public class BilleterasContext(DbContextOptions<BilleterasContext> options) : Db
 
         modelBuilder.Entity<CuentaBilletera>(e =>
         {
+            // El trigger trg_Auditar_CuentasBilletera bloquea OUTPUT INSERTED incluso
+            // para leer el PK IDENTITY. UseSqlOutputClause(false) → EF usa SCOPE_IDENTITY()
+            // en lugar de OUTPUT, lo que funciona correctamente con triggers.
+            e.ToTable("CuentaBilletera", t => t.UseSqlOutputClause(false));
+
+            // FechaVinculacion: se setea desde C# (DateTime.UtcNow), no se deja a la DB.
             e.Property(c => c.FechaVinculacion)
-                .HasDefaultValueSql("GETDATE()")
-                .ValueGeneratedOnAdd();
+                .ValueGeneratedNever();
         });
 
         // ==========================================
