@@ -17,4 +17,7 @@ public interface IUsuarioNegocio
     Task<UsuarioResponse?> ActualizarAsync(int id, UsuarioUpdateRequest req);
 
     Task<bool> EliminarAsync(int id);
+
+    /// BE-11 — Nombres de roles asignados al usuario, para inyectar en el JWT.
+    Task<List<string>> ObtenerNombresRolesAsync(int usuarioId);
 }

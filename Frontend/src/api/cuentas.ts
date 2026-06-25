@@ -63,6 +63,7 @@ export function cuentaToWallet(cuenta: CuentaBilleteraResponse): Wallet | null {
     short: cuenta.alias ?? cuenta.billeteraNombre ?? key,
     bal: cuenta.saldoActual,
     tint: toGradient(key),
+    cuentaId: cuenta.cuentaBilleteraId,
   };
 }
 

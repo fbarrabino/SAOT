@@ -94,6 +94,24 @@ public class UsuarioRepositoryAdo(string connectionString) : IUsuarioRepository
         return await cmd.ExecuteNonQueryAsync() > 0;
     }
 
+    public async Task<List<string>> ObtenerNombresRolesAsync(int usuarioId)
+    {
+        var roles = new List<string>();
+        const string sql =
+            "SELECT r.Nombre FROM UsuarioRol ur " +
+            "JOIN Rol r ON r.RolId = ur.RolId " +
+            "WHERE ur.UsuarioId = @id;";
+
+        using var conn = new SqlConnection(connectionString);
+        using var cmd = new SqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@id", usuarioId);
+        await conn.OpenAsync();
+        using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+            roles.Add(reader.GetString(0));
+        return roles;
+    }
+
     private static Usuario Map(SqlDataReader reader) => new()
     {
         UsuarioId = reader.GetInt32(reader.GetOrdinal("UsuarioId")),

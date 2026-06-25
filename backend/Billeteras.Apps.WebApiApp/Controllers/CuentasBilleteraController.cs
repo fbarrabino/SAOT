@@ -8,10 +8,12 @@ namespace Billeteras.Apps.WebApiApp.Controllers;
 
 [ApiController]
 [Route("api/cuentas-billetera")]
+[Authorize]
 public class CuentasBilleteraController(ICuentaBilleteraNegocio negocio) : ControllerBase
 {
     /// GET /api/cuentas-billetera — admin/debug, sin filtro de usuario.
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<List<CuentaBilleteraResponse>>> ObtenerTodos()
         => Ok(await negocio.ObtenerTodosAsync());
 
@@ -43,7 +45,15 @@ public class CuentasBilleteraController(ICuentaBilleteraNegocio negocio) : Contr
     public async Task<ActionResult<CuentaBilleteraResponse>> ObtenerPorId(int id)
     {
         var cuenta = await negocio.ObtenerPorIdAsync(id);
-        return cuenta is null ? NotFound() : Ok(cuenta);
+        if (cuenta is null) return NotFound();
+
+        // Ownership: el dueño la ve; los Admin también.
+        var idClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(idClaim, out var usuarioId)) return Unauthorized();
+        if (cuenta.UsuarioId != usuarioId && !User.IsInRole("Admin"))
+            return Forbid();
+
+        return Ok(cuenta);
     }
 
     [HttpPost]
@@ -61,6 +71,7 @@ public class CuentasBilleteraController(ICuentaBilleteraNegocio negocio) : Contr
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Eliminar(int id)
         => await negocio.EliminarAsync(id) ? NoContent() : NotFound();
 }

@@ -33,6 +33,9 @@ builder.Services.AddScoped<ITicketSoporteRepository, TicketSoporteRepositoryEF>(
 // --- MAESTRO-DETALLE: Solicitudes de Cobro ---
 builder.Services.AddScoped<ISolicitudCobroRepository, SolicitudCobroRepositoryEF>();
 builder.Services.AddScoped<ISolicitudCobroNegocio, SolicitudCobroNegocio>();
+// --- OPERACIONES TRANSACCIONALES (BE-03/04/05) ---
+builder.Services.AddScoped<IOperacionesRepository, OperacionesRepositoryEF>();
+builder.Services.AddScoped<IOperacionesNegocio, OperacionesNegocio>();
 
 // Servicios de Negocio
 builder.Services.AddScoped<IUsuarioNegocio, UsuarioNegocio>();

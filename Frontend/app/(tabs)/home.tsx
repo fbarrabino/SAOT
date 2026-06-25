@@ -109,9 +109,9 @@ export default function Home() {
             {wallets.map(w => (
               <Pressable
                 key={w.key}
-                onPress={() => {
-                  if (w.key === 'mp') router.push('/wallet-detail');
-                }}
+                onPress={() =>
+                  router.push({ pathname: '/wallet-detail', params: { wallet: w.key } })
+                }
               >
                 <LinearGradient
                   colors={w.tint}

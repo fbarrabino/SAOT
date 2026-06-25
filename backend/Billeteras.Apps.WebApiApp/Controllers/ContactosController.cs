@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Billeteras.Entidades;
 using Billeteras.Negocio.Dtos;
@@ -7,6 +8,7 @@ namespace Billeteras.Apps.WebApiApp.Controllers;
 
 [Route("api/contactos")]
 [ApiController]
+[Authorize]
 public class ContactosController(IContactoRepository repository) : ControllerBase
 {
     [HttpGet("{usuarioPropietarioId}")]
