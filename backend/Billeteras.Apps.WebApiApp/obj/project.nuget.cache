@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0eK/rQP8N8I=",
+  "dgSpecHash": "8YIFIHJACtc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\Billeteras.Apps.WebApiApp.csproj",
+  "projectFilePath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\billeteras.apps.webapiapp\\Billeteras.Apps.WebApiApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

@@ -61,5 +61,45 @@ public class BilleterasContext(DbContextOptions<BilleterasContext> options) : Db
 
         modelBuilder.Entity<ComercioBilletera>()
             .HasKey(cb => new { cb.ComercioId, cb.BilleteraId });
+
+        // ── SolicitudCobro / Maestro-Detalle (BE-06) ──────────────────────────────
+        // IMPORTANTE: FechaCreacion NO se marca como DB-generated.
+        // Si lo fuera, EF Core usaría MERGE (en vez de INSERT) para recuperar el valor
+        // generado por la DB, y SQL Server tiene un bug conocido donde MERGE puede
+        // fallar con FK constraints aunque los datos sean válidos.
+        // El valor lo seteamos desde C# (DateTime.UtcNow) → INSERT simple, sin problemas.
+        modelBuilder.Entity<SolicitudCobro>(e =>
+        {
+            e.Property(s => s.FechaCreacion)
+                .ValueGeneratedNever();  // EF usa el valor de C#, nunca le pide a la DB
+        });
+
+        // FK cabecera → Usuario solicitante (NoAction evita "multiple cascade paths")
+        modelBuilder.Entity<SolicitudCobro>()
+            .HasOne(s => s.UsuarioSolicitante)
+            .WithMany()
+            .HasForeignKey(s => s.UsuarioSolicitanteId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // FK línea → cabecera (Cascade: si se borra la solicitud se borran sus líneas)
+        modelBuilder.Entity<SolicitudCobroDetalle>()
+            .HasOne(d => d.Solicitud)
+            .WithMany(s => s.Lineas)
+            .HasForeignKey(d => d.SolicitudId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // FK línea → Usuario deudor (NoAction para no crear ciclo de cascade)
+        modelBuilder.Entity<SolicitudCobroDetalle>()
+            .HasOne(d => d.UsuarioDeudor)
+            .WithMany()
+            .HasForeignKey(d => d.UsuarioDeudorId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // FK línea → Movimiento generado al pagar (NoAction)
+        modelBuilder.Entity<SolicitudCobroDetalle>()
+            .HasOne(d => d.Movimiento)
+            .WithMany()
+            .HasForeignKey(d => d.MovimientoId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

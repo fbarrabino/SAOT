@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\Billeteras.Apps.WebApiApp.csproj": {}
+    "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\billeteras.apps.webapiapp\\Billeteras.Apps.WebApiApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\Billeteras.Apps.WebApiApp.csproj": {
+    "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\billeteras.apps.webapiapp\\Billeteras.Apps.WebApiApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\Billeteras.Apps.WebApiApp.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\billeteras.apps.webapiapp\\Billeteras.Apps.WebApiApp.csproj",
         "projectName": "Billeteras.Apps.WebApiApp",
-        "projectPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\Billeteras.Apps.WebApiApp.csproj",
+        "projectPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\billeteras.apps.webapiapp\\Billeteras.Apps.WebApiApp.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\Billeteras.Apps.WebApiApp\\obj\\",
+        "outputPath": "C:\\Users\\USER\\Desktop\\Programacion\\Facultad\\TPIS\\SAOT-Unificador-de-Billeteras-1\\backend\\billeteras.apps.webapiapp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"

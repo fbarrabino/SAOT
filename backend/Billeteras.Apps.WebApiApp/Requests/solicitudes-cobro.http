@@ -1,0 +1,87 @@
+### ============================================================================
+### solicitudes-cobro.http — Pruebas del módulo Maestro-Detalle: Pedido/Cobro
+### ============================================================================
+### INSTRUCCIONES:
+###   1. Correr init.sql + alteraciones_solicitud_cobro.sql + seed_test.sql en SSMS
+###   2. Hacer login (ver auth.http) y pegar el token abajo
+###   3. Correr el request 0 para obtener el cuentaBilleteraId real y pegarlo en @CUENTA_ID
+###   4. Ejecutar los requests 1-6 en orden
+### ============================================================================
+
+@API_URL = http://localhost:5001
+@TOKEN   = PEGAR_TOKEN_DE_LOGIN_ACA
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Después de correr el request 0, pegá el cuentaBilleteraId de cualquier cuenta:
+@CUENTA_ID = PEGAR_CUENTA_BILLETERA_ID_ACA
+
+### ── 0. Ver mis cuentas (para obtener el cuentaBilleteraId real) ─────────────
+# Corré esto primero, mirá el "cuentaBilleteraId" de la primera cuenta
+# y pegalo en @CUENTA_ID arriba.
+GET {{API_URL}}/api/cuentas-billetera/me
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 1. Crear una solicitud de cobro (cabecera + 2 líneas, transacción) ──────
+# El REST Client de VS Code guarda la respuesta en @crearSolicitud.
+# Los requests siguientes leen solicitudId y detalleSolicitudId de esa respuesta
+# automáticamente → no hace falta editar nada a mano.
+# NOTA: usuarioDeudorId=1 porque el seed solo tiene un usuario. En producción
+# serían IDs distintos (los que le deben al solicitante).
+# @name crearSolicitud
+POST {{API_URL}}/api/solicitudes-cobro
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "descripcion": "Cena del viernes 20/06",
+  "fechaVencimiento": "2026-07-15T23:59:59",
+  "lineas": [
+    {
+      "usuarioDeudorId": 1,
+      "montoMita": 1500.00,
+      "concepto": "Pizza + bebida"
+    },
+    {
+      "usuarioDeudorId": 1,
+      "montoMita": 1500.00,
+      "concepto": "Pizza + postre"
+    }
+  ]
+}
+
+###
+
+### ── 2. Mis solicitudes (como solicitante) ────────────────────────────────────
+GET {{API_URL}}/api/solicitudes-cobro/me
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 3. Detalle completo — usa el solicitudId de la respuesta del request 1 ───
+# {{crearSolicitud.response.body.$.solicitudId}} lee el id de la respuesta anterior.
+GET {{API_URL}}/api/solicitudes-cobro/{{crearSolicitud.response.body.$.solicitudId}}
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 4. Pagar la primera línea ────────────────────────────────────────────────
+# Usa @CUENTA_ID que seteaste arriba (obtenido del request 0).
+# categoriaId=2 = "Transferencia recibida" (segundo registro de Categoria en el seed).
+PUT {{API_URL}}/api/solicitudes-cobro/lineas/{{crearSolicitud.response.body.$.lineas[0].detalleSolicitudId}}/pagar?cuentaBilleteraId={{CUENTA_ID}}&categoriaId=2
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 5. Verificar que la línea quedó Pagado=true con MovimientoId ─────────────
+GET {{API_URL}}/api/solicitudes-cobro/{{crearSolicitud.response.body.$.solicitudId}}
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 6. Intentar pagar la misma línea de nuevo → debe devolver 409 Conflict ───
+PUT {{API_URL}}/api/solicitudes-cobro/lineas/{{crearSolicitud.response.body.$.lineas[0].detalleSolicitudId}}/pagar?cuentaBilleteraId={{CUENTA_ID}}&categoriaId=2
+Authorization: Bearer {{TOKEN}}
+
+###

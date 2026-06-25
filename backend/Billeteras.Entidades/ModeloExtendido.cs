@@ -91,11 +91,29 @@ namespace Billeteras.Entidades
     {
         [Key]
         public int SolicitudId { get; set; }
+
+        [Required]
         public int UsuarioSolicitanteId { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
         public decimal MontoTotal { get; set; }
+
         public DateTime FechaVencimiento { get; set; }
+
         [MaxLength(20)]
         public string Estado { get; set; } = "Pendiente";
+
+        // Campos agregados para la tarea Maestro-Detalle
+        [MaxLength(250)]
+        public string? Descripcion { get; set; }
+
+        public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
+
+        // Navegación: líneas del detalle
+        [ForeignKey(nameof(UsuarioSolicitanteId))]
+        public Usuario? UsuarioSolicitante { get; set; }
+
+        public ICollection<SolicitudCobroDetalle> Lineas { get; set; } = [];
     }
 
     [Table("SolicitudCobroDetalle")]
@@ -103,10 +121,32 @@ namespace Billeteras.Entidades
     {
         [Key]
         public int DetalleSolicitudId { get; set; }
+
         public int SolicitudId { get; set; }
+
         public int UsuarioDeudorId { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
         public decimal MontoMita { get; set; }
+
         public bool Pagado { get; set; } = false;
+
+        // Campos agregados para la tarea Maestro-Detalle
+        [MaxLength(250)]
+        public string? Concepto { get; set; }
+
+        /// FK al Movimiento generado cuando esta línea es pagada (null mientras Pagado=false).
+        public int? MovimientoId { get; set; }
+
+        // Navegaciones
+        [ForeignKey(nameof(SolicitudId))]
+        public SolicitudCobro? Solicitud { get; set; }
+
+        [ForeignKey(nameof(UsuarioDeudorId))]
+        public Usuario? UsuarioDeudor { get; set; }
+
+        [ForeignKey(nameof(MovimientoId))]
+        public Movimiento? Movimiento { get; set; }
     }
 
     // ==========================================

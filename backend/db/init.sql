@@ -222,8 +222,23 @@ CREATE TABLE [dbo].[MetodoPagoExterno] (
 
 -- 7. REQUERIMIENTO TPI CLASE 7: ALTER TABLE PARA CAMPO JSON
 -- Nota Franco: Se agrega a la tabla Movimiento (creada por Lautaro/Fabri)
-ALTER TABLE [dbo].[Movimiento] ADD [MetadataExtranjera] NVARCHAR(MAX) NULL;
-ALTER TABLE [dbo].[Movimiento] ADD CONSTRAINT [CHK_Movimiento_Metadata_JSON] CHECK (ISJSON([MetadataExtranjera]) = 1);
+-- IMPORTANTE: el GO entre los dos ALTER es obligatorio en SQL Server porque el CHECK
+-- referencia una columna recién creada — ambas sentencias no pueden estar en el mismo batch.
+IF NOT EXISTS (
+    SELECT 1 FROM sys.columns
+    WHERE object_id = OBJECT_ID(N'dbo.Movimiento') AND name = N'MetadataExtranjera'
+)
+    ALTER TABLE [dbo].[Movimiento] ADD [MetadataExtranjera] NVARCHAR(MAX) NULL;
+GO
+
+-- El CHECK admite NULL porque las filas existentes no tienen JSON todavía.
+IF NOT EXISTS (
+    SELECT 1 FROM sys.objects
+    WHERE name = N'CHK_Movimiento_Metadata_JSON' AND type = N'C'
+)
+    ALTER TABLE [dbo].[Movimiento]
+        ADD CONSTRAINT [CHK_Movimiento_Metadata_JSON]
+        CHECK ([MetadataExtranjera] IS NULL OR ISJSON([MetadataExtranjera]) = 1);
 GO
 
 
