@@ -7,6 +7,7 @@ import { ScreenHeader } from '@/components/ScreenHeader';
 import { WalletGlyph } from '@/components/WalletGlyph';
 import { colors, fonts } from '@/theme/tokens';
 import { metodosPagoApi } from '@/api/metodosPago';
+import { ToggleRow } from '@/components/ToggleRow';
 
 // Helper para mapear el nombre de la BD con el tipo que espera tu WalletGlyph ('mp' | 'ua' | 'lm')
 const getWalletKey = (entidad: string) => {
@@ -121,24 +122,6 @@ export default function WalletConfigScreen() {
     );
 }
 
-// Mini-componente de Toggle (lo hacemos acá para no darte más vueltas hoy)
-function ToggleRow({ label, sub, value, onValueChange, isLast = false }: any) {
-    return (
-        <View style={[styles.toggleRow, !isLast && styles.toggleBorder]}>
-            <View style={styles.toggleTextContainer}>
-                <Text style={styles.toggleLabel}>{label}</Text>
-                <Text style={styles.toggleSub}>{sub}</Text>
-            </View>
-            <Switch
-                trackColor={{ false: 'rgba(255,255,255,0.1)', true: colors.cyan }}
-                thumbColor="#FFFFFF"
-                ios_backgroundColor="rgba(255,255,255,0.1)"
-                onValueChange={onValueChange}
-                value={value}
-            />
-        </View>
-    );
-}
 
 const styles = StyleSheet.create({
     root: { flex: 1, backgroundColor: colors.bg },
