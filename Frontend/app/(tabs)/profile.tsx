@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path, Rect, Circle, Line } from 'react-native-svg';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { colors, fonts, gradients, radii } from '@/theme/tokens';
+import { useSession } from '@/context/SessionContext';
 
 function RowIcon({ children, color = colors.cyan }: { children: React.ReactNode; color?: string }) {
   return (
@@ -29,6 +30,15 @@ const ICON_PROPS = (color: string) => ({
 });
 
 export default function Profile() {
+  const { usuario } = useSession();
+
+  const nombreCompleto = usuario
+    ? `${usuario.nombre} ${usuario.apellido}`.trim()
+    : '';
+  const iniciales = usuario
+    ? `${usuario.nombre.charAt(0)}${usuario.apellido.charAt(0)}`.toUpperCase()
+    : '?';
+
   return (
     <View style={styles.root}>
       <AuroraBackground />
@@ -44,11 +54,11 @@ export default function Profile() {
               end={{ x: 1, y: 1 }}
               style={styles.avatar}
             >
-              <Text style={styles.avatarText}>FA</Text>
+              <Text style={styles.avatarText}>{iniciales}</Text>
             </LinearGradient>
             <View style={{ flex: 1, marginLeft: 12 }}>
-              <Text style={styles.userName}>Fabricio Thompson</Text>
-              <Text style={styles.userMail}>fabricio.saot.app@saot.app</Text>
+              <Text style={styles.userName}>{nombreCompleto}</Text>
+              <Text style={styles.userMail}>{usuario?.email ?? ''}</Text>
             </View>
             <Text style={styles.chev}>›</Text>
           </Pressable>
