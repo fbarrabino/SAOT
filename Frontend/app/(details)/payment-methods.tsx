@@ -36,8 +36,20 @@ export default function PaymentMethodsScreen() {
     const cards = methods.filter(m => m.tipo.toLowerCase() === 'tarjeta');
     const accounts = methods.filter(m => m.tipo.toLowerCase() === 'cuenta');
 
+    // ACÁ ESTÁ EL CAMBIO: Transformamos la View en un Pressable ruteado
     const renderItem = (item: MetodoPagoExterno) => (
-        <View key={item.metodoId} style={styles.card}>
+        <Pressable
+            key={item.metodoId}
+            style={({ pressed }) => [styles.card, pressed && { opacity: 0.8 }]}
+            onPress={() => router.push({
+                pathname: '/wallet-config',
+                params: {
+                    id: item.metodoId,
+                    entidad: item.entidadEmisora,
+                    ultimosCuatro: item.ultimosCuatro
+                }
+            })}
+        >
             <View style={styles.iconCircle}>
                 <Svg width={20} height={20} viewBox="0 0 24 24" stroke={colors.muted} strokeWidth={2} fill="none">
                     {item.tipo.toLowerCase() === 'tarjeta'
@@ -50,7 +62,7 @@ export default function PaymentMethodsScreen() {
                 <Text style={styles.entity}>{item.entidadEmisora}</Text>
                 <Text style={styles.detailText}>{item.tipo} terminada en •••• {item.ultimosCuatro}</Text>
             </View>
-        </View>
+        </Pressable>
     );
 
     return (
