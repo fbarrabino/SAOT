@@ -277,4 +277,71 @@ IF COL_LENGTH(N'dbo.Movimiento', N'FechaAnulacion') IS NULL
     ALTER TABLE [dbo].[Movimiento] ADD [FechaAnulacion] DATETIME NULL;
 GO
 
+-- =================================================================
+-- MÓDULO DE AUDITORÍA (TAREA BE-10), Franco
+-- =================================================================
 
+-- 1. Crear tabla de Auditoría
+CREATE TABLE Auditoria (
+    AuditoriaId INT IDENTITY(1,1) PRIMARY KEY,
+    TablaAfectada NVARCHAR(50) NOT NULL,
+    Accion NVARCHAR(10) NOT NULL, -- 'INSERT', 'UPDATE', 'DELETE'
+    UsuarioBaseDatos NVARCHAR(100) DEFAULT SUSER_SNAME(),
+    Fecha DATETIME DEFAULT GETDATE(),
+    Detalle NVARCHAR(MAX) -- Se guardará un JSON con los datos afectados
+);
+GO
+
+-- 2. Trigger para la tabla Movimientos
+CREATE TRIGGER trg_Auditar_Movimientos
+ON Movimientos
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @Accion NVARCHAR(10);
+
+    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
+        SET @Accion = 'UPDATE';
+    ELSE IF EXISTS (SELECT * FROM inserted)
+        SET @Accion = 'INSERT';
+    ELSE IF EXISTS (SELECT * FROM deleted)
+        SET @Accion = 'DELETE';
+    ELSE
+        RETURN;
+
+    INSERT INTO Auditoria (TablaAfectada, Accion, Detalle)
+    VALUES (
+        'Movimientos',
+        @Accion,
+        (SELECT * FROM inserted FOR JSON AUTO) -- Guardamos el estado en formato JSON
+    );
+END;
+GO
+
+-- 3. Trigger para la tabla CuentasBilletera
+CREATE TRIGGER trg_Auditar_CuentasBilletera
+ON CuentasBilletera
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @Accion NVARCHAR(10);
+
+    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
+        SET @Accion = 'UPDATE';
+    ELSE IF EXISTS (SELECT * FROM inserted)
+        SET @Accion = 'INSERT';
+    ELSE IF EXISTS (SELECT * FROM deleted)
+        SET @Accion = 'DELETE';
+    ELSE
+        RETURN;
+
+    INSERT INTO Auditoria (TablaAfectada, Accion, Detalle)
+    VALUES (
+        'CuentasBilletera',
+        @Accion,
+        (SELECT * FROM inserted FOR JSON AUTO)
+    );
+END;
+GO
