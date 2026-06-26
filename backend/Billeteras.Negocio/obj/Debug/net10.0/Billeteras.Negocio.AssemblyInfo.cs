@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Billeteras.Negocio")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+19db0c51f77ec4e30d4cee935a3667bb647a8f95")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+457c63c99596d5af4aa34a50ec8e73c545145ea6")]
 [assembly: System.Reflection.AssemblyProductAttribute("Billeteras.Negocio")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Billeteras.Negocio")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
