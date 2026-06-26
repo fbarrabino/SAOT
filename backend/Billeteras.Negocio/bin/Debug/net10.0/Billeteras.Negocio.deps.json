@@ -10,7 +10,9 @@
         "dependencies": {
           "BCrypt.Net-Next": "4.0.3",
           "Billeteras.Datos": "1.0.0",
-          "Billeteras.Entidades": "1.0.0"
+          "Billeteras.Entidades": "1.0.0",
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.9",
+          "Neo4j.Driver": "6.2.1"
         },
         "runtime": {
           "Billeteras.Negocio.dll": {}
@@ -147,7 +149,7 @@
       },
       "Microsoft.Extensions.Caching.Abstractions/9.0.13": {
         "dependencies": {
-          "Microsoft.Extensions.Primitives": "9.0.13"
+          "Microsoft.Extensions.Primitives": "10.0.9"
         },
         "runtime": {
           "lib/net9.0/Microsoft.Extensions.Caching.Abstractions.dll": {
@@ -162,12 +164,23 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
           "Microsoft.Extensions.Options": "9.0.13",
-          "Microsoft.Extensions.Primitives": "9.0.13"
+          "Microsoft.Extensions.Primitives": "10.0.9"
         },
         "runtime": {
           "lib/net9.0/Microsoft.Extensions.Caching.Memory.dll": {
             "assemblyVersion": "9.0.0.0",
             "fileVersion": "9.0.1326.6317"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Abstractions/10.0.9": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "10.0.9"
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.926.27113"
           }
         }
       },
@@ -193,7 +206,7 @@
       "Microsoft.Extensions.Options/9.0.13": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Primitives": "9.0.13"
+          "Microsoft.Extensions.Primitives": "10.0.9"
         },
         "runtime": {
           "lib/net9.0/Microsoft.Extensions.Options.dll": {
@@ -202,11 +215,11 @@
           }
         }
       },
-      "Microsoft.Extensions.Primitives/9.0.13": {
+      "Microsoft.Extensions.Primitives/10.0.9": {
         "runtime": {
-          "lib/net9.0/Microsoft.Extensions.Primitives.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.1326.6317"
+          "lib/net10.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.926.27113"
           }
         }
       },
@@ -280,6 +293,14 @@
           "lib/netstandard2.0/Microsoft.SqlServer.Server.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Neo4j.Driver/6.2.1": {
+        "runtime": {
+          "lib/net10.0/Neo4j.Driver.dll": {
+            "assemblyVersion": "6.2.10.1",
+            "fileVersion": "6.2.1.0"
           }
         }
       },
@@ -437,6 +458,13 @@
       "path": "microsoft.extensions.caching.memory/9.0.13",
       "hashPath": "microsoft.extensions.caching.memory.9.0.13.nupkg.sha512"
     },
+    "Microsoft.Extensions.Configuration.Abstractions/10.0.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qGhRPd3VxfLV9UqatVOiD9mAeUbj2KiMwGFYC5uXlzExiZQoe4X/hdmzGIU7BQjNLTqCnnbTHVyBglG3668/HA==",
+      "path": "microsoft.extensions.configuration.abstractions/10.0.9",
+      "hashPath": "microsoft.extensions.configuration.abstractions.10.0.9.nupkg.sha512"
+    },
     "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.0": {
       "type": "package",
       "serviceable": true,
@@ -458,12 +486,12 @@
       "path": "microsoft.extensions.options/9.0.13",
       "hashPath": "microsoft.extensions.options.9.0.13.nupkg.sha512"
     },
-    "Microsoft.Extensions.Primitives/9.0.13": {
+    "Microsoft.Extensions.Primitives/10.0.9": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-cqzLFZ6rIEX/N1mJAGN8HLqWhlks2G3eYO+9pCShMLqxeBLN7ndS+MbmxiuQiQ0Tj/Q3tVHRWx91n17yLczjmg==",
-      "path": "microsoft.extensions.primitives/9.0.13",
-      "hashPath": "microsoft.extensions.primitives.9.0.13.nupkg.sha512"
+      "sha512": "sha512-fmEbAUFsaIKirgLt/lYhuFRBwhcSJN31jjHgCdbQxJiWOum6EdLjkbgGuukSP9z/a+9LibaxII/kF+GwOXgC4g==",
+      "path": "microsoft.extensions.primitives/10.0.9",
+      "hashPath": "microsoft.extensions.primitives.10.0.9.nupkg.sha512"
     },
     "Microsoft.IdentityModel.Abstractions/8.16.0": {
       "type": "package",
@@ -513,6 +541,13 @@
       "sha512": "sha512-N4KeF3cpcm1PUHym1RmakkzfkEv3GRMyofVv40uXsQhCQeglr2OHNcUk2WOG51AKpGO8ynGpo9M/kFXSzghwug==",
       "path": "microsoft.sqlserver.server/1.0.0",
       "hashPath": "microsoft.sqlserver.server.1.0.0.nupkg.sha512"
+    },
+    "Neo4j.Driver/6.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ruTHNd3mDRyII37aBcrzWqheunopo70RJjQqDBP+S98lAk+abTQ2Yno8yBg3k1LJT71BHoduKIjxny9Bcon4gg==",
+      "path": "neo4j.driver/6.2.1",
+      "hashPath": "neo4j.driver.6.2.1.nupkg.sha512"
     },
     "System.Configuration.ConfigurationManager/9.0.13": {
       "type": "package",

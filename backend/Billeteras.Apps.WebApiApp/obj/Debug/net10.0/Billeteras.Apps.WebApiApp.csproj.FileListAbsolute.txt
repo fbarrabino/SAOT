@@ -324,3 +324,4 @@ C:\Users\Admin\OneDrive\Desktop\Fabri\Facultad\SAOT-Unificador-de-Billeteras-1\b
 C:\Users\Admin\OneDrive\Desktop\Fabri\Facultad\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Apps.WebApiApp\obj\Debug\net10.0\Billeteras.Apps.WebApiApp.pdb
 C:\Users\Admin\OneDrive\Desktop\Fabri\Facultad\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Apps.WebApiApp\obj\Debug\net10.0\Billeteras.Apps.WebApiApp.genruntimeconfig.cache
 C:\Users\Admin\OneDrive\Desktop\Fabri\Facultad\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Apps.WebApiApp\obj\Debug\net10.0\ref\Billeteras.Apps.WebApiApp.dll
+C:\Users\Admin\OneDrive\Desktop\Fabri\Facultad\SAOT-Unificador-de-Billeteras-1\backend\Billeteras.Apps.WebApiApp\bin\Debug\net10.0\Neo4j.Driver.dll

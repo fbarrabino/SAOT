@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Billeteras.DatosEF")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+256b5961ae27921470777b965c82e89a25fe7960")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ab3b175509f9c11821f9319492939854f5ba9a00")]
 [assembly: System.Reflection.AssemblyProductAttribute("Billeteras.DatosEF")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Billeteras.DatosEF")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
