@@ -63,7 +63,7 @@ Authorization: Bearer {{TOKEN}}
 ### ── 6. Desvincular la cuenta creada en el request 2 ────────────────────────
 # Usa el cuentaBilleteraId de la respuesta del request 2
 # (saldo es 0 por defecto, debe funcionar)
-DELETE {{API_URL}}/api/cuentas-billetera/{{vincular.response.body.$.cuentaBilleteraId}}/desvincular
+DELETE {{API_URL}}/api/cuentas-billetera/ /desvincular
 Authorization: Bearer {{TOKEN}}
 
 ###
