@@ -397,18 +397,38 @@ export default function ReceiptShareScreen() {
   };
 
   // ── Mostrar QR ─────────────────────────────────────────────────────────────
-  const handleMostrarQR = async () => {
+  const handleMostrarQR = () => {
     if (Platform.OS === 'web') {
       Alert.alert('QR', 'El QR está disponible en la app móvil.');
       return;
     }
+    // El QR codifica el resumen del recibo como texto legible
+    const qrText = [
+      'SaOT - Comprobante de operación',
+      `Ref: ${reference}`,
+      `Monto: ${amountFormatted}`,
+      `Descripción: ${tx.title}`,
+      `Billetera: ${tx.walletName}`,
+      `Fecha: ${dateLabel}`,
+      'Estado: Completado',
+      'saot.app',
+    ].join('\n');
+    setQrUri(qrText);
+    setQrVisible(true);
+  };
+
+  // ── Compartir PDF desde modal QR ───────────────────────────────────────────
+  const handleCompartirPDFdesdeQR = async () => {
     try {
       setLoading(true);
       const uri = await generatePDF();
-      setQrUri(uri);
-      setQrVisible(true);
+      await Sharing.shareAsync(uri, {
+        mimeType: 'application/pdf',
+        dialogTitle: `Recibo ${reference}`,
+        UTI: 'com.adobe.pdf',
+      });
     } catch {
-      Alert.alert('Error', 'No se pudo generar el QR.');
+      Alert.alert('Error', 'No se pudo compartir el PDF.');
     } finally {
       setLoading(false);
     }
@@ -427,7 +447,7 @@ export default function ReceiptShareScreen() {
       >
         <Pressable style={styles.modalBackdrop} onPress={() => setQrVisible(false)}>
           <Pressable style={styles.modalCard} onPress={() => {}}>
-            <Text style={styles.modalTitle}>Escaneá para abrir el PDF</Text>
+            <Text style={styles.modalTitle}>Escaneá para ver el recibo</Text>
             <View style={styles.qrWrap}>
               {qrUri ? (
                 <QRCode
@@ -439,6 +459,9 @@ export default function ReceiptShareScreen() {
               ) : null}
             </View>
             <Text style={styles.modalSub}>{reference}</Text>
+            <Pressable style={styles.modalShareBtn} onPress={handleCompartirPDFdesdeQR}>
+              <Text style={styles.modalShareBtnText}>Compartir PDF</Text>
+            </Pressable>
             <Pressable style={styles.modalCloseBtn} onPress={() => setQrVisible(false)}>
               <Text style={styles.modalCloseBtnText}>Cerrar</Text>
             </Pressable>
@@ -624,17 +647,32 @@ const styles = StyleSheet.create({
     color: colors.muted,
     marginBottom: spacing.lg,
   },
-  modalCloseBtn: {
+  modalShareBtn: {
     height: 44,
     paddingHorizontal: spacing.xxl,
     borderRadius: radii.button,
     backgroundColor: colors.cyan,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: spacing.sm,
+    width: '100%',
+  },
+  modalShareBtnText: {
+    ...type.button,
+    color: colors.ctaText,
+  },
+  modalCloseBtn: {
+    height: 44,
+    paddingHorizontal: spacing.xxl,
+    borderRadius: radii.button,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   modalCloseBtnText: {
     ...type.button,
-    color: colors.ctaText,
+    color: colors.muted,
   },
 
   // Recibo
