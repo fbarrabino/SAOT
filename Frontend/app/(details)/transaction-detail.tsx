@@ -6,7 +6,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { WalletGlyph } from '@/components/WalletGlyph';
@@ -73,10 +73,16 @@ export default function TransactionDetailScreen() {
         </ScrollView>
 
         <View style={styles.footer}>
-          <Pressable style={styles.secondaryBtn}>
+          <Pressable
+            style={styles.secondaryBtn}
+            onPress={() => router.push({ pathname: '/receipt-share', params: { id: tx.id } })}
+          >
             <Text style={[type.button, { color: colors.text }]}>Compartir recibo</Text>
           </Pressable>
-          <Pressable style={styles.secondaryBtn}>
+          <Pressable
+            style={styles.secondaryBtn}
+            onPress={() => router.push({ pathname: '/report-reason', params: { id: tx.id } })}
+          >
             <Text style={[type.button, { color: colors.text }]}>Reportar problema</Text>
           </Pressable>
         </View>

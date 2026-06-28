@@ -7,6 +7,8 @@ using Billeteras.Datos.Interfaces;
 using Billeteras.DatosEF;
 using Billeteras.Negocio;
 using Billeteras.Negocio.Interfaces;
+// Maestro-Detalle (usings requeridos para los tipos concretos del módulo)
+// Los tipos están en los ensamblados ya referenciados; este using es solo por claridad.
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,9 +30,20 @@ builder.Services.AddScoped<IMovimientoRepository, MovimientoRepositoryEF>();
 builder.Services.AddScoped<IMetodoPagoExternoRepository, MetodoPagoExternoRepositoryEF>();
 builder.Services.AddScoped<ITicketSoporteRepository, TicketSoporteRepositoryEF>();
 
+// --- MAESTRO-DETALLE: Tickets de Soporte (BE-07) ---
+builder.Services.AddScoped<ITicketSoporteNegocio, TicketSoporteNegocio>();
+
+// --- MAESTRO-DETALLE: Solicitudes de Cobro ---
+builder.Services.AddScoped<ISolicitudCobroRepository, SolicitudCobroRepositoryEF>();
+builder.Services.AddScoped<ISolicitudCobroNegocio, SolicitudCobroNegocio>();
 // --- OPERACIONES TRANSACCIONALES (BE-03/04/05) ---
 builder.Services.AddScoped<IOperacionesRepository, OperacionesRepositoryEF>();
 builder.Services.AddScoped<IOperacionesNegocio, OperacionesNegocio>();
+
+// --- NEO4J (BD-04) ---
+// El IDriver del paquete es thread-safe → singleton para reusar el pool de
+// conexiones entre requests. La instancia se crea desde el config "Neo4j".
+builder.Services.AddSingleton<INeo4jService, Neo4jService>();
 
 // Servicios de Negocio
 builder.Services.AddScoped<IUsuarioNegocio, UsuarioNegocio>();
@@ -70,6 +83,25 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// ─── Neo4j: constraints de unicidad (BD-04) ──────────────────────────────────
+// Se ejecutan una sola vez al arrancar; los IF NOT EXISTS los hacen idempotentes.
+// Si Neo4j no está corriendo (o falla el login), logueamos y seguimos: la API
+// queda usable contra SQL aunque el grafo no esté disponible.
+try
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    var neo4j = scope.ServiceProvider.GetRequiredService<INeo4jService>();
+    await neo4j.ExecuteAsync("CREATE CONSTRAINT usuario_id   IF NOT EXISTS FOR (u:Usuario)         REQUIRE u.usuarioId         IS UNIQUE");
+    await neo4j.ExecuteAsync("CREATE CONSTRAINT billetera_id IF NOT EXISTS FOR (b:Billetera)       REQUIRE b.billeteraId       IS UNIQUE");
+    await neo4j.ExecuteAsync("CREATE CONSTRAINT cuenta_id    IF NOT EXISTS FOR (c:CuentaBilletera) REQUIRE c.cuentaBilleteraId IS UNIQUE");
+    await neo4j.ExecuteAsync("CREATE CONSTRAINT comercio_id  IF NOT EXISTS FOR (co:Comercio)       REQUIRE co.comercioId       IS UNIQUE");
+    Console.WriteLine("[Neo4j] Constraints aplicados correctamente.");
+}
+catch (Exception ex)
+{
+    Console.Error.WriteLine($"[Neo4j] No se pudieron aplicar los constraints — la API seguirá funcionando sin el grafo. Detalle: {ex.Message}");
+}
 
 // Pipeline
 app.UseHttpsRedirection();

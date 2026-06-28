@@ -25,6 +25,10 @@ public class CuentaBilletera
     // Default GETDATE() a nivel DB.
     public DateTime FechaVinculacion { get; set; }
 
+    // "Activa" | "Desvinculada"
+    [Required, MaxLength(20)]
+    public string Estado { get; set; } = "Activa";
+
     // Propiedades de navegación.
     [ForeignKey(nameof(UsuarioId))]
     public Usuario? Usuario { get; set; }

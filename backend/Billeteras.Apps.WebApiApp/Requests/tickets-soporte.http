@@ -1,0 +1,62 @@
+### ============================================================================
+### tickets-soporte.http — Pruebas del módulo Maestro-Detalle: Reporte de problema
+### ============================================================================
+### INSTRUCCIONES:
+###   1. Correr init.sql + seed_test.sql en SSMS (el seed ahora incluye MotivoReporte)
+###   2. Hacer login (ver auth.http) y pegar el token abajo
+###   3. Ejecutar los requests 1-4 en orden
+### ============================================================================
+
+@API_URL = http://localhost:5001
+@TOKEN   = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZmFicmljZUBjb20iLCJqdGkiOiI0NzAzZGRhZC03ZDU2LTQxZDMtOTIzZC1lODhiYzI4NzBlYTQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzgyNDIxOTg2LCJpc3MiOiJCaWxsZXRlcmFzLkFwaSIsImF1ZCI6IkJpbGxldGVyYXMuQ2xpZW50cyJ9.8pHYkNTFsOTOVJjT1WyXj0uKjrpmQdt-Xw4-rjaW-sc
+
+### ── 1. Crear ticket con mensaje y adjuntos (cabecera + detalle en transacción) ─
+# El REST Client guarda la respuesta en @crearTicket.
+# Los requests siguientes leen ticketId de esa respuesta automáticamente.
+# MotivoId=1 = "Error en transferencia" (primer registro del seed).
+# @name crearTicket
+POST {{API_URL}}/api/tickets-soporte
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "motivoId": 1,
+  "cuerpoMensaje": "Al intentar transferir $500 a mi contacto, el saldo se descontó pero el destinatario no lo recibió.",
+  "adjuntos": [
+    {
+      "urlArchivo": "https://storage.example.com/capturas/error_transferencia.png",
+      "tipoMime": "image/png"
+    }
+  ]
+}
+
+###
+
+### ── 2. Mis tickets (resumen: id, motivo, estado, cantidad de mensajes) ────────
+GET {{API_URL}}/api/tickets-soporte/me
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 3. Detalle completo — usa el ticketId de la respuesta del request 1 ───────
+# Muestra cabecera + mensajes + adjuntos.
+GET {{API_URL}}/api/tickets-soporte/{{crearTicket.response.body.$.ticketId}}
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 4. Crear otro ticket sin adjuntos (lista de adjuntos vacía) ────────────────
+# Verifica que la transacción funciona bien cuando adjuntos=[] (el paso 3 se saltea).
+# @name crearTicketSinAdjuntos
+POST {{API_URL}}/api/tickets-soporte
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "motivoId": 4,
+  "cuerpoMensaje": "Tengo un problema que no encaja en las categorías anteriores.",
+  "adjuntos": []
+}
+
+###
+
