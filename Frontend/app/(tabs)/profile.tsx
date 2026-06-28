@@ -54,7 +54,7 @@ export default function Profile() {
           </Pressable>
 
           <View style={styles.group}>
-            {/* ACÁ ESTÁ EL ENLACE A TU NUEVA PANTALLA */}
+
             <Row
               label="Métodos de pago"
               sub="3 billeteras vinculadas"
@@ -68,7 +68,8 @@ export default function Profile() {
               </RowIcon>
             </Row>
 
-            <Row label="Notificaciones" sub="Push, email">
+            {/* CORRECCIÓN 1: onPress agregado a Notificaciones */}
+            <Row label="Notificaciones" sub="Push, email" onPress={() => router.push('/profile-notifications')}>
               <RowIcon>
                 <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.cyan)}>
                   <Path d="M6 8a6 6 0 1112 0c0 7 3 9 3 9H3s3-2 3-9" />
@@ -83,6 +84,15 @@ export default function Profile() {
                 <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.cyan)}>
                   <Path d="M6 10V8a6 6 0 0112 0v2" />
                   <Rect x={5} y={10} width={14} height={10} rx={2} />
+                </Svg>
+              </RowIcon>
+            </Row>
+
+            {/* CORRECCIÓN 2: Fila de Cambiar Contraseña reincorporada y con ruta limpia */}
+            <Row label="Cambiar contraseña" sub="Actualizá tu clave de acceso" onPress={() => router.push('/change-password')}>
+              <RowIcon>
+                <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.cyan)}>
+                  <Path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.18a2 2 0 002.812-.012l1.41-1.41a2 2 0 00-.012-2.813L21 2z" />
                 </Svg>
               </RowIcon>
             </Row>
