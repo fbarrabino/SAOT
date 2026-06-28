@@ -228,7 +228,7 @@ IF OBJECT_ID(N'dbo.TicketAdjunto', N'U') IS NULL
 CREATE TABLE [dbo].[TicketAdjunto] (
     [AdjuntoId] INT IDENTITY(1,1) PRIMARY KEY,
     [MensajeId] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[TicketMensaje]([MensajeId]),
-    [UrlArchivo] VARCHAR(255) NOT NULL,
+    [UrlArchivo] VARCHAR(MAX) NOT NULL,
     [TipoMime] VARCHAR(50) NOT NULL
 );
 GO
