@@ -4,26 +4,37 @@ import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
+import { WalletGlyph } from '@/components/WalletGlyph';
+import type { WalletGlyphKey } from '@/components/WalletGlyph';
 import { colors, radii, spacing, type } from '@/theme/tokens';
 
-const AVAILABLE_WALLETS = [
-    { id: 'bb', name: 'Brubank', desc: 'Banco digital · ARG', color: '#6842FF', short: 'BB' },
-    { id: 'nx', name: 'Naranja X', desc: 'Billetera virtual · ARG', color: '#FF5C00', short: 'NX' },
-    { id: 'rb', name: 'Reba', desc: 'Cuenta digital · ARG', color: '#00D1A3', short: 'RB' },
-    { id: 'bl', name: 'Belo', desc: 'Wallet · ARG', color: '#4B36FF', short: 'BL' },
-    { id: 'cd', name: 'Cuenta DNI', desc: 'Banco Provincia · ARG', color: '#FFB800', short: 'CD' },
-    { id: 'md', name: 'MODO', desc: 'Pagos interbancarios · ARG', color: '#4444FF', short: 'M' },
-    { id: 'pp', name: 'Personal Pay', desc: 'Telecom Personal · ARG', color: '#FF0055', short: 'PP' },
-    { id: 'px', name: 'Prex', desc: 'Tarjeta prepaga · ARG', color: '#00C48C', short: 'PX' },
+// B3 — Solo las billeteras con logo PNG real en assets/wallets/ aparecen como
+// "Disponibles para conectar". Mercado Pago, Ualá y Lemon no entran acá porque
+// se asumen ya conectadas por defecto desde el catálogo principal.
+type AvailableWallet = {
+  id: string;
+  glyph: WalletGlyphKey;
+  name: string;
+  desc: string;
+  color: string; // se usa en la pantalla de permisos / sync como acento
+  short: string; // iniciales fallback si el glyph no carga
+};
+
+const AVAILABLE_WALLETS: AvailableWallet[] = [
+  { id: 'bb', glyph: 'bb', name: 'Brubank',   desc: 'Banco digital · ARG',     color: '#6842FF', short: 'BB' },
+  { id: 'nx', glyph: 'nx', name: 'Naranja X', desc: 'Billetera virtual · ARG', color: '#FF5C00', short: 'NX' },
 ];
 
 export default function ConnectListScreen() {
     const [searchQuery, setSearchQuery] = useState('');
 
-    const filteredWallets = AVAILABLE_WALLETS.filter((wallet) =>
-        wallet.name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-        wallet.short.toLowerCase().startsWith(searchQuery.toLowerCase())
-    );
+    const filteredWallets = AVAILABLE_WALLETS.filter((wallet) => {
+        const q = searchQuery.toLowerCase();
+        return (
+            wallet.name.toLowerCase().includes(q) ||
+            wallet.short.toLowerCase().includes(q)
+        );
+    });
 
     return (
         <View style={styles.container}>
@@ -66,6 +77,7 @@ export default function ConnectListScreen() {
                                         pathname: '/connect-permissions',
                                         params: {
                                             walletId: wallet.id,
+                                            walletGlyph: wallet.glyph,
                                             walletName: wallet.name,
                                             walletShort: wallet.short,
                                             walletColor: wallet.color,
@@ -84,12 +96,10 @@ export default function ConnectListScreen() {
     );
 }
 
-function ConnectRow({ wallet, onPress }: { wallet: typeof AVAILABLE_WALLETS[0], onPress?: () => void }) {
+function ConnectRow({ wallet, onPress }: { wallet: AvailableWallet; onPress?: () => void }) {
     return (
         <Pressable style={styles.row} onPress={onPress}>
-            <View style={[styles.walletIcon, { backgroundColor: wallet.color }]}>
-                <Text style={styles.walletIconText}>{wallet.short}</Text>
-            </View>
+            <WalletGlyph wallet={wallet.glyph} size={44} />
 
             <View style={styles.rowInfo}>
                 <Text style={type.bodyText}>{wallet.name}</Text>
@@ -143,24 +153,12 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         alignItems: 'center',
+        gap: spacing.md,
         paddingVertical: spacing.lg,
         borderBottomWidth: 1,
         borderBottomColor: colors.hairline,
     },
-    walletIcon: {
-        width: 44,
-        height: 44,
-        borderRadius: 22,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: spacing.md,
-    },
-    walletIconText: {
-        color: '#FFFFFF',
-        fontWeight: 'bold',
-        fontSize: 14,
-    },
     rowInfo: {
         flex: 1,
-    }
+    },
 });

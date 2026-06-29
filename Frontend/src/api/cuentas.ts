@@ -31,12 +31,14 @@ export interface CuentaBilleteraResponse {
 
 // ─── Helpers de mapeo ─────────────────────────────────────────────────────────
 
-/** Convierte el nombre del backend ('Mercado Pago', 'Ualá', 'Lemon') al key interno. */
+/** Convierte el nombre del backend al key interno de la app. */
 function toWalletKey(nombre: string | null): WalletKey | null {
   const n = (nombre ?? '').toLowerCase().trim();
   if (n.includes('mercado') || n.includes('mp')) return 'mp';
-  if (n.includes('ual')) return 'ua';   // 'Ualá', 'Uala'
+  if (n.includes('ual')) return 'ua';                              // 'Ualá', 'Uala'
   if (n.includes('lemon') || n.includes('lm')) return 'lm';
+  if (n.includes('brubank') || n.includes('bb')) return 'bb';
+  if (n.includes('naranja') || n.includes('nx')) return 'nx';
   return null; // billetera desconocida — la ignoramos
 }
 
@@ -46,6 +48,8 @@ function toGradient(key: WalletKey): readonly [string, string] {
     mp: gradients.mpTint,
     ua: gradients.uaTint,
     lm: gradients.lmTint,
+    bb: gradients.bbTint,
+    nx: gradients.nxTint,
   };
   return map[key];
 }

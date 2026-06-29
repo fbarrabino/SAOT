@@ -65,6 +65,8 @@ function toWalletKey(alias: string | null): WalletKey {
   if (a.includes('mp') || a.includes('mercado')) return 'mp';
   if (a.includes('ua') || a.includes('uala') || a.includes('ualá')) return 'ua';
   if (a.includes('lm') || a.includes('lemon')) return 'lm';
+  if (a.includes('bb') || a.includes('brubank')) return 'bb';
+  if (a.includes('nx') || a.includes('naranja')) return 'nx';
   return 'mp'; // default razonable mientras el alias no esté estandarizado
 }
 
@@ -73,6 +75,8 @@ function toWalletName(key: WalletKey): string {
     mp: 'Mercado Pago',
     ua: 'Ualá',
     lm: 'Lemon',
+    bb: 'Brubank',
+    nx: 'Naranja X',
   };
   return names[key];
 }

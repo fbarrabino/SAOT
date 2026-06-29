@@ -5,13 +5,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
+import { WalletGlyph } from '@/components/WalletGlyph';
+import type { WalletGlyphKey } from '@/components/WalletGlyph';
 import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
+
+const GLYPH_KEYS: WalletGlyphKey[] = ['mp', 'ua', 'lm', 'bb', 'nx'];
 
 export default function ConnectPermissionsScreen() {
     // B2 — la pantalla recibe la billetera elegida desde connect-list.
     // Antes estaba hardcodeada a Brubank y el modal siempre decía "BB".
     const params = useLocalSearchParams<{
         walletId?: string;
+        walletGlyph?: string;
         walletName?: string;
         walletShort?: string;
         walletColor?: string;
@@ -19,6 +24,9 @@ export default function ConnectPermissionsScreen() {
     const walletName = params.walletName ?? 'la billetera';
     const walletShort = params.walletShort ?? '?';
     const walletColor = params.walletColor ?? '#6842FF';
+    const walletGlyph = GLYPH_KEYS.includes(params.walletGlyph as WalletGlyphKey)
+        ? (params.walletGlyph as WalletGlyphKey)
+        : null;
 
     const [balanceEnabled, setBalanceEnabled] = useState(true);
     const [historyEnabled, setHistoryEnabled] = useState(true);
@@ -44,9 +52,13 @@ export default function ConnectPermissionsScreen() {
                         <View style={styles.dot} />
                     </View>
 
-                    <View style={[styles.logoCircle, { backgroundColor: walletColor }]}>
-                        <Text style={styles.logoText}>{walletShort}</Text>
-                    </View>
+                    {walletGlyph ? (
+                        <WalletGlyph wallet={walletGlyph} size={64} />
+                    ) : (
+                        <View style={[styles.logoCircle, { backgroundColor: walletColor }]}>
+                            <Text style={styles.logoText}>{walletShort}</Text>
+                        </View>
+                    )}
                 </View>
 
                 <Text style={styles.title}>SaOT quiere conectarse con {walletName}</Text>
@@ -94,6 +106,7 @@ export default function ConnectPermissionsScreen() {
                                 pathname: '/connect-syncing',
                                 params: {
                                     walletId: params.walletId ?? '',
+                                    walletGlyph: walletGlyph ?? '',
                                     walletName,
                                     walletShort,
                                     walletColor,

@@ -11,15 +11,19 @@ import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-nati
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
+import { WalletGlyph } from '@/components/WalletGlyph';
+import type { WalletGlyphKey } from '@/components/WalletGlyph';
 import { colors, radii, spacing, type } from '@/theme/tokens';
 
 const SYNC_DURATION_MS = 2200;
+const GLYPH_KEYS: WalletGlyphKey[] = ['mp', 'ua', 'lm', 'bb', 'nx'];
 
 export default function ConnectSyncingScreen() {
     // B2 — la pantalla recibe la wallet elegida y pasa los mismos params a
     // connect-success cuando termina la sincronización simulada.
     const params = useLocalSearchParams<{
         walletId?: string;
+        walletGlyph?: string;
         walletName?: string;
         walletShort?: string;
         walletColor?: string;
@@ -27,6 +31,9 @@ export default function ConnectSyncingScreen() {
     const walletName = params.walletName ?? 'la billetera';
     const walletShort = params.walletShort ?? '?';
     const walletColor = params.walletColor ?? '#6842FF';
+    const walletGlyph = GLYPH_KEYS.includes(params.walletGlyph as WalletGlyphKey)
+        ? (params.walletGlyph as WalletGlyphKey)
+        : null;
 
     useEffect(() => {
         const t = setTimeout(() => {
@@ -34,6 +41,7 @@ export default function ConnectSyncingScreen() {
                 pathname: '/connect-success',
                 params: {
                     walletId: params.walletId ?? '',
+                    walletGlyph: walletGlyph ?? '',
                     walletName,
                     walletShort,
                     walletColor,
@@ -41,7 +49,7 @@ export default function ConnectSyncingScreen() {
             });
         }, SYNC_DURATION_MS);
         return () => clearTimeout(t);
-    }, [params.walletId, walletName, walletShort, walletColor]);
+    }, [params.walletId, walletGlyph, walletName, walletShort, walletColor]);
 
     return (
         <View style={styles.container}>
@@ -70,9 +78,15 @@ export default function ConnectSyncingScreen() {
 
                 <View style={styles.statusCard}>
                     <View style={styles.statusLeft}>
-                        <View style={[styles.walletIcon, { backgroundColor: walletColor }]}>
-                            <Text style={styles.walletIconText}>{walletShort}</Text>
-                        </View>
+                        {walletGlyph ? (
+                            <View style={{ marginRight: spacing.md }}>
+                                <WalletGlyph wallet={walletGlyph} size={40} />
+                            </View>
+                        ) : (
+                            <View style={[styles.walletIcon, { backgroundColor: walletColor }]}>
+                                <Text style={styles.walletIconText}>{walletShort}</Text>
+                            </View>
+                        )}
                         <View>
                             <Text style={type.h4}>{walletName}</Text>
                             <Text style={type.small}>Recibiendo datos…</Text>

@@ -10,7 +10,7 @@
  */
 import { gradients } from '@/theme/tokens';
 
-export type WalletKey = 'mp' | 'ua' | 'lm';
+export type WalletKey = 'mp' | 'ua' | 'lm' | 'bb' | 'nx';
 
 export type Wallet = {
   key: WalletKey;

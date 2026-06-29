@@ -4,12 +4,17 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
+import { WalletGlyph } from '@/components/WalletGlyph';
+import type { WalletGlyphKey } from '@/components/WalletGlyph';
 import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
+
+const GLYPH_KEYS: WalletGlyphKey[] = ['mp', 'ua', 'lm', 'bb', 'nx'];
 
 export default function ConnectSuccessScreen() {
     // B2 — recibe la billetera elegida en connect-list para que el copy y el
     // logo coincidan con lo que el usuario realmente vinculó.
     const params = useLocalSearchParams<{
+        walletGlyph?: string;
         walletName?: string;
         walletShort?: string;
         walletColor?: string;
@@ -17,6 +22,9 @@ export default function ConnectSuccessScreen() {
     const walletName = params.walletName ?? 'la billetera';
     const walletShort = params.walletShort ?? '?';
     const walletColor = params.walletColor ?? '#6842FF';
+    const walletGlyph = GLYPH_KEYS.includes(params.walletGlyph as WalletGlyphKey)
+        ? (params.walletGlyph as WalletGlyphKey)
+        : null;
 
     return (
         <View style={styles.container}>
@@ -46,9 +54,15 @@ export default function ConnectSuccessScreen() {
 
                 <View style={styles.statusCard}>
                     <View style={styles.statusLeft}>
-                        <View style={[styles.walletIcon, { backgroundColor: walletColor }]}>
-                            <Text style={styles.walletIconText}>{walletShort}</Text>
-                        </View>
+                        {walletGlyph ? (
+                            <View style={{ marginRight: spacing.md }}>
+                                <WalletGlyph wallet={walletGlyph} size={40} />
+                            </View>
+                        ) : (
+                            <View style={[styles.walletIcon, { backgroundColor: walletColor }]}>
+                                <Text style={styles.walletIconText}>{walletShort}</Text>
+                            </View>
+                        )}
                         <View>
                             <Text style={type.h4}>{walletName}</Text>
                             <Text style={type.small}>Listo para usar</Text>
