@@ -61,7 +61,17 @@ export default function ConnectListScreen() {
                             <ConnectRow
                                 key={wallet.id}
                                 wallet={wallet}
-                                onPress={() => router.push('/connect-permissions')}
+                                onPress={() =>
+                                    router.push({
+                                        pathname: '/connect-permissions',
+                                        params: {
+                                            walletId: wallet.id,
+                                            walletName: wallet.name,
+                                            walletShort: wallet.short,
+                                            walletColor: wallet.color,
+                                        },
+                                    })
+                                }
                             />
                         ))
                     ) : (

@@ -2,12 +2,24 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, Switch } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
 
 export default function ConnectPermissionsScreen() {
+    // B2 — la pantalla recibe la billetera elegida desde connect-list.
+    // Antes estaba hardcodeada a Brubank y el modal siempre decía "BB".
+    const params = useLocalSearchParams<{
+        walletId?: string;
+        walletName?: string;
+        walletShort?: string;
+        walletColor?: string;
+    }>();
+    const walletName = params.walletName ?? 'la billetera';
+    const walletShort = params.walletShort ?? '?';
+    const walletColor = params.walletColor ?? '#6842FF';
+
     const [balanceEnabled, setBalanceEnabled] = useState(true);
     const [historyEnabled, setHistoryEnabled] = useState(true);
     const [operateEnabled, setOperateEnabled] = useState(false);
@@ -32,12 +44,12 @@ export default function ConnectPermissionsScreen() {
                         <View style={styles.dot} />
                     </View>
 
-                    <View style={[styles.logoCircle, { backgroundColor: '#6842FF' }]}>
-                        <Text style={styles.logoText}>BB</Text>
+                    <View style={[styles.logoCircle, { backgroundColor: walletColor }]}>
+                        <Text style={styles.logoText}>{walletShort}</Text>
                     </View>
                 </View>
 
-                <Text style={styles.title}>SaOT quiere conectarse con Brubank</Text>
+                <Text style={styles.title}>SaOT quiere conectarse con {walletName}</Text>
                 <Text style={styles.subtitle}>
                     Vamos a recibir los datos que vos elijas. Podés revocar el acceso desde Perfil → Seguridad.
                 </Text>
@@ -77,7 +89,17 @@ export default function ConnectPermissionsScreen() {
                 <View style={[shadow.cta, { borderRadius: radii.button, flex: 1 }]}>
                     <Pressable
                         android_ripple={{ color: 'rgba(0,0,0,0.12)' }}
-                        onPress={() => router.push('/connect-syncing')}
+                        onPress={() =>
+                            router.push({
+                                pathname: '/connect-syncing',
+                                params: {
+                                    walletId: params.walletId ?? '',
+                                    walletName,
+                                    walletShort,
+                                    walletColor,
+                                },
+                            })
+                        }
                     >
                         <LinearGradient
                             colors={gradients.cyan}
@@ -85,7 +107,7 @@ export default function ConnectPermissionsScreen() {
                             end={{ x: 1, y: 0 }}
                             style={styles.primaryBtn}
                         >
-                            <Text style={type.button}>Conectar Brubank</Text>
+                            <Text style={type.button}>Conectar {walletName}</Text>
                         </LinearGradient>
                     </Pressable>
                 </View>

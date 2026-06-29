@@ -2,11 +2,22 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
 
 export default function ConnectSuccessScreen() {
+    // B2 — recibe la billetera elegida en connect-list para que el copy y el
+    // logo coincidan con lo que el usuario realmente vinculó.
+    const params = useLocalSearchParams<{
+        walletName?: string;
+        walletShort?: string;
+        walletColor?: string;
+    }>();
+    const walletName = params.walletName ?? 'la billetera';
+    const walletShort = params.walletShort ?? '?';
+    const walletColor = params.walletColor ?? '#6842FF';
+
     return (
         <View style={styles.container}>
             <AuroraBackground />
@@ -26,7 +37,7 @@ export default function ConnectSuccessScreen() {
                 </View>
 
                 <View style={styles.textContainer}>
-                    <Text style={type.display}>Brubank</Text>
+                    <Text style={type.display}>{walletName}</Text>
                     <Text style={styles.successLabel}>¡Conectada!</Text>
                     <Text style={styles.subtitle}>
                         Ya podés ver el balance desde tu dashboard.
@@ -35,11 +46,11 @@ export default function ConnectSuccessScreen() {
 
                 <View style={styles.statusCard}>
                     <View style={styles.statusLeft}>
-                        <View style={[styles.walletIcon, { backgroundColor: '#6842FF' }]}>
-                            <Text style={styles.walletIconText}>BB</Text>
+                        <View style={[styles.walletIcon, { backgroundColor: walletColor }]}>
+                            <Text style={styles.walletIconText}>{walletShort}</Text>
                         </View>
                         <View>
-                            <Text style={type.h4}>Brubank</Text>
+                            <Text style={type.h4}>{walletName}</Text>
                             <Text style={type.small}>Listo para usar</Text>
                         </View>
                     </View>

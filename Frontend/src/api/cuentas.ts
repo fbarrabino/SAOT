@@ -5,14 +5,15 @@
  * Devuelve las cuentas vinculadas del usuario autenticado y las convierte
  * al tipo Wallet que usan las pantallas del frontend.
  *
- * Estrategia de fallback:
- *   Si el backend no responde (red caída, backend en construcción),
- *   devuelve MOCK_WALLETS para que el desarrollo no se detenga.
+ * Bloque 1 (B1): si el usuario no tiene cuentas vinculadas, devolvemos
+ * un array vacío para que la UI muestre el empty state y le ofrezca
+ * conectar la primera billetera. No usamos MOCK_WALLETS como fallback:
+ * mejor mostrar honestamente que no hay billeteras a presentar saldos
+ * que después no se pueden operar.
  */
 
 import { api } from './client';
 import { gradients } from '@/theme/tokens';
-import { MOCK_WALLETS } from '@/data/wallets';
 import type { Wallet, WalletKey } from '@/data/wallets';
 
 // ─── Tipo del backend ─────────────────────────────────────────────────────────
@@ -73,32 +74,23 @@ export function cuentaToWallet(cuenta: CuentaBilleteraResponse): Wallet | null {
  * GET /api/cuentas-billetera/me
  *
  * Devuelve las billeteras del usuario autenticado transformadas a Wallet[].
- *
- * Fallback: si el servidor no responde o devuelve un array vacío,
- * usa MOCK_WALLETS para que el desarrollo pueda continuar.
+ * Si no hay cuentas o el servidor no responde, devolvemos array vacío
+ * y dejamos que la UI muestre el empty state.
  */
 export async function fetchMisCuentas(): Promise<Wallet[]> {
   try {
     const cuentas = await api.get<CuentaBilleteraResponse[]>('/api/cuentas-billetera/me');
 
     if (!Array.isArray(cuentas)) {
-      console.warn('[cuentas] La respuesta del servidor no es un array. Usando mock.');
-      return MOCK_WALLETS;
+      console.warn('[cuentas] La respuesta del servidor no es un array.');
+      return [];
     }
 
-    const wallets = cuentas
+    return cuentas
       .map(cuentaToWallet)
       .filter((w): w is Wallet => w !== null);
-
-    if (wallets.length === 0) {
-      console.warn('[cuentas] El servidor respondió pero sin billeteras reconocidas. Usando mock.');
-      return MOCK_WALLETS;
-    }
-
-    return wallets;
   } catch (err) {
-    // Error de red o del servidor — fallback silencioso en modo desarrollo
-    console.warn('[cuentas] No se pudo conectar al backend. Usando mock de desarrollo:', err);
-    return MOCK_WALLETS;
+    console.warn('[cuentas] No se pudo conectar al backend:', err);
+    return [];
   }
 }

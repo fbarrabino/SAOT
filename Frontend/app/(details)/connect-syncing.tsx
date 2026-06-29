@@ -9,19 +9,39 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { colors, radii, spacing, type } from '@/theme/tokens';
 
 const SYNC_DURATION_MS = 2200;
 
 export default function ConnectSyncingScreen() {
+    // B2 — la pantalla recibe la wallet elegida y pasa los mismos params a
+    // connect-success cuando termina la sincronización simulada.
+    const params = useLocalSearchParams<{
+        walletId?: string;
+        walletName?: string;
+        walletShort?: string;
+        walletColor?: string;
+    }>();
+    const walletName = params.walletName ?? 'la billetera';
+    const walletShort = params.walletShort ?? '?';
+    const walletColor = params.walletColor ?? '#6842FF';
+
     useEffect(() => {
         const t = setTimeout(() => {
-            router.replace('/connect-success');
+            router.replace({
+                pathname: '/connect-success',
+                params: {
+                    walletId: params.walletId ?? '',
+                    walletName,
+                    walletShort,
+                    walletColor,
+                },
+            });
         }, SYNC_DURATION_MS);
         return () => clearTimeout(t);
-    }, []);
+    }, [params.walletId, walletName, walletShort, walletColor]);
 
     return (
         <View style={styles.container}>
@@ -41,7 +61,7 @@ export default function ConnectSyncingScreen() {
                 </View>
 
                 <View style={styles.textContainer}>
-                    <Text style={type.display}>Brubank</Text>
+                    <Text style={type.display}>{walletName}</Text>
                     <Text style={styles.syncLabel}>Sincronizando…</Text>
                     <Text style={styles.subtitle}>
                         Estamos recibiendo el balance y los últimos movimientos.
@@ -50,11 +70,11 @@ export default function ConnectSyncingScreen() {
 
                 <View style={styles.statusCard}>
                     <View style={styles.statusLeft}>
-                        <View style={[styles.walletIcon, { backgroundColor: '#6842FF' }]}>
-                            <Text style={styles.walletIconText}>BB</Text>
+                        <View style={[styles.walletIcon, { backgroundColor: walletColor }]}>
+                            <Text style={styles.walletIconText}>{walletShort}</Text>
                         </View>
                         <View>
-                            <Text style={type.h4}>Brubank</Text>
+                            <Text style={type.h4}>{walletName}</Text>
                             <Text style={type.small}>Recibiendo datos…</Text>
                         </View>
                     </View>
