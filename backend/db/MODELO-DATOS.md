@@ -3,6 +3,10 @@
 > Base **SQL Server** · 20 tablas de dominio · script de creación: [`init.sql`](init.sql)
 > Este documento presenta el **MER** (Modelo Entidad‑Relación, conceptual) y el
 > **MR** (Modelo Relacional, lógico). Los diagramas Mermaid se renderizan gráficos en GitHub.
+>
+> 🖼️ **Versión draw.io** (editable, con cardinalidades min‑max y pata de gallo):
+> [`MER-MR.drawio`](MER-MR.drawio) — abrila en [app.diagrams.net](https://app.diagrams.net) o con
+> la extensión *Draw.io Integration* de VS Code. Tiene 2 pestañas: **MER** y **MR**.
 
 ---
 

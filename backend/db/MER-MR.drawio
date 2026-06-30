@@ -1,0 +1,313 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="mer-page" name="MER (Entidad-Relacion)">
+    <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="MER - Modelo Entidad-Relacion - SaOT (Billeteras)  |  notacion: (min,max) ; pata de gallo = lado N  ;  amarillo = entidad asociativa (resuelve N:M)" style="text;html=1;fontSize=14;fontStyle=1;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="1200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== ENTIDADES ===================== -->
+        <mxCell id="e_Rol" value="Rol" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_UsuarioRol" value="UsuarioRol&#10;(N:M)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_Contacto" value="Contacto&#10;(N:M usuario-usuario)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="360" y="80" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_Usuario" value="Usuario" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="380" y="300" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e_Billetera" value="Billetera" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="720" y="80" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_CuentaBilletera" value="CuentaBilletera" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="720" y="300" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_Movimiento" value="Movimiento" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="980" y="300" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_Categoria" value="Categoria" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="980" y="80" width="150" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_Comercio" value="Comercio" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="720" y="480" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_Sucursal" value="Sucursal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="980" y="480" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ComercioBilletera" value="ComercioBilletera&#10;(N:M)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="720" y="640" width="170" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_SolicitudCobro" value="SolicitudCobro" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="480" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_SolicitudCobroDetalle" value="SolicitudCobroDetalle" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="640" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_TicketSoporte" value="TicketSoporte" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="360" y="500" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_MotivoReporte" value="MotivoReporte" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="360" y="660" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_TicketMensaje" value="TicketMensaje" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="360" y="820" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_TicketAdjunto" value="TicketAdjunto" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="600" y="820" width="150" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_Notificacion" value="Notificacion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="120" y="820" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_MetodoPagoExterno" value="MetodoPagoExterno" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="980" y="640" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_Auditoria" value="Auditoria&#10;(la llenan triggers, sin FK)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="1240" y="480" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== RELACIONES (1 -> N) ===================== -->
+        <!-- estilo: lado 1 = ERone (barra) ; lado N = ERmany (pata de gallo) -->
+
+        <!-- 1. Usuario 1..N CuentaBilletera -->
+        <mxCell id="r1" value="posee" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Usuario" target="e_CuentaBilletera">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r1a" value="(1,1)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r1"><mxGeometry x="-0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="r1b" value="(1,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r1"><mxGeometry x="0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 2. Billetera 1..N CuentaBilletera -->
+        <mxCell id="r2" value="se usa en" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Billetera" target="e_CuentaBilletera">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r2a" value="(1,1)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r2"><mxGeometry x="-0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="r2b" value="(1,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r2"><mxGeometry x="0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 3. CuentaBilletera 1..N Movimiento -->
+        <mxCell id="r3" value="registra" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_CuentaBilletera" target="e_Movimiento">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r3a" value="(1,1)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r3"><mxGeometry x="-0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="r3b" value="(1,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r3"><mxGeometry x="0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 4. Categoria 1..N Movimiento -->
+        <mxCell id="r4" value="clasifica" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Categoria" target="e_Movimiento">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r4a" value="(1,1)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r4"><mxGeometry x="-0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="r4b" value="(1,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r4"><mxGeometry x="0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 5. Usuario 1..N UsuarioRol -->
+        <mxCell id="r5" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Usuario" target="e_UsuarioRol">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r5a" value="(1,1)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r5"><mxGeometry x="0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="r5b" value="(1,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r5"><mxGeometry x="-0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 6. Rol 1..N UsuarioRol -->
+        <mxCell id="r6" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Rol" target="e_UsuarioRol">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r6a" value="(1,1)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r6"><mxGeometry x="-0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="r6b" value="(1,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r6"><mxGeometry x="0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 7. Usuario 1..N Contacto (propietario) -->
+        <mxCell id="r7" value="propietario" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Usuario" target="e_Contacto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r7a" value="(0,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r7"><mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 8. Usuario 1..N Contacto (contacto) -->
+        <mxCell id="r8" value="es contacto" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10;dashed=1" edge="1" parent="1" source="e_Usuario" target="e_Contacto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 9. Comercio 1..N Sucursal -->
+        <mxCell id="r9" value="tiene" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Comercio" target="e_Sucursal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r9a" value="(1,1)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r9"><mxGeometry x="-0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="r9b" value="(1,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r9"><mxGeometry x="0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 10. Comercio 1..N ComercioBilletera -->
+        <mxCell id="r10" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Comercio" target="e_ComercioBilletera">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r10a" value="(1,1)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r10"><mxGeometry x="-0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="r10b" value="(1,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r10"><mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 11. Billetera 1..N ComercioBilletera -->
+        <mxCell id="r11" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Billetera" target="e_ComercioBilletera">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r11a" value="(1,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r11"><mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 12. Usuario 1..N SolicitudCobro -->
+        <mxCell id="r12" value="solicita" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Usuario" target="e_SolicitudCobro">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r12a" value="(0,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r12"><mxGeometry x="0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 13. SolicitudCobro 1..N SolicitudCobroDetalle -->
+        <mxCell id="r13" value="se divide en" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_SolicitudCobro" target="e_SolicitudCobroDetalle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r13a" value="(1,1)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r13"><mxGeometry x="-0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="r13b" value="(1,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r13"><mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 14. Usuario 1..N SolicitudCobroDetalle (deudor) -->
+        <mxCell id="r14" value="es deudor" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10;dashed=1" edge="1" parent="1" source="e_Usuario" target="e_SolicitudCobroDetalle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 15. Usuario 1..N TicketSoporte -->
+        <mxCell id="r15" value="abre" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Usuario" target="e_TicketSoporte">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r15a" value="(0,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r15"><mxGeometry x="0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 16. MotivoReporte 1..N TicketSoporte -->
+        <mxCell id="r16" value="motiva" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_MotivoReporte" target="e_TicketSoporte">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r16a" value="(1,1)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r16"><mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 17. TicketSoporte 1..N TicketMensaje -->
+        <mxCell id="r17" value="contiene" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_TicketSoporte" target="e_TicketMensaje">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r17a" value="(1,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r17"><mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 18. TicketMensaje 1..N TicketAdjunto -->
+        <mxCell id="r18" value="adjunta" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_TicketMensaje" target="e_TicketAdjunto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r18a" value="(0,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r18"><mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 19. Usuario 1..N Notificacion -->
+        <mxCell id="r19" value="recibe" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Usuario" target="e_Notificacion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r19a" value="(0,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r19"><mxGeometry x="0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+        <!-- 20. Usuario 1..N MetodoPagoExterno -->
+        <mxCell id="r20" value="registra" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;fontSize=10" edge="1" parent="1" source="e_Usuario" target="e_MetodoPagoExterno">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r20a" value="(0,N)" style="edgeLabel;html=1;resizable=0;fontSize=10" connectable="0" vertex="1" parent="r20"><mxGeometry x="0.8" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="mr-page" name="MR (Modelo Relacional)">
+    <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="mrtitle" value="MR - Modelo Relacional - SaOT  |  (PK) clave primaria  ·  (FK) clave foranea  ·  (UQ) unique  ·  flecha pata de gallo apunta del lado 1 al lado N" style="text;html=1;fontSize=14;fontStyle=1;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="1300" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== TABLAS ===================== -->
+        <mxCell id="t_Usuario" value="Usuario&#10;------------------------&#10;UsuarioId (PK)&#10;Nombre&#10;Apellido&#10;Email (UQ)&#10;PasswordHash&#10;FechaAlta" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="400" y="300" width="190" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="t_Billetera" value="Billetera&#10;------------------------&#10;BilleteraId (PK)&#10;Nombre&#10;LogoUrl" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="720" y="80" width="190" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t_Categoria" value="Categoria&#10;------------------------&#10;CategoriaId (PK)&#10;Nombre&#10;Tipo (Ingreso/Egreso)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="80" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t_CuentaBilletera" value="CuentaBilletera&#10;------------------------&#10;CuentaBilleteraId (PK)&#10;UsuarioId (FK)&#10;BilleteraId (FK)&#10;Alias&#10;SaldoActual&#10;FechaVinculacion&#10;Estado (Activa/Inactiva)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="720" y="280" width="200" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="t_Movimiento" value="Movimiento&#10;------------------------&#10;MovimientoId (PK)&#10;CuentaBilleteraId (FK)&#10;CategoriaId (FK)&#10;Fecha&#10;Descripcion&#10;Monto&#10;Tipo (Ingreso/Egreso)&#10;MetadataExtranjera (JSON)&#10;Anulado&#10;FechaAnulacion" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="280" width="220" height="210" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_Rol" value="Rol&#10;------------------------&#10;RolId (PK)&#10;Nombre (UQ)&#10;Descripcion" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="190" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t_UsuarioRol" value="UsuarioRol  (N:M)&#10;------------------------&#10;UsuarioId (PK, FK)&#10;RolId (PK, FK)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="190" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="t_Contacto" value="Contacto  (N:M usuario-usuario)&#10;------------------------&#10;UsuarioPropietarioId (PK, FK)&#10;UsuarioContactoId (PK, FK)&#10;AliasPersonalizado&#10;FechaAgregado" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="40" y="380" width="240" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_Comercio" value="Comercio&#10;------------------------&#10;ComercioId (PK)&#10;RazonSocial&#10;Cuit (UQ)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="700" y="560" width="190" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t_Sucursal" value="Sucursal&#10;------------------------&#10;SucursalId (PK)&#10;ComercioId (FK)&#10;Direccion&#10;CodigoQRBase (UQ)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="980" y="560" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="t_ComercioBilletera" value="ComercioBilletera  (N:M)&#10;------------------------&#10;ComercioId (PK, FK)&#10;BilleteraId (PK, FK)&#10;TasaComision" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="700" y="720" width="210" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_SolicitudCobro" value="SolicitudCobro&#10;------------------------&#10;SolicitudId (PK)&#10;UsuarioSolicitanteId (FK)&#10;MontoTotal&#10;FechaVencimiento&#10;Estado" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="560" width="220" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="t_SolicitudCobroDetalle" value="SolicitudCobroDetalle&#10;------------------------&#10;DetalleSolicitudId (PK)&#10;SolicitudId (FK)&#10;UsuarioDeudorId (FK)&#10;MontoMita&#10;Pagado" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="740" width="220" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_MotivoReporte" value="MotivoReporte&#10;------------------------&#10;MotivoId (PK)&#10;Titulo&#10;Gravedad" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="320" y="900" width="190" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t_TicketSoporte" value="TicketSoporte&#10;------------------------&#10;TicketId (PK)&#10;UsuarioId (FK)&#10;MotivoId (FK)&#10;FechaCreacion&#10;Estado" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="320" y="560" width="190" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="t_TicketMensaje" value="TicketMensaje&#10;------------------------&#10;MensajeId (PK)&#10;TicketId (FK)&#10;RemitenteEsSoporte&#10;CuerpoMensaje&#10;FechaEnvio" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="320" y="720" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="t_TicketAdjunto" value="TicketAdjunto&#10;------------------------&#10;AdjuntoId (PK)&#10;MensajeId (FK)&#10;UrlArchivo&#10;TipoMime" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="560" y="900" width="200" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_Notificacion" value="Notificacion&#10;------------------------&#10;NotificacionId (PK)&#10;UsuarioId (FK)&#10;Titulo&#10;Mensaje&#10;Leida&#10;FechaEmision" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="400" y="80" width="190" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="t_MetodoPagoExterno" value="MetodoPagoExterno&#10;------------------------&#10;MetodoId (PK)&#10;UsuarioId (FK)&#10;Tipo&#10;UltimosCuatro&#10;EntidadEmisora" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="560" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="t_Auditoria" value="Auditoria  (trazabilidad por triggers)&#10;------------------------&#10;AuditoriaId (PK)&#10;TablaAfectada&#10;Accion (INSERT/UPDATE/DELETE)&#10;UsuarioBaseDatos&#10;Fecha&#10;Detalle (JSON)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="280" width="250" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== FK (1 -> N, pata de gallo en el N) ===================== -->
+        <mxCell id="f1" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Usuario" target="t_CuentaBilletera"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f2" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Billetera" target="t_CuentaBilletera"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f3" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_CuentaBilletera" target="t_Movimiento"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f4" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Categoria" target="t_Movimiento"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f5" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Usuario" target="t_UsuarioRol"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f6" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Rol" target="t_UsuarioRol"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f7" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Usuario" target="t_Contacto"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f9" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Comercio" target="t_Sucursal"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f10" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Comercio" target="t_ComercioBilletera"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f11" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Billetera" target="t_ComercioBilletera"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f12" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Usuario" target="t_SolicitudCobro"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f13" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_SolicitudCobro" target="t_SolicitudCobroDetalle"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f14" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;dashed=1;" edge="1" parent="1" source="t_Usuario" target="t_SolicitudCobroDetalle"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f15" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Usuario" target="t_TicketSoporte"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f16" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_MotivoReporte" target="t_TicketSoporte"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f17" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_TicketSoporte" target="t_TicketMensaje"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f18" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_TicketMensaje" target="t_TicketAdjunto"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f19" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Usuario" target="t_Notificacion"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f20" style="edgeStyle=entityRelationEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;startFill=0;endFill=0;" edge="1" parent="1" source="t_Usuario" target="t_MetodoPagoExterno"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
