@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
@@ -15,27 +24,41 @@ export default function ResetCode() {
     <View style={styles.root}>
       <AuroraBackground />
       <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
-        <ScreenHeader title="Restablecer contraseña" />
-        <View style={styles.body}>
-          <Text style={styles.title}>Ingresá el código</Text>
-          <Text style={styles.lead}>Te enviamos un código de 6 dígitos al email.</Text>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={20}
+        >
+          {/* Tocar fuera del input cierra el teclado para poder llegar al CTA */}
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={{ flex: 1 }}>
+              <ScreenHeader title="Restablecer contraseña" />
+              <View style={styles.body}>
+                <Text style={styles.title}>Ingresá el código</Text>
+                <Text style={styles.lead}>Te enviamos un código de 6 dígitos al email.</Text>
 
-          <View style={{ marginTop: 28 }}>
-            <CodeInput length={6} onChange={setCode} />
-          </View>
+                <View style={{ marginTop: 28 }}>
+                  <CodeInput length={6} onChange={setCode} />
+                </View>
 
-          <Pressable onPress={() => {}} style={styles.resend}>
-            <Text style={styles.resendText}>Reenviar código</Text>
-          </Pressable>
-        </View>
+                <Pressable onPress={() => {}} style={styles.resend}>
+                  <Text style={styles.resendText}>Reenviar código</Text>
+                </Pressable>
+              </View>
 
-        <View style={styles.footer}>
-          <PrimaryButton
-            label="Verificar código"
-            onPress={() => router.push('/(auth)/reset-new-password')}
-            disabled={code.length < 6}
-          />
-        </View>
+              <View style={styles.footer}>
+                <PrimaryButton
+                  label="Verificar código"
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    router.push('/(auth)/reset-new-password');
+                  }}
+                  disabled={code.length < 6}
+                />
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
   );
