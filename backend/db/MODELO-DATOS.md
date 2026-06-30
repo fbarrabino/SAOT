@@ -4,9 +4,10 @@
 > Este documento presenta el **MER** (Modelo Entidad‑Relación, conceptual) y el
 > **MR** (Modelo Relacional, lógico). Los diagramas Mermaid se renderizan gráficos en GitHub.
 >
-> 🖼️ **Versión draw.io** (editable, con cardinalidades min‑max y pata de gallo):
-> [`MER-MR.drawio`](MER-MR.drawio) — abrila en [app.diagrams.net](https://app.diagrams.net) o con
-> la extensión *Draw.io Integration* de VS Code. Tiene 2 pestañas: **MER** y **MR**.
+> 🖼️ **Versión draw.io** (editable) en dos archivos separados:
+> [`MER.drawio`](MER.drawio) (notación Chen: entidades, rombos de relación, atributos en óvalos)
+> y [`MR.drawio`](MR.drawio) (tablas ER con `PK`/`FK1`/`FK2` y flechas). Abrilos en
+> [app.diagrams.net](https://app.diagrams.net) o con la extensión *Draw.io Integration* de VS Code.
 
 ---
 

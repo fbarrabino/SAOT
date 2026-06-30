@@ -112,11 +112,17 @@ EF Core).
 
 El modelo completo (20 tablas, relaciones, claves) está documentado con diagramas en
 **[`backend/db/MODELO-DATOS.md`](backend/db/MODELO-DATOS.md)** — incluye el **MER** (modelo
-entidad‑relación) y el **MR** (modelo relacional). Para verlo/editarlo de forma gráfica hay un
-archivo **draw.io** en **[`backend/db/MER-MR.drawio`](backend/db/MER-MR.drawio)** (2 páginas:
-MER y MR), con cardinalidades min‑max `(1,1)` / `(1,N)` / `N:M` y pata de gallo — abrilo en
-[app.diagrams.net](https://app.diagrams.net) o con la extensión Draw.io de VS Code. El script de
-creación es
+entidad‑relación) y el **MR** (modelo relacional). Para verlos/editarlos de forma gráfica hay
+dos archivos **draw.io** separados:
+
+- **[`backend/db/MER.drawio`](backend/db/MER.drawio)** — MER en notación Chen (entidades,
+  rombos de relación, atributos en óvalos con la PK subrayada, cardinalidades `(1,1)`/`(1,n)`
+  y tipo `1:N` / `N:M`).
+- **[`backend/db/MR.drawio`](backend/db/MR.drawio)** — MR con las 20 tablas en formato ER de
+  draw.io (`PK`, `FK1`, `FK2`…) y flechas a la tabla referenciada.
+
+Abrilos en [app.diagrams.net](https://app.diagrams.net) o con la extensión Draw.io de VS Code.
+El script de creación es
 **[`backend/db/init.sql`](backend/db/init.sql)**, idempotente (`IF OBJECT_ID … IS NULL`,
 `IF COL_LENGTH … IS NULL`, `IF NOT EXISTS …`): se puede correr varias veces sin romper nada.
 
