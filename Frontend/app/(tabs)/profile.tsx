@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path, Rect, Circle, Line } from 'react-native-svg';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { colors, fonts, gradients, radii } from '@/theme/tokens';
+import { useSession } from '@/context/SessionContext';
 
 function RowIcon({ children, color = colors.cyan }: { children: React.ReactNode; color?: string }) {
   return (
@@ -29,6 +30,15 @@ const ICON_PROPS = (color: string) => ({
 });
 
 export default function Profile() {
+  const { usuario } = useSession();
+
+  const nombreCompleto = usuario
+    ? `${usuario.nombre} ${usuario.apellido}`.trim()
+    : 'Usuario SaOT';
+  const iniciales = usuario
+    ? `${usuario.nombre.charAt(0)}${usuario.apellido.charAt(0)}`.toUpperCase()
+    : 'OT';
+
   return (
     <View style={styles.root}>
       <AuroraBackground />
@@ -44,17 +54,17 @@ export default function Profile() {
               end={{ x: 1, y: 1 }}
               style={styles.avatar}
             >
-              <Text style={styles.avatarText}>FA</Text>
+              <Text style={styles.avatarText}>{iniciales}</Text>
             </LinearGradient>
             <View style={{ flex: 1, marginLeft: 12 }}>
-              <Text style={styles.userName}>Fabricio Thompson</Text>
-              <Text style={styles.userMail}>fabricio.saot.app@saot.app</Text>
+              <Text style={styles.userName}>{nombreCompleto}</Text>
+              <Text style={styles.userMail}>{usuario?.email ?? ''}</Text>
             </View>
             <Text style={styles.chev}>›</Text>
           </Pressable>
 
           <View style={styles.group}>
-            {/* ACÁ ESTÁ EL ENLACE A TU NUEVA PANTALLA */}
+
             <Row
               label="Métodos de pago"
               sub="3 billeteras vinculadas"
@@ -68,7 +78,7 @@ export default function Profile() {
               </RowIcon>
             </Row>
 
-            <Row label="Notificaciones" sub="Push, email">
+            <Row label="Notificaciones" sub="Push, email" onPress={() => router.push('/profile-notifications')}>
               <RowIcon>
                 <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.cyan)}>
                   <Path d="M6 8a6 6 0 1112 0c0 7 3 9 3 9H3s3-2 3-9" />
@@ -77,7 +87,6 @@ export default function Profile() {
               </RowIcon>
             </Row>
 
-            {/* NAVEGACIÓN 2: Fila de Seguridad -> Pantalla de Seguridad */}
             <Row label="Seguridad" sub="Face ID, 2FA" onPress={() => router.push('/profile-security')}>
               <RowIcon>
                 <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.cyan)}>
@@ -87,7 +96,15 @@ export default function Profile() {
               </RowIcon>
             </Row>
 
-            <Row label="Ayuda y soporte" sub="FAQ, contactanos">
+            <Row label="Cambiar contraseña" sub="Actualizá tu clave de acceso" onPress={() => router.push('/change-password')}>
+              <RowIcon>
+                <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.cyan)}>
+                  <Path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.18a2 2 0 002.812-.012l1.41-1.41a2 2 0 00-.012-2.813L21 2z" />
+                </Svg>
+              </RowIcon>
+            </Row>
+
+            <Row label="Ayuda y soporte" sub="FAQ, contactanos" onPress={() => router.push('/support-faq')}>
               <RowIcon>
                 <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.cyan)}>
                   <Circle cx={12} cy={12} r={10} />
@@ -97,7 +114,6 @@ export default function Profile() {
               </RowIcon>
             </Row>
 
-            {/* NAVEGACIÓN 3: Fila de Logout -> Pantalla de Confirmación de Logout */}
             <Row label="Cerrar sesión" danger onPress={() => router.push('/profile-logout')}>
               <RowIcon color={colors.red}>
                 <Svg width={20} height={20} viewBox="0 0 24 24" {...ICON_PROPS(colors.red)}>

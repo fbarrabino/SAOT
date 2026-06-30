@@ -1,0 +1,101 @@
+### ============================================================================
+### cuentas-billetera.http — Pruebas del módulo Transaccional: BE-08
+### Vincular / Desvincular billetera con validaciones
+### ============================================================================
+### INSTRUCCIONES:
+###   1. Correr init.sql + seed_test.sql en SSMS (incluye filas en Billetera)
+###   2. Hacer login (ver auth.http) y pegar el token abajo
+###   3. Ejecutar los requests en orden
+### ============================================================================
+
+@API_URL = http://localhost:5001
+@TOKEN   = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZmFicmljZUBjb20iLCJqdGkiOiI2Nzc1MTkzNC01YWRkLTRhZmYtYmNmYi00ZmJlNjZhZjAxZmIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzgyNDIzOTA0LCJpc3MiOiJCaWxsZXRlcmFzLkFwaSIsImF1ZCI6IkJpbGxldGVyYXMuQ2xpZW50cyJ9.etdaJXoSM3D80kKWLfkAyhccP9Hhq1wc2cWt7GVDJDc
+
+### ── 1. Ver mis billeteras activas (debería estar vacío al inicio) ───────────
+GET {{API_URL}}/api/cuentas-billetera/me
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 2. Vincular billetera existente (BilleteraId=1 del seed) ───────────────
+# @name vincular
+POST {{API_URL}}/api/cuentas-billetera/vincular
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "billeteraId": 1,
+  "alias": "Mi cuenta principal"
+}
+
+###
+
+### ── 3. Ver mis billeteras activas (debería mostrar la recién vinculada) ─────
+GET {{API_URL}}/api/cuentas-billetera/me
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 4. Intentar vincular la misma billetera de nuevo (debe devolver 409) ───
+POST {{API_URL}}/api/cuentas-billetera/vincular
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "billeteraId": 1,
+  "alias": "Duplicado"
+}
+
+###
+
+### ── 5. Intentar vincular una billetera inexistente (debe devolver 404) ─────
+POST {{API_URL}}/api/cuentas-billetera/vincular
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "billeteraId": 9999,
+  "alias": "No existe"
+}
+
+###
+
+### ── 6. Desvincular la cuenta creada en el request 2 ────────────────────────
+# Usa el cuentaBilleteraId de la respuesta del request 2
+# (saldo es 0 por defecto, debe funcionar)
+DELETE {{API_URL}}/api/cuentas-billetera/ /desvincular
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 7. Ver mis billeteras activas (debería estar vacío de nuevo) ────────────
+GET {{API_URL}}/api/cuentas-billetera/me
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 8. Intentar desvincular la misma cuenta (ya está Desvinculada → 400) ──
+DELETE {{API_URL}}/api/cuentas-billetera/{{vincular.response.body.$.cuentaBilleteraId}}/desvincular
+Authorization: Bearer {{TOKEN}}
+
+###
+
+### ── 9. Vincular una segunda billetera (BilleteraId=2) ──────────────────────
+# @name vincular2
+POST {{API_URL}}/api/cuentas-billetera/vincular
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "billeteraId": 2,
+  "alias": "Billetera secundaria"
+}
+
+###
+
+### ── 10. [ADMIN] Ver todas las cuentas, incluyendo desvinculadas ─────────────
+# Requiere token con rol Admin
+GET {{API_URL}}/api/cuentas-billetera
+Authorization: Bearer {{TOKEN}}
+
+###

@@ -39,7 +39,25 @@ DECLARE @CatOcio      INT = (SELECT CategoriaId FROM dbo.Categoria WHERE Nombre 
 DECLARE @CatOtros     INT = (SELECT CategoriaId FROM dbo.Categoria WHERE Nombre = N'Otros');
 
 -- ── 2. Cuentas vinculadas al usuario ──────────────────────────────────────────
--- Limpiamos para poder re-correr el seed sin duplicados
+-- Limpiamos para poder re-correr el seed sin duplicados.
+-- ORDEN OBLIGATORIO: respetar las FKs (hijos antes que padres).
+
+-- 2a. SolicitudCobroDetalle referencia Movimiento → borrar primero
+DELETE FROM dbo.SolicitudCobroDetalle
+WHERE MovimientoId IN (
+    SELECT MovimientoId FROM dbo.Movimiento
+    WHERE CuentaBilleteraId IN (
+        SELECT CuentaBilleteraId FROM dbo.CuentaBilletera WHERE UsuarioId = @UsuarioId
+    )
+);
+-- 2b. SolicitudCobroDetalle también referencia SolicitudCobro del mismo usuario
+DELETE FROM dbo.SolicitudCobroDetalle
+WHERE SolicitudId IN (
+    SELECT SolicitudId FROM dbo.SolicitudCobro WHERE UsuarioSolicitanteId = @UsuarioId
+);
+-- 2c. SolicitudCobro del usuario
+DELETE FROM dbo.SolicitudCobro WHERE UsuarioSolicitanteId = @UsuarioId;
+-- 2d. Ahora sí podemos borrar Movimiento y CuentaBilletera
 DELETE FROM dbo.Movimiento
 WHERE CuentaBilleteraId IN (
     SELECT CuentaBilleteraId FROM dbo.CuentaBilletera WHERE UsuarioId = @UsuarioId
@@ -88,3 +106,16 @@ PRINT 'Cuenta MP  id: ' + CAST(@CuentaMP AS VARCHAR);
 PRINT 'Cuenta UA  id: ' + CAST(@CuentaUA AS VARCHAR);
 PRINT 'Cuenta LM  id: ' + CAST(@CuentaLM AS VARCHAR);
 GO
+
+-- ── Seed: MotivoReporte (BE-07) ─────────────────────────────────────────────
+-- Necesario para que el POST /api/tickets-soporte funcione con MotivoId válido.
+USE BilleterasDB;
+GO
+IF NOT EXISTS (SELECT 1 FROM dbo.MotivoReporte)
+INSERT INTO dbo.MotivoReporte (Titulo, Gravedad) VALUES
+    (N'Error en transferencia',  3),
+    (N'Problema con el saldo',   2),
+    (N'No puedo iniciar sesión', 2),
+    (N'Otro',                    1);
+GO
+PRINT 'Seed MotivoReporte completado.';

@@ -4,8 +4,10 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { colors, radii, spacing, type } from '@/theme/tokens';
+import { useSession } from '@/context/SessionContext';
 
 export default function ProfileLogoutScreen() {
+    const { logout } = useSession();
     return (
         <View style={styles.container}>
             <AuroraBackground />
@@ -36,7 +38,7 @@ export default function ProfileLogoutScreen() {
                 <Pressable
                     style={styles.dangerBtn}
                     android_ripple={{ color: 'rgba(0,0,0,0.1)' }}
-                    onPress={() => router.replace('/(auth)/login')}
+                    onPress={() => { logout(); router.replace('/(auth)/login'); }}
                 >
                     <Text style={[type.button, { color: '#FFFFFF' }]}>Cerrar sesión</Text>
                 </Pressable>

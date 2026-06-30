@@ -7,6 +7,8 @@ using Billeteras.Datos.Interfaces;
 using Billeteras.DatosEF;
 using Billeteras.Negocio;
 using Billeteras.Negocio.Interfaces;
+// Maestro-Detalle (usings requeridos para los tipos concretos del módulo)
+// Los tipos están en los ensamblados ya referenciados; este using es solo por claridad.
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,12 @@ builder.Services.AddScoped<IMovimientoRepository, MovimientoRepositoryEF>();
 builder.Services.AddScoped<IMetodoPagoExternoRepository, MetodoPagoExternoRepositoryEF>();
 builder.Services.AddScoped<ITicketSoporteRepository, TicketSoporteRepositoryEF>();
 
+// --- MAESTRO-DETALLE: Tickets de Soporte (BE-07) ---
+builder.Services.AddScoped<ITicketSoporteNegocio, TicketSoporteNegocio>();
+
+// --- MAESTRO-DETALLE: Solicitudes de Cobro ---
+builder.Services.AddScoped<ISolicitudCobroRepository, SolicitudCobroRepositoryEF>();
+builder.Services.AddScoped<ISolicitudCobroNegocio, SolicitudCobroNegocio>();
 // --- OPERACIONES TRANSACCIONALES (BE-03/04/05) ---
 builder.Services.AddScoped<IOperacionesRepository, OperacionesRepositoryEF>();
 builder.Services.AddScoped<IOperacionesNegocio, OperacionesNegocio>();

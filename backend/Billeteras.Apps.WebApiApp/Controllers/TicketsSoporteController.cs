@@ -1,47 +1,56 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Billeteras.Entidades;
 using Billeteras.Negocio.Dtos;
-using Billeteras.Datos.Interfaces;
+using Billeteras.Negocio.Interfaces;
 
 namespace Billeteras.Apps.WebApiApp.Controllers;
 
 [Route("api/tickets-soporte")]
 [ApiController]
 [Authorize]
-public class TicketsSoporteController(ITicketSoporteRepository repository) : ControllerBase
+public class TicketsSoporteController(ITicketSoporteNegocio negocio) : ControllerBase
 {
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
+    // Extrae el UsuarioId del JWT (mismo patrón que SolicitudesCobroController)
+    private int UsuarioId =>
+        int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+    // ── GET /api/tickets-soporte/me ───────────────────────────────────────────
+    /// <summary>Devuelve los tickets del usuario autenticado (resumen).</summary>
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMios()
     {
-        var tickets = await repository.GetAllAsync();
-        return Ok(tickets);
+        var lista = await negocio.ObtenerMisAsync(UsuarioId);
+        return Ok(lista);
     }
 
-    [HttpGet("usuario/{usuarioId}")]
-    public async Task<IActionResult> GetByUsuario(int usuarioId)
+    // ── GET /api/tickets-soporte/{id} ─────────────────────────────────────────
+    /// <summary>Detalle completo: cabecera + mensajes + adjuntos.</summary>
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetDetalle(int id)
     {
-        var tickets = await repository.GetByUsuarioIdAsync(usuarioId);
-        return Ok(tickets);
+        var detalle = await negocio.ObtenerDetalleAsync(id);
+        if (detalle is null)
+            return NotFound(new { mensaje = $"No existe el ticket con id {id}." });
+        return Ok(detalle);
     }
 
+    // ── POST /api/tickets-soporte ─────────────────────────────────────────────
+    /// <summary>
+    /// Crea ticket (cabecera) + primer mensaje + adjuntos en una sola transacción.
+    /// Devuelve 201 Created con el detalle completo.
+    /// </summary>
     [HttpPost]
-    public async Task<IActionResult> Create(CreateTicketSoporteDto dto)
+    public async Task<IActionResult> Crear([FromBody] CrearTicketRequest req)
     {
-        var entidad = new TicketSoporte
+        try
         {
-            UsuarioId = dto.UsuarioId,
-            MotivoId = dto.MotivoId
-        };
-
-        var creado = await repository.AddAsync(entidad);
-        return Ok(creado);
-    }
-
-    [HttpPatch("{id}/estado")]
-    public async Task<IActionResult> UpdateEstado(int id, [FromBody] string nuevoEstado)
-    {
-        await repository.UpdateEstadoAsync(id, nuevoEstado);
-        return NoContent();
+            var creado = await negocio.CrearAsync(UsuarioId, req);
+            return CreatedAtAction(nameof(GetDetalle), new { id = creado.TicketId }, creado);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { mensaje = "Error interno al crear el ticket.", detalle = ex.Message });
+        }
     }
 }

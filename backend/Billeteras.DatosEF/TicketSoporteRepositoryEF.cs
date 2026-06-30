@@ -6,13 +6,13 @@ namespace Billeteras.DatosEF;
 
 public class TicketSoporteRepositoryEF(BilleterasContext context) : ITicketSoporteRepository
 {
-    public async Task<IEnumerable<TicketSoporte>> GetAllAsync() 
+    public async Task<IEnumerable<TicketSoporte>> GetAllAsync()
         => await context.TicketsSoporte.ToListAsync();
 
-    public async Task<TicketSoporte?> GetByIdAsync(int id) 
+    public async Task<TicketSoporte?> GetByIdAsync(int id)
         => await context.TicketsSoporte.FindAsync(id);
 
-    public async Task<IEnumerable<TicketSoporte>> GetByUsuarioIdAsync(int usuarioId) 
+    public async Task<IEnumerable<TicketSoporte>> GetByUsuarioIdAsync(int usuarioId)
         => await context.TicketsSoporte.Where(t => t.UsuarioId == usuarioId).ToListAsync();
 
     public async Task<TicketSoporte> AddAsync(TicketSoporte ticket)
@@ -31,4 +31,56 @@ public class TicketSoporteRepositoryEF(BilleterasContext context) : ITicketSopor
             await context.SaveChangesAsync();
         }
     }
+
+    // ── Maestro-Detalle (BE-07) ───────────────────────────────────────────────
+
+    /// <summary>
+    /// Transacción: INSERT TicketSoporte → INSERT TicketMensaje → INSERT[] TicketAdjunto → COMMIT.
+    /// Si cualquier paso falla se hace ROLLBACK completo (atomicidad garantizada).
+    /// </summary>
+    public async Task<int> CrearConMensajeYAdjuntosAsync(
+        TicketSoporte ticket,
+        TicketMensaje mensaje,
+        List<TicketAdjunto> adjuntos)
+    {
+        await using var transaction = await context.Database.BeginTransactionAsync();
+        try
+        {
+            // 1) Cabecera: EF genera el TicketId por IDENTITY
+            context.TicketsSoporte.Add(ticket);
+            await context.SaveChangesAsync();
+
+            // 2) Primer mensaje: asignamos el TicketId recién generado
+            mensaje.TicketId = ticket.TicketId;
+            context.TicketsMensajes.Add(mensaje);
+            await context.SaveChangesAsync();
+
+            // 3) Adjuntos del mensaje: asignamos el MensajeId recién generado
+            if (adjuntos.Count > 0)
+            {
+                foreach (var adj in adjuntos)
+                    adj.MensajeId = mensaje.MensajeId;
+                context.TicketsAdjuntos.AddRange(adjuntos);
+                await context.SaveChangesAsync();
+            }
+
+            await transaction.CommitAsync();
+            return ticket.TicketId;
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Devuelve el ticket con mensajes y adjuntos cargados (eager loading de 2 niveles).
+    /// </summary>
+    public async Task<TicketSoporte?> ObtenerConMensajesAsync(int ticketId)
+        => await context.TicketsSoporte
+            .Include(t => t.Motivo)
+            .Include(t => t.Mensajes)
+                .ThenInclude(m => m.Adjuntos)
+            .FirstOrDefaultAsync(t => t.TicketId == ticketId);
 }

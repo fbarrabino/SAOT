@@ -45,9 +45,14 @@ public class BilleterasContext(DbContextOptions<BilleterasContext> options) : Db
 
         modelBuilder.Entity<CuentaBilletera>(e =>
         {
+            // El trigger trg_Auditar_CuentasBilletera bloquea OUTPUT INSERTED incluso
+            // para leer el PK IDENTITY. UseSqlOutputClause(false) → EF usa SCOPE_IDENTITY()
+            // en lugar de OUTPUT, lo que funciona correctamente con triggers.
+            e.ToTable("CuentaBilletera", t => t.UseSqlOutputClause(false));
+
+            // FechaVinculacion: se setea desde C# (DateTime.UtcNow), no se deja a la DB.
             e.Property(c => c.FechaVinculacion)
-                .HasDefaultValueSql("GETDATE()")
-                .ValueGeneratedOnAdd();
+                .ValueGeneratedNever();
         });
 
         // ==========================================
@@ -61,5 +66,74 @@ public class BilleterasContext(DbContextOptions<BilleterasContext> options) : Db
 
         modelBuilder.Entity<ComercioBilletera>()
             .HasKey(cb => new { cb.ComercioId, cb.BilleteraId });
+
+        // ── SolicitudCobro / Maestro-Detalle (BE-06) ──────────────────────────────
+        // IMPORTANTE: FechaCreacion NO se marca como DB-generated.
+        // Si lo fuera, EF Core usaría MERGE (en vez de INSERT) para recuperar el valor
+        // generado por la DB, y SQL Server tiene un bug conocido donde MERGE puede
+        // fallar con FK constraints aunque los datos sean válidos.
+        // El valor lo seteamos desde C# (DateTime.UtcNow) → INSERT simple, sin problemas.
+        modelBuilder.Entity<SolicitudCobro>(e =>
+        {
+            e.Property(s => s.FechaCreacion)
+                .ValueGeneratedNever();  // EF usa el valor de C#, nunca le pide a la DB
+        });
+
+        // FK cabecera → Usuario solicitante (NoAction evita "multiple cascade paths")
+        modelBuilder.Entity<SolicitudCobro>()
+            .HasOne(s => s.UsuarioSolicitante)
+            .WithMany()
+            .HasForeignKey(s => s.UsuarioSolicitanteId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // FK línea → cabecera (Cascade: si se borra la solicitud se borran sus líneas)
+        modelBuilder.Entity<SolicitudCobroDetalle>()
+            .HasOne(d => d.Solicitud)
+            .WithMany(s => s.Lineas)
+            .HasForeignKey(d => d.SolicitudId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // FK línea → Usuario deudor (NoAction para no crear ciclo de cascade)
+        modelBuilder.Entity<SolicitudCobroDetalle>()
+            .HasOne(d => d.UsuarioDeudor)
+            .WithMany()
+            .HasForeignKey(d => d.UsuarioDeudorId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // FK línea → Movimiento generado al pagar (NoAction)
+        modelBuilder.Entity<SolicitudCobroDetalle>()
+            .HasOne(d => d.Movimiento)
+            .WithMany()
+            .HasForeignKey(d => d.MovimientoId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // ── TicketSoporte / Maestro-Detalle (BE-07) ───────────────────────────────
+        // Ticket → Usuario (NoAction: evita ciclo cascade con Usuario)
+        modelBuilder.Entity<TicketSoporte>()
+            .HasOne(t => t.Usuario)
+            .WithMany()
+            .HasForeignKey(t => t.UsuarioId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // Ticket → MotivoReporte (NoAction)
+        modelBuilder.Entity<TicketSoporte>()
+            .HasOne(t => t.Motivo)
+            .WithMany()
+            .HasForeignKey(t => t.MotivoId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // Mensaje → Ticket (Cascade: al borrar ticket se borran sus mensajes)
+        modelBuilder.Entity<TicketMensaje>()
+            .HasOne(m => m.Ticket)
+            .WithMany(t => t.Mensajes)
+            .HasForeignKey(m => m.TicketId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Adjunto → Mensaje (Cascade: al borrar mensaje se borran sus adjuntos)
+        modelBuilder.Entity<TicketAdjunto>()
+            .HasOne(a => a.Mensaje)
+            .WithMany(m => m.Adjuntos)
+            .HasForeignKey(a => a.MensajeId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
