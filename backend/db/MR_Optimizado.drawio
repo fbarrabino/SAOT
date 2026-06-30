@@ -1,0 +1,44 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="mr-optimizado" name="MR Optimizado">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="t_usr" value="&lt;b&gt;Usuario&lt;/b&gt;&lt;hr&gt;&lt;u&gt;PK UsuarioId&lt;/u&gt;&lt;br&gt;Nombre&lt;br&gt;Apellido&lt;br&gt;Email&lt;br&gt;PasswordHash&lt;br&gt;FechaAlta" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+            <mxGeometry x="100" y="300" width="200" height="150" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="t_bil" value="&lt;b&gt;Billetera&lt;/b&gt;&lt;hr&gt;&lt;u&gt;PK BilleteraId&lt;/u&gt;&lt;br&gt;Nombre&lt;br&gt;LogoUrl" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+            <mxGeometry x="500" y="100" width="200" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="t_cat" value="&lt;b&gt;Categoria&lt;/b&gt;&lt;hr&gt;&lt;u&gt;PK CategoriaId&lt;/u&gt;&lt;br&gt;Nombre&lt;br&gt;Tipo" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+            <mxGeometry x="900" y="100" width="200" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="t_cb" value="&lt;b&gt;CuentaBilletera&lt;/b&gt;&lt;hr&gt;&lt;u&gt;PK CuentaBilleteraId&lt;/u&gt;&lt;br&gt;&lt;i&gt;FK1 UsuarioId&lt;/i&gt;&lt;br&gt;&lt;i&gt;FK2 BilleteraId&lt;/i&gt;&lt;br&gt;Alias&lt;br&gt;SaldoActual&lt;br&gt;FechaVinculacion&lt;br&gt;Estado" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+            <mxGeometry x="500" y="300" width="200" height="170" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="t_mov" value="&lt;b&gt;Movimiento&lt;/b&gt;&lt;hr&gt;&lt;u&gt;PK MovimientoId&lt;/u&gt;&lt;br&gt;&lt;i&gt;FK1 CuentaBilleteraId&lt;/i&gt;&lt;br&gt;&lt;i&gt;FK2 CategoriaId&lt;/i&gt;&lt;br&gt;Fecha&lt;br&gt;Descripcion&lt;br&gt;Monto&lt;br&gt;Tipo&lt;br&gt;MetadataExtranjera&lt;br&gt;Anulado&lt;br&gt;FechaAnulacion" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+            <mxGeometry x="900" y="300" width="200" height="210" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="fk1" edge="1" parent="1" source="t_cb" target="t_usr" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;strokeColor=#000000;">
+            <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk2" edge="1" parent="1" source="t_cb" target="t_bil" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;strokeColor=#000000;">
+            <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk3" edge="1" parent="1" source="t_mov" target="t_cb" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;strokeColor=#000000;">
+            <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk4" edge="1" parent="1" source="t_mov" target="t_cat" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;strokeColor=#000000;">
+            <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
