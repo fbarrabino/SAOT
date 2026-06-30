@@ -29,6 +29,12 @@
         {
           "cameraPermission": "SaOT necesita acceso a tu cámara para escanear códigos QR de pago."
         }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "SaOT usa Face ID para confirmar tus pagos de forma segura."
+        }
       ]
     ],
     "experiments": {
