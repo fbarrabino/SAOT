@@ -2,66 +2,56 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, Switch } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
+import { WALLET_CATALOG } from '@/data/wallets';
 
 export default function ConnectPermissionsScreen() {
+    // Leemos 'wallet' (lo que manda Fabri) o 'id' por las dudas
+    const { wallet, id } = useLocalSearchParams();
+    const paramKey = typeof wallet === 'string' ? wallet : (typeof id === 'string' ? id : 'bb');
+    const walletInfo = WALLET_CATALOG[paramKey] || WALLET_CATALOG['bb'];
+
     const [balanceEnabled, setBalanceEnabled] = useState(true);
     const [historyEnabled, setHistoryEnabled] = useState(true);
     const [operateEnabled, setOperateEnabled] = useState(false);
 
+    const handleContinue = () => {
+        router.push({ pathname: '/(details)/connect-amount', params: { wallet: paramKey } });
+    };
+
     return (
         <View style={styles.container}>
             <AuroraBackground />
-
             <View style={{ paddingTop: 48 }}>
                 <ScreenHeader title="Permisos" />
             </View>
 
             <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-
                 <View style={styles.logosRow}>
                     <View style={[styles.logoCircle, { backgroundColor: colors.teal }]}>
                         <Text style={[styles.logoText, { color: colors.bg }]}>S</Text>
                     </View>
-
                     <View style={styles.connectorContainer}>
                         <View style={styles.dot} />
                         <View style={styles.dot} />
                     </View>
-
-                    <View style={[styles.logoCircle, { backgroundColor: '#6842FF' }]}>
-                        <Text style={styles.logoText}>BB</Text>
+                    <View style={[styles.logoCircle, { backgroundColor: walletInfo.color }]}>
+                        <Text style={styles.logoText}>{walletInfo.initials}</Text>
                     </View>
                 </View>
 
-                <Text style={styles.title}>SaOT quiere conectarse con Brubank</Text>
+                <Text style={styles.title}>SaOT quiere conectarse con {walletInfo.name}</Text>
                 <Text style={styles.subtitle}>
                     Vamos a recibir los datos que vos elijas. Podés revocar el acceso desde Perfil → Seguridad.
                 </Text>
 
                 <View style={styles.permissionsCard}>
-                    <PermissionRow
-                        icon="credit-card"
-                        label="Ver balance disponible"
-                        value={balanceEnabled}
-                        onValueChange={setBalanceEnabled}
-                    />
-                    <PermissionRow
-                        icon="activity"
-                        label="Ver historial de transacciones"
-                        value={historyEnabled}
-                        onValueChange={setHistoryEnabled}
-                    />
-                    <PermissionRow
-                        icon="send"
-                        label="Operar (enviar y pagar)"
-                        value={operateEnabled}
-                        onValueChange={setOperateEnabled}
-                        noBorder
-                    />
+                    <PermissionRow icon="credit-card" label="Ver balance disponible" value={balanceEnabled} onValueChange={setBalanceEnabled} />
+                    <PermissionRow icon="activity" label="Ver historial de transacciones" value={historyEnabled} onValueChange={setHistoryEnabled} />
+                    <PermissionRow icon="send" label="Operar (enviar y pagar)" value={operateEnabled} onValueChange={setOperateEnabled} noBorder />
                 </View>
 
                 <View style={styles.securityNote}>
@@ -70,22 +60,13 @@ export default function ConnectPermissionsScreen() {
                         Conexión cifrada · OAuth 2.0 · No guardamos tu contraseña
                     </Text>
                 </View>
-
             </ScrollView>
 
             <View style={styles.footer}>
                 <View style={[shadow.cta, { borderRadius: radii.button, flex: 1 }]}>
-                    <Pressable
-                        android_ripple={{ color: 'rgba(0,0,0,0.12)' }}
-                        onPress={() => router.push('/connect-syncing')}
-                    >
-                        <LinearGradient
-                            colors={gradients.cyan}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 0 }}
-                            style={styles.primaryBtn}
-                        >
-                            <Text style={type.button}>Conectar Brubank</Text>
+                    <Pressable android_ripple={{ color: 'rgba(0,0,0,0.12)' }} onPress={handleContinue}>
+                        <LinearGradient colors={gradients.cyan} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.primaryBtn}>
+                            <Text style={type.button}>Conectar {walletInfo.name}</Text>
                         </LinearGradient>
                     </Pressable>
                 </View>
@@ -115,107 +96,22 @@ function PermissionRow({ icon, label, value, onValueChange, noBorder }: any) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colors.bg,
-    },
-    content: {
-        paddingHorizontal: spacing.lg,
-        paddingTop: spacing.lg,
-        paddingBottom: 20,
-    },
-    logosRow: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: spacing.xl,
-    },
-    logoCircle: {
-        width: 64,
-        height: 64,
-        borderRadius: 32,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    logoText: {
-        fontFamily: 'SpaceGrotesk_700Bold',
-        fontSize: 22,
-        color: '#FFFFFF',
-    },
-    connectorContainer: {
-        flexDirection: 'row',
-        gap: 6,
-        marginHorizontal: spacing.md,
-    },
-    dot: {
-        width: 4,
-        height: 4,
-        borderRadius: 2,
-        backgroundColor: colors.dim,
-    },
-    title: {
-        ...type.h4,
-        fontSize: 20,
-        textAlign: 'center',
-        marginBottom: spacing.sm,
-    },
-    subtitle: {
-        ...type.small,
-        textAlign: 'center',
-        marginBottom: spacing.xxl,
-        paddingHorizontal: spacing.md,
-    },
-    permissionsCard: {
-        backgroundColor: 'rgba(255,255,255,0.04)',
-        borderRadius: radii.card,
-        borderWidth: 1,
-        borderColor: colors.cardBorder,
-        paddingHorizontal: spacing.lg,
-        marginBottom: spacing.xl,
-    },
-    permissionRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingVertical: spacing.lg,
-    },
-    permissionRowBorder: {
-        borderBottomWidth: 1,
-        borderBottomColor: colors.hairline,
-    },
-    permissionLeft: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
-    },
-    iconBox: {
-        width: 32,
-        height: 32,
-        borderRadius: 8,
-        backgroundColor: 'rgba(57,195,242,0.1)',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: spacing.md,
-    },
-    securityNote: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: spacing.sm,
-        paddingHorizontal: spacing.lg,
-    },
-    securityText: {
-        ...type.small,
-        fontSize: 11,
-    },
-    footer: {
-        padding: spacing.lg,
-        paddingBottom: 60, // FIX: Acá faltaba el número
-    },
-    primaryBtn: {
-        height: 52,
-        borderRadius: radii.button,
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
+    container: { flex: 1, backgroundColor: colors.bg },
+    content: { paddingHorizontal: spacing.lg, paddingTop: spacing.lg, paddingBottom: 20 },
+    logosRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: spacing.xl },
+    logoCircle: { width: 64, height: 64, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
+    logoText: { fontFamily: 'SpaceGrotesk_700Bold', fontSize: 22, color: '#FFFFFF' },
+    connectorContainer: { flexDirection: 'row', gap: 6, marginHorizontal: spacing.md },
+    dot: { width: 4, height: 4, borderRadius: 2, backgroundColor: colors.dim },
+    title: { ...type.h4, fontSize: 20, textAlign: 'center', marginBottom: spacing.sm },
+    subtitle: { ...type.small, textAlign: 'center', marginBottom: spacing.xxl, paddingHorizontal: spacing.md },
+    permissionsCard: { backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: radii.card, borderWidth: 1, borderColor: colors.cardBorder, paddingHorizontal: spacing.lg, marginBottom: spacing.xl },
+    permissionRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: spacing.lg },
+    permissionRowBorder: { borderBottomWidth: 1, borderBottomColor: colors.hairline },
+    permissionLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
+    iconBox: { width: 32, height: 32, borderRadius: 8, backgroundColor: 'rgba(57,195,242,0.1)', alignItems: 'center', justifyContent: 'center', marginRight: spacing.md },
+    securityNote: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: spacing.sm, paddingHorizontal: spacing.lg },
+    securityText: { ...type.small, fontSize: 11 },
+    footer: { padding: spacing.lg, paddingBottom: 60 },
+    primaryBtn: { height: 52, borderRadius: radii.button, alignItems: 'center', justifyContent: 'center' }
 });

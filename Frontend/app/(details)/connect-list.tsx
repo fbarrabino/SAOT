@@ -6,15 +6,17 @@ import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { colors, radii, spacing, type } from '@/theme/tokens';
 
+// Actualizado para sincronizar con los IDs de nuestro WALLET_CATALOG
 const AVAILABLE_WALLETS = [
+    { id: 'mp', name: 'Mercado Pago', desc: 'Billetera digital · ARG', color: '#009EE3', short: 'MP' },
+    { id: 'ua', name: 'Ualá', desc: 'Tarjeta prepaga · ARG', color: '#FF3366', short: 'UA' },
     { id: 'bb', name: 'Brubank', desc: 'Banco digital · ARG', color: '#6842FF', short: 'BB' },
-    { id: 'nx', name: 'Naranja X', desc: 'Billetera virtual · ARG', color: '#FF5C00', short: 'NX' },
-    { id: 'rb', name: 'Reba', desc: 'Cuenta digital · ARG', color: '#00D1A3', short: 'RB' },
-    { id: 'bl', name: 'Belo', desc: 'Wallet · ARG', color: '#4B36FF', short: 'BL' },
-    { id: 'cd', name: 'Cuenta DNI', desc: 'Banco Provincia · ARG', color: '#FFB800', short: 'CD' },
-    { id: 'md', name: 'MODO', desc: 'Pagos interbancarios · ARG', color: '#4444FF', short: 'M' },
-    { id: 'pp', name: 'Personal Pay', desc: 'Telecom Personal · ARG', color: '#FF0055', short: 'PP' },
-    { id: 'px', name: 'Prex', desc: 'Tarjeta prepaga · ARG', color: '#00C48C', short: 'PX' },
+    { id: 'nx', name: 'Naranja X', desc: 'Billetera virtual · ARG', color: '#FF5E00', short: 'NX' },
+    { id: 'pp', name: 'Personal Pay', desc: 'Telecom Personal · ARG', color: '#00B4E6', short: 'PP' },
+    { id: 'rb', name: 'Reba', desc: 'Cuenta digital · ARG', color: '#00D287', short: 'RB' },
+    { id: 'bl', name: 'Belo', desc: 'Wallet · ARG', color: '#6A2BFE', short: 'BL' },
+    { id: 'cd', name: 'Cuenta DNI', desc: 'Banco Provincia · ARG', color: '#0055A6', short: 'CD' },
+    { id: 'md', name: 'MODO', desc: 'Pagos interbancarios · ARG', color: '#2B1A66', short: 'MD' },
 ];
 
 export default function ConnectListScreen() {
@@ -61,7 +63,8 @@ export default function ConnectListScreen() {
                             <ConnectRow
                                 key={wallet.id}
                                 wallet={wallet}
-                                onPress={() => router.push('/connect-permissions')}
+                                // ACÁ ESTÁ EL FIX: Se pasa el parámetro `wallet` a la siguiente pantalla
+                                onPress={() => router.push({ pathname: '/(details)/connect-permissions', params: { wallet: wallet.id } })}
                             />
                         ))
                     ) : (
