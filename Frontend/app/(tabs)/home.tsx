@@ -136,17 +136,17 @@ export default function Home() {
             <QuickAction
               icon={<SendIcon />}
               label="Enviar"
-              onPress={() => router.push('/(send)/recipient')}
+              onPress={() => router.push('/recipient')}
             />
             <QuickAction
               icon={<RequestIcon />}
               label="Pedir"
-              onPress={() => router.push('/(request)/amount')}
+              onPress={() => router.push('/amount')}
             />
             <QuickAction
               icon={<SwapIcon />}
               label="Cambiar"
-              onPress={() => router.push('/(exchange)/amount')}
+              onPress={() => router.push('/amount')}
             />
             <QuickAction
               icon={<QRIcon />}
@@ -158,7 +158,7 @@ export default function Home() {
           {/* ── Actividad reciente ───────────────────────────────────────────── */}
           <Pressable
             style={[styles.sectionRow, { marginTop: 26 }]}
-            onPress={() => router.push('/(tabs)/activity')}
+            onPress={() => router.push('/activity')}
           >
             <Text style={styles.h4}>Actividad Reciente</Text>
             <Text style={styles.more}>Ver todo ›</Text>
