@@ -168,17 +168,20 @@ export default function Home() {
                 <QuickAction
                   icon={<SendIcon />}
                   label="Enviar"
-                  onPress={() => (sinBilleteras ? irAConectar() : router.push('/(send)/recipient'))}
+                  // Fix Franco: Rutas limpias sin paréntesis
+                  onPress={() => (sinBilleteras ? irAConectar() : router.push('/recipient'))}
                 />
                 <QuickAction
                   icon={<RequestIcon />}
                   label="Pedir"
-                  onPress={() => (sinBilleteras ? irAConectar() : router.push('/(request)/amount'))}
+                  // Fix Franco: Rutas limpias sin paréntesis
+                  onPress={() => (sinBilleteras ? irAConectar() : router.push('/amount'))}
                 />
                 <QuickAction
                   icon={<SwapIcon />}
                   label="Cambiar"
-                  onPress={() => (sinBilleteras ? irAConectar() : router.push('/(exchange)/amount'))}
+                  // Fix Franco: Rutas limpias sin paréntesis
+                  onPress={() => (sinBilleteras ? irAConectar() : router.push('/amount'))}
                 />
                 <QuickAction
                   icon={<QRIcon />}
@@ -192,7 +195,7 @@ export default function Home() {
           {/* ── Actividad reciente ───────────────────────────────────────────── */}
           <Pressable
             style={[styles.sectionRow, { marginTop: 26 }]}
-            onPress={() => router.push('/(tabs)/activity')}
+            onPress={() => router.push('/activity')}
           >
             <Text style={styles.h4}>Actividad Reciente</Text>
             <Text style={styles.more}>Ver todo ›</Text>

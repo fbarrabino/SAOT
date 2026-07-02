@@ -4,19 +4,11 @@
  * Endpoint: GET /api/cuentas-billetera/me
  * Devuelve las cuentas vinculadas del usuario autenticado y las convierte
  * al tipo Wallet que usan las pantallas del frontend.
- *
- * Bloque 1 (B1): si el usuario no tiene cuentas vinculadas, devolvemos
- * un array vacío para que la UI muestre el empty state y le ofrezca
- * conectar la primera billetera. No usamos MOCK_WALLETS como fallback:
- * mejor mostrar honestamente que no hay billeteras a presentar saldos
- * que después no se pueden operar.
  */
 
 import { api } from './client';
 import { gradients } from '@/theme/tokens';
 import type { Wallet, WalletKey } from '@/data/wallets';
-
-// ─── Tipo del backend ─────────────────────────────────────────────────────────
 
 export interface CuentaBilleteraResponse {
   cuentaBilleteraId: number;
@@ -35,29 +27,24 @@ export interface CuentaBilleteraResponse {
 function toWalletKey(nombre: string | null): WalletKey | null {
   const n = (nombre ?? '').toLowerCase().trim();
   if (n.includes('mercado') || n.includes('mp')) return 'mp';
-  if (n.includes('ual')) return 'ua';                              // 'Ualá', 'Uala'
+  if (n.includes('ual')) return 'ua';
   if (n.includes('lemon') || n.includes('lm')) return 'lm';
   if (n.includes('brubank') || n.includes('bb')) return 'bb';
   if (n.includes('naranja') || n.includes('nx')) return 'nx';
   return null; // billetera desconocida — la ignoramos
 }
 
-/** Devuelve el gradiente correspondiente al key de billetera. */
 function toGradient(key: WalletKey): readonly [string, string] {
-  const map: Record<WalletKey, readonly [string, string]> = {
+  const map: Record<string, readonly [string, string]> = {
     mp: gradients.mpTint,
     ua: gradients.uaTint,
     lm: gradients.lmTint,
     bb: gradients.bbTint,
     nx: gradients.nxTint,
   };
-  return map[key];
+  return map[key] || gradients.mpTint;
 }
 
-/**
- * Transforma una CuentaBilleteraResponse del backend al tipo Wallet del frontend.
- * Devuelve null si la billetera no es reconocida (key desconocida).
- */
 export function cuentaToWallet(cuenta: CuentaBilleteraResponse): Wallet | null {
   const key = toWalletKey(cuenta.billeteraNombre);
   if (key === null) return null;
@@ -78,8 +65,6 @@ export function cuentaToWallet(cuenta: CuentaBilleteraResponse): Wallet | null {
  * GET /api/cuentas-billetera/me
  *
  * Devuelve las billeteras del usuario autenticado transformadas a Wallet[].
- * Si no hay cuentas o el servidor no responde, devolvemos array vacío
- * y dejamos que la UI muestre el empty state.
  */
 export async function fetchMisCuentas(): Promise<Wallet[]> {
   try {
@@ -97,4 +82,14 @@ export async function fetchMisCuentas(): Promise<Wallet[]> {
     console.warn('[cuentas] No se pudo conectar al backend:', err);
     return [];
   }
+}
+
+// Nueva función para B4-FE (Tu trabajo)
+export async function vincularCuentaBilletera(billeteraId: number, alias: string, saldoInicial: number): Promise<CuentaBilleteraResponse> {
+  const req = {
+    billeteraId,
+    alias,
+    saldoInicial
+  };
+  return await api.post<CuentaBilleteraResponse>('/api/cuentas-billetera', req);
 }

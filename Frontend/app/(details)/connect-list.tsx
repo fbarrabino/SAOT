@@ -8,21 +8,19 @@ import { WalletGlyph } from '@/components/WalletGlyph';
 import type { WalletGlyphKey } from '@/components/WalletGlyph';
 import { colors, radii, spacing, type } from '@/theme/tokens';
 
-// B3 — Solo las billeteras con logo PNG real en assets/wallets/ aparecen como
-// "Disponibles para conectar". Mercado Pago, Ualá y Lemon no entran acá porque
-// se asumen ya conectadas por defecto desde el catálogo principal.
+// B3 — Código de Fabricio: Solo muestra billeteras con logo real en assets.
 type AvailableWallet = {
-  id: string;
-  glyph: WalletGlyphKey;
-  name: string;
-  desc: string;
-  color: string; // se usa en la pantalla de permisos / sync como acento
-  short: string; // iniciales fallback si el glyph no carga
+    id: string;
+    glyph: WalletGlyphKey;
+    name: string;
+    desc: string;
+    color: string;
+    short: string;
 };
 
 const AVAILABLE_WALLETS: AvailableWallet[] = [
-  { id: 'bb', glyph: 'bb', name: 'Brubank',   desc: 'Banco digital · ARG',     color: '#6842FF', short: 'BB' },
-  { id: 'nx', glyph: 'nx', name: 'Naranja X', desc: 'Billetera virtual · ARG', color: '#FF5C00', short: 'NX' },
+    { id: 'bb', glyph: 'bb', name: 'Brubank', desc: 'Banco digital · ARG', color: '#6842FF', short: 'BB' },
+    { id: 'nx', glyph: 'nx', name: 'Naranja X', desc: 'Billetera virtual · ARG', color: '#FF5C00', short: 'NX' },
 ];
 
 export default function ConnectListScreen() {
@@ -72,18 +70,8 @@ export default function ConnectListScreen() {
                             <ConnectRow
                                 key={wallet.id}
                                 wallet={wallet}
-                                onPress={() =>
-                                    router.push({
-                                        pathname: '/connect-permissions',
-                                        params: {
-                                            walletId: wallet.id,
-                                            walletGlyph: wallet.glyph,
-                                            walletName: wallet.name,
-                                            walletShort: wallet.short,
-                                            walletColor: wallet.color,
-                                        },
-                                    })
-                                }
+                                // Lógica de Franco (B4-FE): Pasamos un único parámetro limpio.
+                                onPress={() => router.push({ pathname: '/(details)/connect-permissions', params: { wallet: wallet.id } })}
                             />
                         ))
                     ) : (
@@ -99,6 +87,7 @@ export default function ConnectListScreen() {
 function ConnectRow({ wallet, onPress }: { wallet: AvailableWallet; onPress?: () => void }) {
     return (
         <Pressable style={styles.row} onPress={onPress}>
+            {/* Componente visual de Fabricio */}
             <WalletGlyph wallet={wallet.glyph} size={44} />
 
             <View style={styles.rowInfo}>
@@ -112,53 +101,13 @@ function ConnectRow({ wallet, onPress }: { wallet: AvailableWallet; onPress?: ()
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colors.bg,
-    },
-    content: {
-        paddingHorizontal: spacing.lg,
-        paddingTop: spacing.lg,
-        paddingBottom: 40,
-    },
-    description: {
-        ...type.small,
-        marginBottom: spacing.xl,
-        lineHeight: 20,
-    },
-    searchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'rgba(255,255,255,0.06)',
-        borderRadius: radii.input,
-        paddingHorizontal: spacing.lg,
-        height: 52,
-        marginBottom: spacing.xxl,
-    },
-    searchInput: {
-        flex: 1,
-        marginLeft: spacing.sm,
-        fontFamily: 'PlusJakartaSans_500Medium',
-        fontSize: 16,
-        color: colors.text,
-    },
-    listContainer: {
-        marginTop: spacing.md,
-    },
-    noResultsText: {
-        ...type.body,
-        textAlign: 'center',
-        marginTop: spacing.xl,
-    },
-    row: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: spacing.md,
-        paddingVertical: spacing.lg,
-        borderBottomWidth: 1,
-        borderBottomColor: colors.hairline,
-    },
-    rowInfo: {
-        flex: 1,
-    },
+    container: { flex: 1, backgroundColor: colors.bg },
+    content: { paddingHorizontal: spacing.lg, paddingTop: spacing.lg, paddingBottom: 40 },
+    description: { ...type.small, marginBottom: spacing.xl, lineHeight: 20 },
+    searchContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: radii.input, paddingHorizontal: spacing.lg, height: 52, marginBottom: spacing.xxl },
+    searchInput: { flex: 1, marginLeft: spacing.sm, fontFamily: 'PlusJakartaSans_500Medium', fontSize: 16, color: colors.text },
+    listContainer: { marginTop: spacing.md },
+    noResultsText: { ...type.body, textAlign: 'center', marginTop: spacing.xl },
+    row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.lg, borderBottomWidth: 1, borderBottomColor: colors.hairline },
+    rowInfo: { flex: 1 },
 });
