@@ -1,6 +1,6 @@
 import { gradients } from '@/theme/tokens';
 
-export type WalletKey = 'mp' | 'ua' | 'lm' | 'bb' | 'nx' | 'pp' | 'rb' | 'bl' | 'cd' | 'md';
+export type WalletKey = 'mp' | 'ua' | 'lm' | 'bb' | 'nx';
 
 export type Wallet = {
   key: WalletKey;

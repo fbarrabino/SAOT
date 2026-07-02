@@ -5,19 +5,30 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
 import { ScreenHeader } from '@/components/ScreenHeader';
+import { WalletGlyph } from '@/components/WalletGlyph';
+import type { WalletGlyphKey } from '@/components/WalletGlyph';
 import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
 import { WALLET_CATALOG } from '@/data/wallets';
 
+// Claves de billeteras que Fabricio tiene configuradas con imágenes reales (logo.webp)
+const GLYPH_KEYS: WalletGlyphKey[] = ['mp', 'ua', 'lm', 'bb', 'nx'];
+
 export default function ConnectPermissionsScreen() {
-    // Leemos 'wallet' (lo que manda Fabri) o 'id' por las dudas
+    // 1. LÓGICA DE FRANCO: Recibimos un solo ID y leemos del catálogo central
     const { wallet, id } = useLocalSearchParams();
     const paramKey = typeof wallet === 'string' ? wallet : (typeof id === 'string' ? id : 'bb');
     const walletInfo = WALLET_CATALOG[paramKey] || WALLET_CATALOG['bb'];
+
+    // 2. LÓGICA DE FABRICIO: Validar si la billetera elegida tiene imagen real
+    const walletGlyph = GLYPH_KEYS.includes(paramKey as WalletGlyphKey)
+        ? (paramKey as WalletGlyphKey)
+        : null;
 
     const [balanceEnabled, setBalanceEnabled] = useState(true);
     const [historyEnabled, setHistoryEnabled] = useState(true);
     const [operateEnabled, setOperateEnabled] = useState(false);
 
+    // 3. NAVEGACIÓN DE FRANCO (B4-FE): Dirigir a la nueva pantalla de monto
     const handleContinue = () => {
         router.push({ pathname: '/(details)/connect-amount', params: { wallet: paramKey } });
     };
@@ -38,11 +49,18 @@ export default function ConnectPermissionsScreen() {
                         <View style={styles.dot} />
                         <View style={styles.dot} />
                     </View>
-                    <View style={[styles.logoCircle, { backgroundColor: walletInfo.color }]}>
-                        <Text style={styles.logoText}>{walletInfo.initials}</Text>
-                    </View>
+
+                    {/* 4. VISUAL DE FABRICIO: Renderizar logo real o fallback */}
+                    {walletGlyph ? (
+                        <WalletGlyph wallet={walletGlyph} size={64} />
+                    ) : (
+                        <View style={[styles.logoCircle, { backgroundColor: walletInfo.color }]}>
+                            <Text style={styles.logoText}>{walletInfo.initials}</Text>
+                        </View>
+                    )}
                 </View>
 
+                {/* 5. TEXTOS DINÁMICOS BASADOS EN EL CATÁLOGO DE FRANCO */}
                 <Text style={styles.title}>SaOT quiere conectarse con {walletInfo.name}</Text>
                 <Text style={styles.subtitle}>
                     Vamos a recibir los datos que vos elijas. Podés revocar el acceso desde Perfil → Seguridad.

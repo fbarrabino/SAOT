@@ -1,16 +1,26 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
 import { AuroraBackground } from '@/components/AuroraBackground';
-import { colors, radii, spacing, type, shadow, gradients } from '@/theme/tokens';
-import { LinearGradient } from 'expo-linear-gradient';
+import { WalletGlyph } from '@/components/WalletGlyph';
+import type { WalletGlyphKey } from '@/components/WalletGlyph';
+import { colors, radii, spacing, type, gradients, shadow } from '@/theme/tokens';
 import { WALLET_CATALOG } from '@/data/wallets';
 
+const GLYPH_KEYS: WalletGlyphKey[] = ['mp', 'ua', 'lm', 'bb', 'nx'];
+
 export default function ConnectSuccessScreen() {
+    // 1. LÓGICA DE FRANCO: Lectura de catálogo
     const { wallet } = useLocalSearchParams();
     const paramKey = typeof wallet === 'string' ? wallet : 'bb';
     const walletInfo = WALLET_CATALOG[paramKey] || WALLET_CATALOG['bb'];
+
+    // 2. LÓGICA DE FABRICIO: Validación de imagen
+    const walletGlyph = GLYPH_KEYS.includes(paramKey as WalletGlyphKey)
+        ? (paramKey as WalletGlyphKey)
+        : null;
 
     return (
         <View style={styles.container}>
@@ -27,6 +37,7 @@ export default function ConnectSuccessScreen() {
                     <Feather name="check" size={32} color="#FFFFFF" />
                 </View>
 
+                {/* TEXTO BLANCO (Fix de Franco) + NOMBRE DINÁMICO (Franco) */}
                 <Text style={styles.title}>{walletInfo.name}{'\n'}¡Conectada!</Text>
                 <Text style={styles.subtitle}>
                     Ya podés ver el balance desde tu dashboard.
@@ -34,11 +45,17 @@ export default function ConnectSuccessScreen() {
 
                 <View style={styles.card}>
                     <View style={styles.cardLeft}>
-                        <View style={[styles.logoCircle, { backgroundColor: walletInfo.color }]}>
-                            <Text style={styles.logoText}>{walletInfo.initials}</Text>
-                        </View>
+                        {/* 3. VISUAL DE FABRICIO: Renderizar logo real o fallback */}
+                        {walletGlyph ? (
+                            <View style={{ marginRight: spacing.md }}>
+                                <WalletGlyph wallet={walletGlyph} size={40} />
+                            </View>
+                        ) : (
+                            <View style={[styles.logoCircle, { backgroundColor: walletInfo.color }]}>
+                                <Text style={styles.logoText}>{walletInfo.initials}</Text>
+                            </View>
+                        )}
                         <View>
-                            {/* FIX: Se fuerza el color blanco en el texto */}
                             <Text style={[type.bodyBold, { color: '#FFFFFF' }]}>{walletInfo.name}</Text>
                             <Text style={type.small}>Listo para usar</Text>
                         </View>
@@ -69,7 +86,6 @@ const styles = StyleSheet.create({
     closeBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: radii.icon, backgroundColor: 'rgba(255,255,255,0.05)' },
     content: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing.xl, marginTop: -60 },
     successCircle: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#00D287', alignItems: 'center', justifyContent: 'center', marginBottom: spacing.xl, shadowColor: '#00D287', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.4, shadowRadius: 16, elevation: 10 },
-    // FIX: Se agregó color: '#FFFFFF' explícitamente en el título
     title: { ...type.h3, textAlign: 'center', marginBottom: spacing.sm, color: '#FFFFFF' },
     subtitle: { ...type.body, color: colors.dim, textAlign: 'center', marginBottom: spacing.xxl },
     card: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: radii.card, borderWidth: 1, borderColor: colors.cardBorder, padding: spacing.lg },
@@ -80,6 +96,5 @@ const styles = StyleSheet.create({
     footer: { padding: spacing.lg, paddingBottom: 60 },
     primaryBtn: { height: 52, borderRadius: radii.button, alignItems: 'center', justifyContent: 'center' },
     secondaryBtn: { height: 52, alignItems: 'center', justifyContent: 'center' },
-    // FIX: Se forzó el color blanco en el botón secundario
     secondaryBtnText: { ...type.button, color: '#FFFFFF' }
 });
